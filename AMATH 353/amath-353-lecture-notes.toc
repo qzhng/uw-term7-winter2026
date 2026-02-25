@@ -1,0 +1,111 @@
+\contentsline {section}{Lecture 1}{1}{section*.2}%
+\contentsline {subsection}{\numberline {1.1}General Form of PDE}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Deriving PDE}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}One Dimensional Problem of a Fluid-Filled Tube}{1}{subsubsection.1.2.1}%
+\contentsline {section}{Lecture 2}{5}{section*.3}%
+\contentsline {subsection}{\numberline {2.1}Conservation Law in Higher Dimension}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Simplifying the Global Equation}{5}{subsubsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.2}Constitutive Relation}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Diffusion Equation}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Reaction--Diffusion Equation}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Advection / Transport}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Burgers' Equation}{8}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Diffusion in 3D}{8}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Advection--Reaction--Diffusion}{9}{subsection.2.8}%
+\contentsline {section}{Lecture 3}{10}{section*.4}%
+\contentsline {subsection}{\numberline {3.1}Wave Equation}{10}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Newton's Second Law}{10}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Set Up of The Problem}{10}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Consider A Point on the String}{10}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Newton's Second Law and Deriving PDE}{11}{subsubsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.2}Boundary Conditions}{13}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Dirichlet Boundary Condition}{13}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Von Neumann Boundary Condition}{14}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Mixed/Robin Boundary Condition}{14}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Period Boundary Condition (Circular Drum)}{14}{subsubsection.3.2.4}%
+\contentsline {section}{Lecture 4}{15}{section*.5}%
+\contentsline {subsection}{\numberline {4.1}Vibrating Membrane}{15}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}Deriving the PDE}{15}{subsubsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.2}Solving the Wave Equation}{17}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Solving the Wave Equation: Integration}{19}{subsubsection.4.2.1}%
+\contentsline {section}{Lecture 5}{21}{section*.6}%
+\contentsline {subsection}{\numberline {5.1}Introduction to Separation of Variables}{21}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}Linear Operators and Classification of PDEs}{21}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}Boundary Conditions}{23}{subsubsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.2}Separation of Variables}{23}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Wave Equation in 1D}{24}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Separable Solutions}{24}{subsubsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.3}Eigenvalue Problem}{25}{subsubsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.3}Parabolic Case}{25}{subsection.5.3}%
+\contentsline {section}{Lecture 6}{27}{section*.7}%
+\contentsline {subsection}{\numberline {6.1}Separation of Variables: Elliptic Case}{27}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Separation Ansatz}{27}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Eigenvalue Problem}{28}{subsection.6.3}%
+\contentsline {subsubsection}{\numberline {6.3.1}Example: Dirichlet Boundary Conditions}{28}{subsubsection.6.3.1}%
+\contentsline {paragraph}{Case 1: $\lambda < 0$.}{29}{section*.8}%
+\contentsline {paragraph}{Case 2: $\lambda = 0$.}{29}{section*.9}%
+\contentsline {paragraph}{Case 3: $\lambda > 0$.}{31}{section*.10}%
+\contentsline {subsection}{\numberline {6.4}Inner Products and Operator Properties}{31}{subsection.6.4}%
+\contentsline {subsection}{\numberline {6.5}Self-Adjointness and Positivity}{32}{subsection.6.5}%
+\contentsline {paragraph}{Case 1}{34}{section*.11}%
+\contentsline {paragraph}{Case 2}{34}{section*.12}%
+\contentsline {subsection}{\numberline {6.6}Positivity}{35}{subsection.6.6}%
+\contentsline {section}{Lecture 7}{36}{section*.13}%
+\contentsline {subsection}{\numberline {7.1}Eigenfunction Expansions}{36}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1}Orthogonality}{36}{subsubsection.7.1.1}%
+\contentsline {subsubsection}{\numberline {7.1.2}Positivity (Non-negativity)}{37}{subsubsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.2}General Solutions}{38}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}Parabolic Equation coefficients}{39}{subsubsection.7.2.1}%
+\contentsline {subsubsection}{\numberline {7.2.2}Hyperbolic Equation coefficients}{39}{subsubsection.7.2.2}%
+\contentsline {section}{Lecture 8}{41}{section*.14}%
+\contentsline {subsection}{\numberline {8.1}Sturm--Liouville Problems}{41}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Generalized Fourier Series}{41}{subsection.8.2}%
+\contentsline {subsubsection}{\numberline {8.2.1}Hermitian Inner Product}{41}{subsubsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.2}Function Spaces and Orthogonality}{43}{subsubsection.8.2.2}%
+\contentsline {subsubsection}{\numberline {8.2.3}Fourier Series Convergence}{44}{subsubsection.8.2.3}%
+\contentsline {section}{Lecture 9}{49}{section*.15}%
+\contentsline {subsection}{\numberline {9.1}Properties of Sturm--Liouville Problems}{49}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Examples}{52}{subsection.9.2}%
+\contentsline {subsubsection}{\numberline {9.2.1}Fourier Series}{52}{subsubsection.9.2.1}%
+\contentsline {subsubsection}{\numberline {9.2.2}Bessel Function Expansions}{53}{subsubsection.9.2.2}%
+\contentsline {section}{Lecture 10}{56}{section*.16}%
+\contentsline {subsection}{\numberline {10.1}Bessel Function Expansions (Continued)}{56}{subsection.10.1}%
+\contentsline {subsubsection}{\numberline {10.1.1}Self-Adjointness}{56}{subsubsection.10.1.1}%
+\contentsline {subsubsection}{\numberline {10.1.2}Solutions}{57}{subsubsection.10.1.2}%
+\contentsline {subsection}{\numberline {10.2}Series Solution to the Wave Equation on a Bounded Interval}{59}{subsection.10.2}%
+\contentsline {subsection}{\numberline {10.3}Energy Conservation in the Wave Equation}{61}{subsection.10.3}%
+\contentsline {section}{Lecture 11}{64}{section*.17}%
+\contentsline {subsection}{\numberline {11.1}General Solution to the Diffusion Equation}{64}{subsection.11.1}%
+\contentsline {subsubsection}{\numberline {11.1.1}Separation of Variables}{64}{subsubsection.11.1.1}%
+\contentsline {subsubsection}{\numberline {11.1.2}Initial Conditions}{65}{subsubsection.11.1.2}%
+\contentsline {subsection}{\numberline {11.2}Non-Homogeneous Boundary Conditions}{65}{subsection.11.2}%
+\contentsline {subsubsection}{\numberline {11.2.1}The Steady Solution}{65}{subsubsection.11.2.1}%
+\contentsline {subsubsection}{\numberline {11.2.2}The Transient Solution}{66}{subsubsection.11.2.2}%
+\contentsline {subsection}{\numberline {11.3}Laplace's Equation on a Rectangle}{66}{subsection.11.3}%
+\contentsline {subsubsection}{\numberline {11.3.1}Separation of Variables}{66}{subsubsection.11.3.1}%
+\contentsline {subsubsection}{\numberline {11.3.2}Applying Boundary Conditions}{67}{subsubsection.11.3.2}%
+\contentsline {subsection}{\numberline {11.4}Alternative Boundary Configurations}{68}{subsection.11.4}%
+\contentsline {section}{Lecture 12}{69}{section*.18}%
+\contentsline {subsection}{\numberline {12.1}Laplace's Equation on a Circle}{69}{subsection.12.1}%
+\contentsline {subsubsection}{\numberline {12.1.1}Separation of Variables}{69}{subsubsection.12.1.1}%
+\contentsline {subsubsection}{\numberline {12.1.2}Solving the Angular Equation}{70}{subsubsection.12.1.2}%
+\contentsline {subsubsection}{\numberline {12.1.3}Solving the Radial Equation}{70}{subsubsection.12.1.3}%
+\contentsline {paragraph}{Case 1: $n = 0$}{70}{section*.19}%
+\contentsline {paragraph}{Case 2: $n \ge 1$}{71}{section*.20}%
+\contentsline {subsubsection}{\numberline {12.1.4}General Solution}{71}{subsubsection.12.1.4}%
+\contentsline {subsubsection}{\numberline {12.1.5}Finding the Coefficients (Orthogonality)}{72}{subsubsection.12.1.5}%
+\contentsline {subsection}{\numberline {12.2}The Vibrating Drum}{73}{subsection.12.2}%
+\contentsline {subsubsection}{\numberline {12.2.1}Separation of Variables}{73}{subsubsection.12.2.1}%
+\contentsline {paragraph}{Angular Equation}{74}{section*.21}%
+\contentsline {paragraph}{Radial Equation}{74}{section*.22}%
+\contentsline {subsubsection}{\numberline {12.2.2}Eigenvalues}{74}{subsubsection.12.2.2}%
+\contentsline {subsubsection}{\numberline {12.2.3}General Solution}{75}{subsubsection.12.2.3}%
+\contentsline {subsection}{\numberline {12.3}Initial Conditions and Coefficients}{75}{subsection.12.3}%
+\contentsline {subsection}{\numberline {12.4}Comparison with the 1D Wave Equation}{76}{subsection.12.4}%
+\contentsline {subsection}{\numberline {12.5}Nodal Patterns}{76}{subsection.12.5}%
+\contentsline {section}{\numberline {A}Summary of Separation of Variables}{78}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}The General Algorithm}{78}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}Solutions for the Temporal Variable}{78}{subsection.A.2}%
+\contentsline {subsubsection}{\numberline {A.2.1}Hyperbolic Case (Wave Equation)}{79}{subsubsection.A.2.1}%
+\contentsline {subsubsection}{\numberline {A.2.2}Parabolic Case (Diffusion Equation)}{79}{subsubsection.A.2.2}%
+\contentsline {subsubsection}{\numberline {A.2.3}Elliptic Case (Laplace Equation)}{80}{subsubsection.A.2.3}%

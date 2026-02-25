@@ -1,0 +1,787 @@
+\documentclass[8pt]{extarticle}
+\usepackage[letterpaper, margin=0.12in]{geometry}
+
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{parskip}
+\usepackage{xcolor}
+
+% Reduce spacing
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{0.2cm}
+\setlength{\parskip}{0pt}
+
+% Custom section formatting
+\usepackage{titlesec}
+\titleformat{\section}
+  {\small\bfseries}  % ADD THIS LINE
+  {}
+  {0pt}
+  {}
+\titleformat{\subsection}
+  {\small\bfseries}  % ADD THIS LINE
+  {}
+  {0pt}
+  {}
+\titlespacing*{\section}{0pt}{1pt}{1pt}
+\titlespacing*{\subsection}{0pt}{1pt}{1pt}
+
+\begin{document}
+
+\begin{multicols}{5}
+\raggedright
+\small
+
+\section*{10 Enhancing Optimization}
+
+\textcolor{red}{Gradient Clipping} \\
+\textcolor{blue}{\(\frac{\partial E}{\partial \theta} \leftarrow \frac{\tau}{\left|\frac{\partial E}{\partial \theta}\right|} \frac{\partial E}{\partial \theta} \quad \text{if } \left|\frac{\partial E}{\partial \theta}\right| > \tau\)}
+
+\section*{11 Visual Systems and CNN}
+\begin{itemize}[nosep, leftmargin=*]
+    \item if a layer has \(k\) filters, each kernel has a bias
+\end{itemize}
+
+\textcolor{red}{Multi Channel Inputs} learnable parameter for one channel kernel size \textcolor{blue}{\(n\times n \times \text{channel number} + 1 \text{bias}\)}
+
+\begin{itemize}[nosep, leftmargin=*]
+    \item CNN avoid parameter explosion
+    \item locality: nearby pixels matter more
+    \item translational invariance: patterns matter anywhere
+\end{itemize}
+
+\section*{12 Hopfield Networks}
+
+\textcolor{red}{Hopfield Networks}
+\begin{itemize}[nosep, leftmargin=*]
+    \item neuron update rule: \(x_i = \begin{cases} -1 & \text{if } \vec{x}W + b_i < 0 \\ 1 & \text{if } \vec{x}W + b_i \geq 0 \end{cases}\)
+    \item graph has cycles, so backprop won't work
+\end{itemize}
+
+\textcolor{red}{Hopfield Energy (symmetric \(W\))} \\
+\textcolor{blue}{\(E = -\frac{1}{2} \sum_i \sum_{j \neq i} x_i W_{ij} x_j - \sum_i b_i x_i = -\frac{1}{2} \vec{x} W \vec{x}^\top - \vec{b} \vec{x}^\top\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item where \(W_{ii} = 0\)
+\end{itemize}
+
+\textcolor{red}{Minimizing Energy (Gradient Descent)} \\
+\textcolor{blue}{\(\frac{\partial E}{\partial x_j} = -\sum_{i \neq j} x_i W_{ij} - b_j\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item or: \(\nabla_{\vec{x}} E = -\vec{x}W - \vec{b} \Rightarrow \tau_x \frac{d\vec{x}}{dt} = \vec{x}W + \vec{b}\)
+\end{itemize}
+
+\textcolor{red}{Weight Gradients}
+\begin{itemize}[nosep, leftmargin=*]
+    \item if \(i \neq j\): \(\frac{\partial E}{\partial W_{ij}} = -x_i x_j\)
+    \item if \(i = j\): \(\frac{\partial E}{\partial W_{ii}} = -x_i^2 = -1\)
+    \item gradient vector: \textcolor{blue}{\(\nabla_W E = -\vec{x}^\top \vec{x} + I_{N \times N}\)}
+    \item add identity matrix to keep \(W_{ii} = 0\) during gradient descent
+\end{itemize}
+
+\textcolor{red}{Learning Rule (Over All \(M\) Targets)} \\
+\textcolor{blue}{\(\nabla_W E = -\frac{1}{M} \sum_{s=1}^{M} (\vec{x}^{(s)})^\top \vec{x}^{(s)} + I = -\frac{1}{M} X^\top X + I\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item weight update: \textcolor{blue}{\(W \leftarrow W + \kappa \left( \frac{1}{M} X^\top X - I \right)\)}
+    \item \(X^\top X\) computes coactivation states between all neuron pairs
+    \item since input patterns \(X\) are fixed, gradient direction is constant across iterations
+    \item steady-state solution: \(W^* = \frac{1}{M} X^\top X - I\)
+\end{itemize}
+
+\section*{Probability}
+
+\textcolor{red}{Probability Rules}
+\begin{itemize}[nosep, leftmargin=*]
+    \item Bayes' rule: \textcolor{blue}{\(P(A|B) = \frac{P(B|A)P(A)}{P(B)}\)}
+    \item Jensen's inequality: for convex \(f\): \textcolor{blue}{\(f(\mathbb{E}[X]) \leq \mathbb{E}[f(X)]\)}, for concave \(f\): \textcolor{blue}{\(f(\mathbb{E}[X]) \geq \mathbb{E}[f(X)]\)}
+\end{itemize}
+
+\section*{13 RBM}
+
+\textcolor{red}{Restricted Boltzmann Machines (RBMs)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item connections between layers are symmetric, weight matrix \(W\)
+\end{itemize}
+
+\textcolor{red}{RBM Energy} \\
+\textcolor{blue}{\(E(v, h) = -\sum_{i=1}^{m} \sum_{j=1}^{n} v_i W_{ij} h_j - \sum_{i=1}^{m} b_i v_i - \sum_{j=1}^{n} c_j h_j\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item matrix form: \textcolor{blue}{\(E(v, h) = -vWh^\top - bv^\top - ch^\top\)} where \(W \in \mathbb{R}^{m \times n}\)
+    \item discordance cost: \(-vWh^\top\)
+    \item operating cost: \(-bv^\top - ch^\top\)
+\end{itemize}
+
+\textcolor{red}{Boltzmann Probability} \\
+\textcolor{blue}{\(q(v, h) = \frac{1}{Z} e^{-E(v,h)}\)} where \textcolor{blue}{\(Z = \sum_{v,h} e^{-E(v,h)}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item lower-energy states visited more frequently:
+    \item \(E(v^{(1)}, h^{(1)}) < E(v^{(2)}, h^{(2)}) \Rightarrow q(v^{(1)}, h^{(1)}) > q(v^{(2)}, h^{(2)})\)
+\end{itemize}
+
+\textcolor{red}{Training RBM as Generative Model} \\
+For inputs \(v \sim p(v)\), want RBM \(q_\theta\) such that: \\
+\textcolor{blue}{\(\max_\theta \mathbb{E}_{v \sim p}[\ln q_\theta(v)]\)} or equivalently \textcolor{blue}{\(\min_\theta \mathbb{E}_{v \sim p}[-\ln q_\theta(v)]\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item loss function: \(L = -\ln q_\theta(V)\) for given \(V\)
+    \item expanding: \textcolor{blue}{\(L = -\ln \left( \frac{1}{Z} \sum_h e^{-E_\theta(V,h)} \right)\)}
+    \item rewriting: \textcolor{blue}{\(L = -\ln \left( \sum_h e^{-E_\theta(V,h)} \right) + \ln \left( \sum_v \sum_h e^{-E_\theta(v,h)} \right)\)}
+\end{itemize}
+
+\textcolor{red}{Combined Gradient} \\
+\textcolor{blue}{\(\nabla_\theta L = \nabla_\theta L_1 + \nabla_\theta L_2 = \mathbb{E}_{q(h|V)}[\nabla_\theta E_\theta] - \mathbb{E}_{q(v,h)}[\nabla_\theta E_\theta]\)}
+
+\textcolor{red}{Computing Gradient for \(W_{ij}\)} \\
+For parameter \(\theta = W_{ij}\): \\
+\textcolor{blue}{\(\nabla_{W_{ij}} E(V, h) = \nabla_{W_{ij}} [ -\sum_{i=1}^{m} \sum_{j=1}^{n} V_i W_{ij} h_j - \sum_{i=1}^{m} b_i V_i -\)}  \\ \textcolor{blue}{\(\sum_{j=1}^{n} c_j h_j ] = -V_i h_j\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item similarly: \textcolor{blue}{\(\nabla_{W_{ij}} E(v, h) = -v_i h_j\)}
+    \item gradient of loss: \textcolor{blue}{\(\nabla_{W_{ij}} L = -\mathbb{E}_{q(h|V)}[V_i h_j] + \mathbb{E}_{q(v,h)}[v_i h_j]\)}
+    \item first term: expected value under posterior distribution
+    \item second term: expected value under joint distribution
+\end{itemize}
+
+\textcolor{red}{Contrastive Divergence for Training RBMs}
+makes differentiation possible \\
+\textbf{Step 1:} Clamp visible states to \(V\), calculate hidden probabilities: \\
+\textcolor{blue}{\(q(h_j|V) = \sigma(VW_{\cdot j} + c_j)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item then: \textcolor{blue}{\(\nabla_W L_1 = -V^\top \sigma(VW + c)\)}
+    \item results in rank-1 outer product in \(\mathbb{R}^{m \times n}\)
+\end{itemize}
+\textbf{Step 2:} Compute expectation using Gibbs Sampling: \\
+\textcolor{blue}{\(\langle v_i h_j \rangle_{q(v,h)} \equiv \mathbb{E}_{q(v,h)}[v_i h_j] = \sum_v \sum_h q(v, h) v_i h_j\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item Gibbs sampling computes average \(v_i h_j\): \textcolor{blue}{\(\nabla_W L_2 = v^\top \sigma(vW + c)\)}
+    \item also an outer product
+\end{itemize}
+
+\textcolor{red}{Weight Update Rule} \\
+\textcolor{blue}{\(W \rightarrow W - \eta(\nabla_W L_1 + \nabla_W L_2)\)} \\
+\textcolor{blue}{\(W \rightarrow W + \eta V^\top \sigma(VW + c) - \eta v^\top \sigma(vW + c)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\eta\): learning rate
+    \item first term: \textbf{positive phase} (clamped visible state)
+    \item second term: \textbf{negative phase} (after one Gibbs sampling step)
+\end{itemize}
+
+\textcolor{red}{Sampling an RBM} \\
+After training, generate new data points \(V^{(1)}, V^{(2)}, \ldots, V^{(M)}\) via Gibbs sampling from \(P(h|v), P(v|h)\):
+\begin{verbatim}
+initialize v = V^(0)
+(random data point)
+for t = 1 to M:
+    sample h^(t) ~ P(h|v^(t-1))
+    = sigmoid(v^(t-1) W + c)
+    sample v^(t) ~ P(v|h^(t))
+    = sigmoid(W h^(t) + b)
+return v^(1), v^(2), ...,
+v^(M)
+\end{verbatim}
+
+\section*{14 Autoenc \& Vector Embed.}
+
+\textcolor{red}{Loss Function} \\
+\textcolor{blue}{\(L(x', x)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item minimizes reconstruction error between output \(x'\) and original input \(x\)
+    \item i.e., how well can we rebuild the input after compressing it?
+\end{itemize}
+
+input and output layers have same size and state
+
+\textcolor{red}{Tied Weights}
+decoder uses transpose of encoder weights (reduces parameters, adds regularization)
+
+\textcolor{red}{Vector Embeddings / Word Representations}
+\begin{itemize}[nosep, leftmargin=*]
+    \item problem: one-hot vectors don't capture similarity (``happy'' and ``elated'' are equally distant from ``cat'')
+\end{itemize}
+
+\textcolor{red}{Predicting Word Co-occurrences (Neural Network Approach)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item use 3-layer neural network to predict co-occurrences
+    \item input: one-hot word vector
+    \item output: probability of each word's co-occurrence
+\end{itemize}
+\textcolor{blue}{\(y = f(v, \theta)\)} where \(v \in \mathcal{W}\) \\
+\textcolor{blue}{\(y \in \mathcal{P}^{N_v} = \{p \in \mathbb{R}^{N_v} \mid p \text{ is a probability vector}\}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item i.e., \textcolor{blue}{\(\sum p_i = 1, \quad p_i \geq 0 \quad \forall i\)}
+    \item \(y_j\) = probability that word\(_j\) appears nearby
+\end{itemize}
+
+\textcolor{red}{Neural Network Architecture}
+\begin{itemize}[nosep, leftmargin=*]
+    \item output layer uses \textbf{softmax}
+    \item hidden layer is smaller than input/output (bottleneck)
+    \item this squeezing forces similar words to have similar representations
+    \item the hidden layer activations \textit{are} the word embeddings
+\end{itemize}
+
+\textcolor{red}{word2vec}
+\begin{itemize}[nosep, leftmargin=*]
+    \item (1) \textbf{treats common phrases as new words}: e.g., ``New York'' \(\rightarrow\) one token
+    \item (2) \textbf{randomly ignores very common words}: e.g., ``the'' dominates word pairs
+    \item (3) \textbf{negative sampling}: only backprop on some negative cases (not all 70k words)
+\end{itemize}
+
+\textcolor{red}{Embedding Space}
+\begin{itemize}[nosep, leftmargin=*]
+    \item low-dimensional space where similar inputs map to similar locations
+    \item \textbf{why it works}: similar words co-occur with same set of words \(\rightarrow\) similar outputs \(\rightarrow\) similar hidden activations
+\end{itemize}
+
+\section*{15 Variational Autoencoders}
+
+\textcolor{red}{Variational Autoencoders}
+\begin{itemize}[nosep, leftmargin=*]
+    \item goal: not just reconstruct samples, but generate ANY valid sample
+    \item want to sample from \(p(x)\), the distribution of inputs
+    \item idea: sample from lower-dimensional latent space \(z \sim p(z)\), then generate \(x\) from \(z\)
+    \item e.g., for digits, \(z\) could represent digit class, thickness, slant, etc.
+\end{itemize}
+
+\textcolor{red}{Generative Model Formulation} \\
+\textcolor{blue}{\(p(x) = \int p_\theta(x|z)p(z) \, dz\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item have dataset \(X\), want to find \(\theta\) to maximize likelihood of observing \(X\)
+    \item \(p(x|z)\): mapping from latent \(z\) to data \(x\) (decoder)
+\end{itemize}
+
+\textcolor{red}{Gaussian Decoder Assumption} \\
+Assume \(p_\theta(x|z)\) is Gaussian with mean \(d(z, \theta)\) and std \(\Sigma\): \\
+\textcolor{blue}{\(-\ln p_\theta(x|z) = \frac{1}{2\Sigma^2} \|X - d(z, \theta)\|^2 + C\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item given samples \(z\), we can learn decoder \(d(z, \theta)\)
+    \item objective: \textcolor{blue}{\(\max_\theta \mathbb{E}_{z \sim p(z)}[p_\theta(x|z)]\)} or \textcolor{blue}{\(\min_\theta \mathbb{E}_{z \sim p(z)}[\|X - d(z, \theta)\|^2]\)}
+    \item can use Monte Carlo to approximate: \textcolor{blue}{\(\mathbb{E}_{p(z)}[p_\theta(x|z)] = \int p_\theta(x|z)p(z)dz\)}
+\end{itemize}
+
+\textcolor{red}{Sampling from Latent Space}
+\begin{itemize}[nosep, leftmargin=*]
+    \item if we sample randomly, we choose improbable \(z\)'s where \(p(z_i) \approx 0\)
+\end{itemize}
+
+\textcolor{red}{Choose the Latent Distribution} \\
+Let \(q(z)\) be our chosen distribution over \(z\): \\
+\textcolor{blue}{\(p(x) = \mathbb{E}_{z \sim p}[p(x|z)] = \int dz \, p(x|z)p(z) = \int dz \, p(x|z)\frac{p(z)}{q(z)}q(z) = \mathbb{E}_{z \sim q}\left[p(x|z)\frac{p(z)}{q(z)}\right]\)}
+
+\textcolor{red}{Evidence Lower Bound (ELBO)} \\
+Expected negative log likelihood (NLL): \\
+\textcolor{blue}{\(-\ln p(x) \leq -\mathbb{E}_{q(z)}\left[\ln p(x|z) + \ln \frac{p(z)}{q(z)}\right]\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item rewrite RHS: \textcolor{blue}{\(-\ln p(x) \leq {\text{KL}(q(z)\|p(z))} - {\mathbb{E}_{q(z)}[\ln p(x|z)]}\)}
+    \item where KL divergence: \textcolor{blue}{\(\text{KL}(q(z)\|p(z)) = -\mathbb{E}_{z \sim q}\left[\ln\left(\frac{p(z)}{q(z)}\right)\right]\)}
+    \item (1) + (2) is upper bound on NLL; minimizing it maximizes likelihood \(p(x)\)
+\end{itemize}
+
+\textcolor{red}{VAE Strategy}
+\begin{itemize}[nosep, leftmargin=*]
+    \item (1) choose convenient latent distribution: \textcolor{blue}{\(p(z) \sim \mathcal{N}(0, I)\)}
+    \item design \(q(z)\) to be close to \(\mathcal{N}(0, I)\): \textcolor{blue}{\(\min_q \text{KL}(q(z)\|\mathcal{N}(0, I))\)}
+    \item how? encoder outputs \(\mathcal{N}(\mu, \sigma^2)\), then pressure encoder to give \(\mu = 0, \sigma^2 = I\)
+\end{itemize}
+
+\textcolor{red}{KL Divergence for Gaussians (Closed Form)} \\
+\textcolor{blue}{\(\text{KL}(\mathcal{N}(\mu, \sigma^2)\|\mathcal{N}(0, I)) = \frac{1}{2}(\sigma^2 + \mu^2 - \ln \sigma^2 - 1)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item want to minimize this (push encoder toward standard normal)
+    \item but reconstruction loss pushes back...
+\end{itemize}
+
+\textcolor{red}{Reconstruction Loss (Term 2)} \\
+\textcolor{blue}{\(\mathbb{E}_q[\ln p(x|z)]\)} is reconstruction loss
+\begin{itemize}[nosep, leftmargin=*]
+    \item can write as \(\mathbb{E}_q[\ln p(x|\hat{x})]\) where \(\hat{x} = d(z, \theta)\) (deterministic decoder)
+\end{itemize}
+
+\textcolor{red}{Reparameterization Trick} \\
+\textcolor{blue}{\(z = \mu(x, \theta) + \epsilon \odot \sigma(x, \theta), \quad \epsilon \sim \mathcal{N}(0, I)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item makes distribution differentiable for backprop
+    \item stochasticity comes from separate variable \(\epsilon\) (vector of random values)
+\end{itemize}
+
+\textcolor{red}{VAE Training Process}
+\begin{itemize}[nosep, leftmargin=*]
+    \item encode \(x\): compute \(\mu(x, \theta)\) and \(\sigma(x, \theta)\) using neural network
+    \item sample: \textcolor{blue}{\(z = \mu + \epsilon\sigma, \quad \epsilon \sim \mathcal{N}(0, I)\)}
+    \item compute KL loss: \textcolor{blue}{\(\frac{1}{2}(\sigma^2 + \mu^2 - \ln \sigma^2 - 1)\)}
+    \item decode: \(\hat{x} = f(x, \theta) = d(z)\)
+    \item compute reconstruction loss:
+    \item Gaussian \(p(x|\hat{x})\): \textcolor{blue}{\(\frac{1}{2}\|\hat{x} - x\|^2\)}
+    \item Bernoulli \(p(x|\hat{x})\): \textcolor{blue}{\(\sum_x x \ln \hat{x}\)}
+\end{itemize}
+
+\textcolor{red}{Full VAE Objective} \\
+\textcolor{blue}{\(E = \mathbb{E}_x[{L(x, \hat{x})} + \beta{(\sigma^2 + \mu^2 - \ln \sigma^2 - 1)}]\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item first term is reconstruction, second is KL, both terms differentiable w.r.t. \(\theta\), so can use gradient descent
+    \item \(\beta\) balances reconstruction vs. KL divergence loss
+    \item VAE latent space has fewer holes (closer to \(\mathcal{N}(0, I)\))
+\end{itemize}
+
+\section*{16 Diffusion Models}
+
+\textcolor{red}{Diffusion Models}
+\begin{itemize}[nosep, leftmargin=*]
+    \item goal: generate images from noise by reversing diffusion process
+    \item latent variable model with sequence: \(x_0, x_1, \ldots, x_T\)
+\end{itemize}
+
+\textcolor{red}{Forward Process (Adding Noise)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item progressively adds noise until we get pure noise at \(x_T\)
+    \item forward step: \textcolor{blue}{\(q(x_t \mid x_{t-1})\)}
+    \item defined as Gaussian: \textcolor{blue}{\(q(x_t \mid x_{t-1}) = \mathcal{N}(x_t; \sqrt{1 - \beta_t} \, x_{t-1}, \beta_t I)\)}
+    \item for large \(T\): \textcolor{blue}{\(x_T \sim \mathcal{N}(0, I)\)}
+    \item variance schedule \(\beta_1, \ldots, \beta_T\) controls noise addition (e.g., linear: \(\beta_1 = 10^{-4}, \beta_T = 0.02\))
+\end{itemize}
+
+\textcolor{red}{Reverse Process (Denoising)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item aims to recover original data from noise
+    \item reverse step: \textcolor{blue}{\(p_\theta(x_{t-1} \mid x_t)\)}
+    \item learned by neural network
+\end{itemize}
+
+\textcolor{red}{Forward Process: From \(x_0\) to \(x_t\) Directly} \\
+\textcolor{blue}{\(x_t = \sqrt{1 - \beta_t} \, x_{t-1} + \sqrt{\beta_t} \, \epsilon_t, \quad \epsilon_t \sim \mathcal{N}(0, I)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item define \(\alpha_t \equiv 1 - \beta_t\), expand recursively:
+    \item \textcolor{blue}{\(x_t = \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}} \, x_{t-2} + \sqrt{1 - \alpha_{t-1}} \, \epsilon_{t-1}) + \sqrt{1 - \alpha_t} \, \epsilon_t\)}
+    \item result: \textcolor{blue}{\(x_t = \sqrt{\bar{\alpha}_t} \, x_0 + \sum_i c_i \epsilon_i\)}
+    \item where \(\bar{\alpha}_t \equiv \alpha_1 \cdots \alpha_t\) and \(\epsilon_i \sim \mathcal{N}(0, I)\)
+    \item sum of independent Gaussians is Gaussian: \textcolor{blue}{\(\sum_i c_i \epsilon_i \sim \mathcal{N}(0, (1 - \bar{\alpha}_t)I)\)}
+\end{itemize}
+
+\textcolor{red}{Closed-Form Forward Process} \\
+\textcolor{blue}{\(x_t = \sqrt{\bar{\alpha}_t} \, x_0 + \sqrt{1 - \bar{\alpha}_t} \, \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item can jump directly from \(x_0\) to any \(x_t\) without iterating
+    \item solving for \(x_0\): \textcolor{blue}{\(x_0 = \frac{1}{\sqrt{\bar{\alpha}_t}} \left( x_t - \sqrt{1 - \bar{\alpha}_t} \, \epsilon \right)\)}
+    \item to get \(x_0\) from \(x_t\), need to estimate noise \(\epsilon\) using neural network \(\epsilon_\theta(x_t, t)\)
+\end{itemize}
+
+\textcolor{red}{Why Not Use Direct Formula?}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\bar{\alpha}_t = \alpha_1 \cdots \alpha_t\) becomes very small for large \(t\)
+    \item amplifies noise in our estimate of \(\epsilon\)
+    \item use iterative sampling algorithm instead (works better in practice)
+\end{itemize}
+
+\textcolor{red}{Simplified Loss} \\
+\textcolor{blue}{\(\mathbb{E}_{x_0, \epsilon}\left[ \lambda_t \| \epsilon - \epsilon_\theta(x_t, t) \|_2^2 \right]\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item where \(\lambda_t = \frac{\beta_t^2}{2\sigma_t^2 \alpha_t (1 - \bar{\alpha}_t)}\)
+    \item in practice, set \(\lambda_t = 1\)
+    \item substituting \(x_t\): \textcolor{blue}{\(\mathbb{E}_{x_0, \epsilon}[ \| \epsilon - \epsilon_\theta(\sqrt{\bar{\alpha}_t} \, x_0\)} \\ \textcolor{blue}{\(+ \sqrt{1 - \bar{\alpha}_t} \, \epsilon, t) \|_2^2]\)}
+    \item intuition: train network to predict the noise that was added
+\end{itemize}
+
+\textcolor{red}{Training Algorithm}
+\begin{verbatim}
+repeat until convergence:
+    sample x_0 ~ q(x_0)
+    from dataset
+    sample t
+    ~ Uniform({1, ..., T})
+    sample epsilon ~ N(0, I)
+    compute x_t
+    = sqrt(alpha_bar_t) *
+    x_0 + sqrt(1 - alpha_bar_t)
+    * epsilon
+    gradient descent on L =
+    ||epsilon - 
+    epsilon_theta(x_t, t)||^2
+\end{verbatim}
+
+\textcolor{red}{Sampling Algorithm}
+\begin{verbatim}
+initialize x_T ~ N(0, I)
+for t = T, ..., 1:
+    sample z ~ N(0, I) if
+    t > 1, else z = 0
+    compute x_{t-1} = 
+    (1/sqrt(alpha_t)) * 
+    (x_t - (beta_t/sqrt(1 -
+    alpha_bar_t)) * epsilon_
+    theta(x_t, t)) + sigma_t
+    * z
+return x_0 (generated sample)
+\end{verbatim}
+
+takes noisy image \(x_t\) and timestep \(t\) as input outputs predicted noise \(\epsilon\)
+
+\section*{17 Recurrent NN}
+
+\textcolor{red}{How it works} processes sequence with hidden state that carries information forward from previous steps.
+
+\textcolor{red}{Mathematical Definition} \\
+\textcolor{blue}{\(\mathbf{h}_i = f(\mathbf x_iU+\mathbf h_{i-1}W+\mathbf b)\)}
+
+\textcolor{red}{Output \(\mathbf y\) at time \(i\)} \\
+\textcolor{blue}{\(\mathbf y = \operatorname{Softmax}(\mathbf h_iV + \mathbf c)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\mathbf y\) is output at \(i\)
+    \item \(V\) is weight matrix from hidden-to-output transformation
+    \item \(\mathbf c\) is bias
+\end{itemize}
+
+\begin{itemize}[nosep, leftmargin=*]
+    \item maintain memory through hidden state \(\mathbf h_i\), effective for sequences: language modeling, time-series forecasting, speech recognition
+    \item increasing number of hidden units enhances model's ability to store and process long-term dependencies, higher computational cost \& memory usage
+    \item vanilla RNN is prone to vanishing \& exploding gradients when the sequence is long, use long short-term memory \& gated recurrent units
+\end{itemize}
+
+\textcolor{red}{Train RNN - Loss Function} \\
+need output to match target by minimizing loss function
+\textcolor{blue}{\(\mathcal L(\mathbf y_1,\dots, \mathbf y_N, \mathbf t_1, \dots, \mathbf t_N)=\sum_{i=1}^N\alpha_i\mathcal L(\mathbf y_i, \mathbf t_i)\)} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\mathbf y_i\) output at \(i\)
+    \item \(\mathbf t_i\) target output at \(i\)
+    \item \(N\) sequence length
+    \item \(\mathcal L(\mathbf y_i, \mathbf t_i)\) loss function error between prediction and target, could be cross-entropy for classification or MSE for regression
+\end{itemize}
+
+\textcolor{red}{Train RNN - Find \(\theta\)} \\
+\(\theta\) minimizes the expected loss over the entire data set, mathematically \\
+\textcolor{blue}{\(\theta^{*} = \operatorname{arg}\operatorname{min}_\theta \mathbb{E}_{(\mathbf X, \mathbf T)\in\mathcal D}[\mathcal L]\)} \\
+\(\theta = \{U, V, W, \vec{b}, \vec{c}\}\) is the set of trainable parameters
+
+\textcolor{red}{Deep RNN Mechanism} \\
+input \(\vec{x}^n\) is processed by the first RNN layer, generating a hidden state \(\vec{h}^n_1\), each subsequent layer \(l\) receives hidden state from previous \(l-1\) and computes a new hidden, the final layer \(L\) produces output \(\vec{y}^n\)
+
+\textcolor{red}{Deep RNN Layer Math Def} \\
+\textcolor{blue}{\(\vec{h}^n_L = f(\vec{h}^n_{L-1}U_L + \vec{h}^{n-1}_L W_L + b_L)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\vec{h}^n_i\) hidden state at time step \(n\) in layer \(l\)
+    \item \(U_l\) is the input-to-hidden weight matrix for layer \(l\)
+    \item \(W_l\) is the recurrent weight matrix within layer \(l\)
+    \item \(f\) is non-linear activation function
+    \item \(\vec{b}_i\) are vector biases
+\end{itemize}
+the final output is
+\textcolor{blue}{\(\vec{y}_n = \operatorname{Softmax}(\vec{h}_L^n V+\vec{c})\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(V\) is the weight matrix from the last hidden layer to the output
+    \item \(\vec{c}\) is a bias vector
+\end{itemize}
+
+\begin{itemize}[nosep, leftmargin=*]
+    \item increase the number of layers while keeping size of hidden state \(d_n\) small to maintain reasonable computational cost
+    \item improves representation learning
+    \item deep RNN outperforms shallow ones in speech recognition and language modeling
+\end{itemize}
+
+\section*{18 Gated Recurrent Units}
+\textcolor{red}{Why GRU} vanilla RNNs this happens due to vanishing gradient when the weight \(|w| < 1\), the \(n\)-th power shrinks exponentially, if \(|w| > 1\), the training becomes unstable
+
+\textcolor{red}{New Candidate Hidden State} \\
+\textcolor{blue}{\(\vec{\tilde{h}}^n = \tanh{(\vec{h}^{n-1}W + \vec{x}^nU + \vec{b})}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(W\) is the hidden-to-hidden weight matrix
+    \item \(U\) is the input-to-hidden weight matrix
+    \item \(\tilde{b}\) is the bias vector
+    \item The tanh function ensures that \(\tilde{h}^t \in (-1, 1)\)
+\end{itemize}
+
+\textcolor{red}{Gate Mechanism} \\
+The gate \(\vec{g}^n\) determines how much past information is retained
+\textcolor{blue}{\(\vec{g}^n = \sigma(\vec{h}^{n-1}W_g + \vec{x}^n U_g + \vec{b}_g)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(W_g\) and \(U_g\) are the gate's weight matrices
+    \item \(\vec{b}_g\) is the bias vector for the gate
+    \item The \(\sigma\) (sigmoid) function ensures that \(g^n \in (0, 1)\), meaning it acts as a soft switch
+\end{itemize}
+
+\textcolor{red}{Final Hidden State Update}
+\textcolor{blue}{\(\vec{h}^n = \vec{g}^n \odot \vec{\tilde{h}}^n + (1 - \vec{g}^n) \odot \vec{h}^{n-1}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\vec{g}^n\) controls how much of the new candidate state \(\vec{\tilde{h}}^n\) is retained
+    \item \((1 - \vec{g}^n)\) controls how much of the previous state \(\vec{h}^{n-1}\) is preserved
+\end{itemize}
+
+\textcolor{red}{How It Works}
+\begin{itemize}[nosep, leftmargin=*]
+    \item if \(g_i^n \approx 1\), the new state is mostly the candidate state component \(\tilde{h}_i^n\), meaning the network updates to new information
+    \item if \(g_i^n \approx 0\), the previous hidden state component \(h_i^{n-1}\) is mostly preserved, preventing unnecessary updates
+\end{itemize}
+for "the city is beautiful", we can set \(g\) for city and beautiful to be 1, it retains relevant information
+
+\textcolor{red}{Full GRU} \\
+update gate \\
+\textcolor{blue}{\(\vec{g}^n = \sigma(\vec{h}^{n-1}W_g + \vec{x}^n U_g + \vec{b}_g)\)} \\
+reset gate \\
+\textcolor{blue}{\(\vec{r}^n = \sigma(\vec{h}^{n-1}W_r + \vec{x}^n U_r + \vec{b}_r)\)}
+candidate state \\
+\textcolor{blue}{\(\vec{\tilde{h}}^n = \tanh((\vec{h}^{n-1} \odot \vec{r}^n)W + \vec{x}^n U + \vec{b})\)} \\
+final state \\
+\textcolor{blue}{\(\vec{h}^n = \vec{g}^n \odot \vec{\tilde{h}}^n + (1 - \vec{g}^n) \odot \vec{h}^{n-1}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item reset gate \(\vec{r}^n\) determines how much of the previous hidden state \(\vec{h}^{n-1}\) should be forgotten before new candidate hidden state
+    \item when \(\vec{r}^n\) is close to \(0\), the model is more reliant on new input
+    \item when when \(\vec{r}^n\) is close to \(1\), more past information is retained
+\end{itemize}
+
+\section{19 Attention Mechanism}
+transformers is good for natural language processing
+
+\textcolor{red}{Tokenization}
+breaks down a piece of text (like a sentence) into smaller units called tokens
+
+\textcolor{red}{Embedding}
+each word is a vector of size \(d\) and represents a row, the embedding \(X\) of a sentence with three words is \(\in \mathbb{R}^{3 \times d}\)
+
+\textcolor{red}{Self Attention}
+for each word \(x_i\)
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textcolor{blue}{Queries \(\vec{q}_i = \vec{x}_iW^{(Q)}\) \\ 
+    \(Q = XW^{(Q)} \quad n\times d \cdot d \times \ell\)}
+    what the word is looking for
+    \item \textcolor{blue}{Keys \(\vec{k}_i = \vec{x}_iW^{(K)}\) \\ 
+    \(K = XW^{(K)} \quad n\times d \cdot d \times \ell\)} what the word has, used to decide if the word is relevant
+    \item \textcolor{blue}{Values \(\vec{v}_i = \vec{x}_iW^{(V)}\) \\ 
+    \(V = XW^{(V)} \quad n\times d \cdot d \times \ell\)} provides information once the word is chosen as relevant
+\end{itemize}
+for the matrices
+\begin{itemize}[nosep, leftmargin=*]
+    \item all matrices are in \(\mathbb{R}^{d \times \ell}\)
+    \item \(\ell\) is a hyperparameter
+    \item \(k\) and \(v\) belong to the words that might be attended to
+    \item \(q\) belongs to the word that is doing the attending
+\end{itemize}
+
+\textcolor{red}{Computing Attention Scores} \\
+the attention of \(\vec{q}_i\) on \(\vec{k}_j\) is \\
+\textcolor{blue}{\(S_{ij} = \vec{q}_i \cdot \vec{k}_j,\quad j = 1,\dots,n\)} \\
+\(S_{ij}\) is the vector \(i\)'s score for vector \(j\)'s, how important \(k_j\) is to \(q_i\), so \(S_{12}\) is how important \(3\) is to \(1\)
+
+\textcolor{red}{Full Attention Matrix} \\
+\textcolor{blue}{\(S = QK^T \quad n \times \ell \cdot \ell \times n\)}
+
+\textcolor{red}{Self-Attention Output} each row sums up to \(1\) \\
+\textcolor{blue}{\(A = \operatorname{Softmax}({S}/{\sqrt{d}}), \, A \in \mathbb{R}^{n\times n}\)}
+
+\textcolor{red}{Attention Head} \\
+\textcolor{blue}{\(H = A \cdot V \quad H \in \mathbb R^{n \times \ell}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item original word embedding w contextual information important words, importance still matrix \(A\)
+    \item it has the same size as the original embedding matrix \(X\)
+\end{itemize}
+for each token output \\
+\textcolor{blue}{\(\vec{H}_i = \sum_{j=1}^nA_{ij}\vec{v}_j\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(A_{ij}\) attention score of query \(\vec{q}_i\) on key \(\vec{k}_j\)
+    \item \(\vec{v}_j\) is the value associated with input \(j\)
+\end{itemize}
+
+\textcolor{red}{Positional Encoding Problem} \\
+sentences with same words but different order have the same attention head, word embeddings do not contain positional information, self-attention is permutation equivalent \\
+
+\textcolor{red}{Positional Encoding} \\
+impose new order \\
+\textcolor{blue}{\(\vec{x}_i \Rightarrow \vec{x}'_i = \vec{x}_i + \operatorname{PE}(i) \)} \\
+\(\operatorname{PE}\) is defined as \\
+\textcolor{blue}{\(\operatorname{PE}(i)_{2j} = \sin\left(\frac{i}{10000^{2j/d}}\right)\) \\
+\(\operatorname{PE}(i)_{2j+1} = \cos\left(\frac{i}{10000^{2j/d}}\right)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\operatorname{PE}(i)\) is the positional encoding vector for position \(i\)
+    \item frequency changes with dimension \(j\)
+    \item \(10000\) is a scaling constant to allow converge of a large max sequence length
+\end{itemize}
+
+\textcolor{red}{Multi-Head Attention} \\
+allows the model to jointly attend to information, each head can learn distinct aspects or features, it runs \(n\) weight matrices in parallel \\
+\textcolor{blue}{\(\text{Multi-Head Attention} = \operatorname{Concat(H^{(1)}, \dots, H^{(h)} )}W^O\) \\ \(\in \mathbb R^{n \times d_{\text{model}}}\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item each \(H^{(\mu)}\) is computed independently in each attention head \(\mu\)
+    \item concat is \(\in \mathbb R^{n \times (h \ell)}\)
+    \item \(W^O \in \mathbb R^{(h\ell) \times d_{\text{model}}}\)
+    \item the number of heads is denoted by \(h\)
+\end{itemize}
+
+\section*{20 Transformers}
+
+\textcolor{red}{Batch Normalization (One Feature for All Samp.)}
+
+\textcolor{red}{Batch N on a Single Neuron} \\
+let \(i\) a particular neuron (or feature) indexed by \(i\) and a mini-batch of size \(D\), let \(h_i^{(d)}\) be the activations of neuron \(i\) on example \(d\), for \(d = 1,\dots,D\)
+\begin{itemize}[nosep, leftmargin=*]
+    \item \textcolor{blue}{the mini-batch mean of neuron \(i\) is \(\mu_i = \tfrac{1}{D}\sum_{d=1}^Dh_i^{(d)}\)}
+    \item \textcolor{blue}{the corresponding mini-match variance is \(\sigma_i^2 = \tfrac{1}{D}\sum_{d=1}^D(h_i^{(d)} - \mu_i)^2\)}
+    \item normalize each activation  \textcolor{blue}{\(\hat{h}_i^{(d)} = \frac{h_i^{(d)} - \mu_i}{\sigma_i}\)} or more stably \textcolor{blue}{\(\hat{h}_i^{(d)} = \frac{h_i^{(d)} - \mu_i}{\sqrt{\sigma_i^2 + \varepsilon}}\)}
+\end{itemize}
+
+\textcolor{red}{Layer Normalization} \\
+\textcolor{blue}{\(y = \operatorname{LN}(x)\)}
+normalizes all features within one layer for a single example \\
+for hidden vector \(\vec{h} \in \mathbb R^H\), compute the mean and variance of its coordinates then normalized activation is \\
+\textcolor{blue}{\(\hat{\vec{h}} = \frac{\vec{h} - \mu}{\sqrt{\sigma^2 + \varepsilon}} \)}
+
+\textcolor{red}{Layer Norm Definition} \\
+\textcolor{blue}{\(\operatorname{LN}(\vec h) = \boldsymbol{\alpha} \odot \hat{\vec h} + \boldsymbol{\beta}\)} where \(\boldsymbol{\alpha}, \boldsymbol{\beta} \in \mathbb{R}^H\) are learned scale and shift parameters
+
+\textcolor{red}{Why use LN} \\
+let \(h_1 = 5, h_2 = 5000\), to train \(z = w_1h_1 + w_2h_2 + b\), we need to keep \(w_2\) very small, inefficient learning. LN scales \(h_1\) and \(h_2\) so they're comparable
+
+\textcolor{red}{Add and Norm Module}
+after a multi-head attentionblock in a transformer, we use
+\textcolor{blue}{\(y = \operatorname{LN}(x + \operatorname{MHA}(x))\)}
+
+\textcolor{red}{BN vs. LN} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item BN normalizes over the batch dimension, LN normalizes over the feature dimension, BN solves it across examples, LN solves it within each example
+    \item often prefer LN over BN because batch size is often variable, LN does not depend on batch statistics
+\end{itemize}
+
+\textcolor{red}{FF Layer in En/Decoder} \\
+\(x \to \text{attention} \to \text{norm} \to \text{FF layer} \to \text{norm} \to \text{output}\) \\
+inside each encoder and decoder there is a position-wise FFN that applies weights and biases independently to each position of the sequence \\
+\textcolor{blue}{\(f(x) = W_2\varphi(W_1x+b_1)+b_2\)}
+
+\textcolor{red}{Autoregressive} \\
+the decoder is autoregressive, each prediction depends only on previous predictions, not future ones
+
+\textcolor{red}{Next-Token NLL} \\
+loss that's minimized \\
+\textcolor{blue}{\(\mathcal{L} = \mathbb{E}_D[\sum_{i=1}^N -\log p_\theta(x_i | x_{<i})]\)}
+
+\textcolor{red}{Benefit of Transformer} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item long range dependency
+    \item every position can directly attend to every other position in a single step, \(O(1)\) path length
+    \item direct gradient flow
+\end{itemize}
+
+\section*{21 Adversarial Attacks}
+given the data set \( \mathcal{D} = \{ (x,t) \mid x \in X,\, t \in \{1,\ldots,K\} \} \)
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(X\) is output space
+    \item \(t\) is true target
+\end{itemize}
+
+\textcolor{red}{Real World Issue} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item might cause autonomous vehicles to not recognize stop signs
+    \item misclassifications of numbers that might be undetected by human eyes
+\end{itemize}
+
+\textcolor{red}{Classification Error} \\
+\textcolor{blue}{\( R(f) \triangleq \mathbb{E}_{(x,t)\sim \mathcal{D}}[ \operatorname{card}\{ \arg\max_i y_i \neq t \mid y = f(x) \} ] \)} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\operatorname{arg}\operatorname{max}_i y_i\) the index of the largest element of \(y\)
+    \item \(\operatorname{card}\) is the cardinality (number of elements)
+\end{itemize}
+
+\textcolor{red}{\(\varepsilon\)-Ball} \\
+\textcolor{blue}{\( \mathcal{B}(x,\varepsilon) = \{ x' \in X \mid \|x - x'\| \le \varepsilon \} \)}
+
+\textcolor{red}{Adversarial Attacks} \\
+is there \(x' \in \mathcal B(x, \varepsilon)\) such that \\
+\textcolor{blue}{\(\operatorname{arg} \operatorname{max}_i (y_i) \neq t\) for \(y = f(x')\)}, is there \(x'\) such that it's output probability vector is classified incorrectly?
+
+\textcolor{red}{Gradient-Based Whitebox Attack} \\
+going up the gradient to maximize loss
+
+\textcolor{red}{Untargeted Attack} \\
+\textcolor{blue}{\(x' = x +k\nabla_xE(f(x;\theta, t(x)))\)} or \\ \textcolor{blue}{\( \operatorname{max}_{x' \in \mathcal{B}(x, \varepsilon)}[L(f(x'),t]\)} update input based on gradient wrt input, only need the model to classify incorrectly, gradient ascent to increase loss
+
+\textcolor{red}{Targeted Attack} \\
+\textcolor{blue}{\(x' = x - k\nabla_xE(f(x;\theta), l)\)} where \(l \neq t(x)\) or \textcolor{blue}{\( \operatorname{max}_{x'\in \mathcal B_{(x, \varepsilon)}} [Lf(x'), l],\, l \neq t \)} gradient descent in the direction to decrease loss for the wrong class
+
+\textcolor{red}{Fast Gradient Sign Method} \\
+adjust by each pixel by \(\varepsilon\) \\
+\textcolor{blue}{\(\Delta x = \varepsilon \operatorname{sign}(\nabla_xE)\)} \\
+can also find the smallest \(\|\Delta x\|\) that causes misclassification \\
+\textcolor{blue}{\(\operatorname{min}_{\| \Delta x \|} [\operatorname{arg} \operatorname{max}_i (y_i(x)) \neq t(x)]\)}
+
+\textcolor{red}{Why Fooled So Easily?} \\
+output dimension is flattened to a high dimension, move in one direction by a small step causes movement in all directions
+\textcolor{blue}{\(w^T \Delta x = \sum_i^n w_i x_i = \sum_i^n w_i \operatorname{sign}(\Delta_xE)\varepsilon\)}, when \(n\) is large, small \(\varepsilon\) contributes to a huge loss
+
+\section*{22 Adversarial Defense}
+
+suppose we have a model \(f:X\to \mathbb R\) and the dataset \((X,T)\), where \(X \subset \mathbb X\), and \(T \in {-1, 1}\), we use
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\operatorname{sign} (f(X))\) indicates the class of \(x\)
+    \item classification is correct if \(f(X)T>0\)
+\end{itemize}
+
+\textcolor{red}{Classification ``Natural" Loss} \\
+\textcolor{blue}{\(\mathcal{R}_{\text{nat}}(f) = \mathbb{E}_{(X,T)}[\text{card}\{f(X)T \leq 0\}]\)} \\
+counts how many points are misclassified, this loss doesn't care about adversarial robustness at all, a point could be barely correctly classified (margin close to 0), and this loss counts it the same as a point that's very confidently correct
+
+\textcolor{red}{Robust Loss} \\
+\textcolor{blue}{\(\mathcal{R}_{\text{rob}}(f) = \mathbb{E}_{(X,T)} [\text{card} \{X' \in \mathcal{B}(X,\varepsilon) \)} \\ \textcolor{blue}{\(| f(X')T \leq 0\}]\)} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item ball represents all possible adversarial perturbations an attacker could make
+    \item it says if any point in the \(\varepsilon\)-region can be misclassified then it's bad
+\end{itemize}
+
+then we use a smooth function g that approximates the step function since \(\operatorname{card}\) is a step function
+
+\textcolor{red}{Full TRADES} \\
+\textcolor{blue}{\(\min_f \mathbb{E}_{(X,T)} [g(f(X)T) + \max_{X' \in \mathcal{B}(X,\varepsilon)} g(f(X) \cdot f(X'))]\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item first term ensures \(X\) is properlly classified
+    \item second term adds a penalty for models \(f\) that place the decision boundary within \(\varepsilon\) of \(X\), where\(f(X)\) and \(f(X')\) will have opposite signs
+\end{itemize}
+
+\textcolor{red}{Implementation} \\
+for each gradient update
+\begin{itemize}[nosep, leftmargin=*]
+    \item run several steps of gradient ascent to find \(X'\)
+    \item evaluate joint loss \textcolor{blue}{\(\text{loss} = g(f(X)T) + \beta g(f(X)f(X'))\)} where \(\beta\) s a hyperparameter
+    \item use gradient of the loss to update weights
+\end{itemize}
+
+\section*{23 Generative Adversarial Network}
+
+\textcolor{red}{Cost Function of GANs} \\
+\textcolor{blue}{\(C(\theta_D, \theta_G) = -\frac{1}{2} \mathbb{E}_{x_{\text{real}} \sim p_{\text{data}}} [\log D_{\theta_D}(x_{\text{real}})] - \frac{1}{2} \mathbb{E}_{z \sim p_z} [\log(1 - D_{\theta_D}(G_{\theta_G}(z)))]\)} \\
+\begin{itemize}[nosep, leftmargin=*]
+    \item \(\theta_D\) parameters (weights) of the discriminator network
+    \item \(\theta_G\) parameters (weights) of the generator network
+    \item \(p_{\text{data}}\) the distribution of real data
+    \item \(p_z\): the distribution of noise (usually standard Gaussian)
+    \item \(D_{\theta_D}(x)\) discriminator's output (probability) for input \(x\)
+    \item \(G_{\theta_G}(z)\) generator's output (fake sample) for noise \(z\)
+\end{itemize}
+
+\textcolor{red}{GAN Training (Min-Max Game)} \\
+\textcolor{blue}{\(\max_{\theta_G} \min_{\theta_D} C(\theta_D, \theta_G)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item implemented by alternating gradient \textit{descent} on discriminator and gradient \textit{ascent} on generator \textcolor{blue}{\(\theta_D \leftarrow \theta_D - \eta_D \nabla_{\theta_D} C(\theta_D, \theta_G)\)} \\ \textcolor{blue}{\(\theta_G \leftarrow \theta_G + \eta_G \nabla_{\theta_G} C(\theta_D, \theta_G)\)}
+    \item discriminator \(D\) aims to minimize cost \(C\), ideally \(D(x_{\text{real}}) = 1\) and \(D(x_{\text{fake}}) = 0\)
+    \item \textcolor{blue}{\(D(x_{\text{real}}) \approx D(x_{\text{fake}}) \approx 0.5\)}
+\end{itemize}
+
+\textcolor{red}{Relation to Untargeted A A} \\
+classifier \(f_\theta(x)\) with loss \(\ell(f_\theta(x), y)\), untargeted solves \\
+\textcolor{blue}{\(x_{\text{adv}} = \text{arg max}_{x' \in B(x,\varepsilon)} \ell(f_\theta(x'), y)\)}
+\begin{itemize}[nosep, leftmargin=*]
+    \item gradient ascent on input: \textcolor{blue}{\(x \leftarrow x + \alpha \nabla_x \ell(f_\theta(x), y)\)}
+    \item adversarial training (TRADES) min-max objective \\ \textcolor{blue}{\(\min_\theta \max_{x' \in B(x,\varepsilon)} \ell(f_\theta(x'), y)\)}
+    \item same structure as GAN \textcolor{blue}{\(\min_{\theta_D} \max_{\theta_G} C(\theta_D, \theta_G)\)}
+    \item discriminator \(D_{\theta_D}\) is classifier \(f_\theta\)
+    \item generator \(G_{\theta_G}(z)\) is learned adversary searching for \(x_{\text{fake}} = G_{\theta_G}(z)\) that maximally confuses discriminator
+\end{itemize}
+
+\textcolor{red}{Intuition and Training Phases}
+\begin{itemize}[nosep, leftmargin=*]
+    \item discriminator \(D\) distinguishes fake from real
+    \item generator \(G\) improves, discriminator's task hard
+    \item ideally, generator produces data indistinguishable from real, discriminator assigns probability 0.5 to both
+    \item GAN trained until discriminator can no longer reliably distinguish real vs generated
+\end{itemize}
+
+\end{multicols}
+\end{document}
+
+% itemize with no indent
+[nosep, leftmargin=*]
+
+% item in red
+\textcolor{red}{}

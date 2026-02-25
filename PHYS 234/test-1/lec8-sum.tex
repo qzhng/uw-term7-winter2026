@@ -1,0 +1,115 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{physics} % For bra-ket notation \ket{}, \bra{}, \braket{}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=1in}
+
+\title{Lecture 8: Expectation Value \& RMS Deviation - Summary}
+\author{Based on Lecture by Raffi Budakian (Univ. of Waterloo)}
+\date{Week of Jan. 26, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Lecture Overview}
+\begin{itemize}
+    \item \textbf{Topic:} State Tomography, Expectation Values, and Uncertainty (RMS Deviation).
+    \item \textbf{Goal:} To quantify the ``average'' outcome of a quantum measurement and the ``spread'' or uncertainty associated with it.
+\end{itemize}
+
+\section{1. Introduction to State Tomography}
+\begin{itemize}
+    \item A single measurement collapses the state, destroying the information we wanted to measure.
+    \item To determine an unknown state $\ket{\psi}$, we need many identical copies.
+    \item By measuring these copies repeatedly, we build a probability distribution from which we can reconstruct (tomography) the original state.
+\end{itemize}
+
+\section{2. The Expectation Value}
+The expectation value $\langle \hat{A} \rangle$ is the theoretical average of many measurements.
+
+\subsection{Definition}
+It is defined as the sum of eigenvalues weighted by their probabilities. In the operator formalism:
+\begin{equation}
+    \langle \hat{A} \rangle = \bra{\psi} \hat{A} \ket{\psi}
+\end{equation}
+This quantity is physically observable and independent of the basis used to represent the vectors.
+
+\section{3. RMS Deviation (Uncertainty)}
+While the expectation value gives the mean, the Root-Mean-Square (RMS) deviation gives the spread (standard deviation) of the measurement results.
+
+\subsection{Formula}
+\begin{equation}
+    \Delta A = \sqrt{\langle A^2 \rangle - \langle A \rangle^2}
+\end{equation}
+Where $\langle A^2 \rangle$ is the expectation value of the operator squared ($\hat{A} \cdot \hat{A}$).
+
+\section{4. Example: Spin Measurements}
+The lecture analyzes the uncertainty relations using Spin-1/2 operators.
+
+\subsection{Properties of Squared Spin Operators}
+For spin-1/2 matrices, the square of any Pauli matrix is the Identity.
+\begin{equation}
+    S_x^2 = S_y^2 = S_z^2 = \frac{\hbar^2}{4} \mathbb{1}
+\end{equation}
+Consequently, the expectation value of any squared spin component is always:
+\begin{equation}
+    \langle S_i^2 \rangle = \frac{\hbar^2}{4}
+\end{equation}
+
+\subsection{Case Study: Measuring $S_z$ vs $S_x$}
+Assume the system is in the state $\ket{+}$ (an eigenstate of $S_z$).
+
+\begin{enumerate}
+    \item \textbf{Measuring $S_z$ (The "Same" Direction):}
+    \begin{itemize}
+        \item $\langle S_z \rangle = \frac{\hbar}{2}$
+        \item $\Delta S_z = \sqrt{\frac{\hbar^2}{4} - (\frac{\hbar}{2})^2} = 0$
+        \item \textbf{Result:} Zero uncertainty. The result is deterministic.
+    \end{itemize}
+
+    \item \textbf{Measuring $S_x$ (The "Orthogonal" Direction):}
+    \begin{itemize}
+        \item $\langle S_x \rangle = 0$ (Average of $+ \hbar/2$ and $- \hbar/2$)
+        \item $\Delta S_x = \sqrt{\frac{\hbar^2}{4} - (0)^2} = \frac{\hbar}{2}$
+        \item \textbf{Result:} Maximum uncertainty. The result is completely random.
+    \end{itemize}
+\end{enumerate}
+
+\newpage
+
+\section*{Midterm Formula Sheet}
+\addcontentsline{toc}{section}{Midterm Formula Sheet}
+
+\begin{enumerate}
+    \item \textbf{Expectation Value (Operator Form)}
+    \begin{equation}
+        \langle \hat{A} \rangle = \bra{\psi} \hat{A} \ket{\psi}
+    \end{equation}
+
+    \item \textbf{Expectation Value (Summation Form)}
+    \begin{equation}
+        \langle \hat{A} \rangle = \sum_n a_n P_n
+    \end{equation}
+
+    \item \textbf{RMS Deviation (Uncertainty)}
+    \begin{equation}
+        \Delta A = \sqrt{\langle A^2 \rangle - \langle A \rangle^2}
+    \end{equation}
+
+    \item \textbf{Squared Spin Operator Identity}
+    \begin{equation}
+        S_i^2 = \frac{\hbar^2}{4} \mathbb{1} \quad \text{for } i = x, y, z
+    \end{equation}
+\end{enumerate}
+
+\section*{Core Takeaway}
+\textbf{The Uncertainty Principle:} We cannot simultaneously know the values of non-commuting observables.
+\begin{itemize}
+    \item Precise knowledge of $S_z$ ($\Delta S_z = 0$) forces maximum uncertainty in $S_x$ and $S_y$ ($\Delta S_{x,y} = \hbar/2$).
+\end{itemize}
+
+\end{document}

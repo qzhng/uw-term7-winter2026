@@ -1,0 +1,1780 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{csquotes}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\newtcolorbox{important}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+\newtcolorbox{insight}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=blue!5,
+  colframe=blue!75,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+\graphicspath{ {./images/} }
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\pagenumbering{alph}
+\begin{titlepage}
+    \centering
+    \vspace*{5cm} % Pushes the title down the page
+    {\Large \textbf{PHYS 234}} \\begin{equation}1em]
+    {\Large \textbf{Quantum Physics 1}} \\begin{equation}1em]
+    {\Large \textbf{Lecture Notes}} \\begin{equation}1em]
+    {\Large Winter 2026}
+\end{titlepage}
+\clearpage
+
+\pagenumbering{roman}
+\tableofcontents
+\numberwithin{equation}{section}
+\clearpage
+
+\pagenumbering{arabic}
+
+\section*{Lecture 1}
+\addcontentsline{toc}{section}{Lecture 1}
+\stepcounter{section}
+\setcounter{section}{1}
+\setcounter{equation}{0}
+
+\subsection{What Is Quantum Physics}
+
+\begin{definition}[Quantum Physics]
+\label{quantum physics}
+    Quantum physics is the study of light and matter on a very small scale. 
+\end{definition}
+Quantum means ``packets" or ``discrete amount". It comes from the Latin word ``quantus", meaning``how much." In physics, it refers to the discovery that energy and matter are not smooth, continuous flows, but rather choppy, grainy chunks.
+
+\subsection{Discovery of Quantum Physics}
+
+\subsubsection{Review of Waves}
+
+\begin{definition}[Wavelength \(\lambda\) of A Standing Wave]
+\label{wavelength of a standing wave}
+    The wavelength (one complete wave cycle) of the \(n\)-th mode of a standing wave is defined as
+    \begin{equation}
+    \lambda_n = \frac{2L}{n},
+    \end{equation}
+    where \(L\) is the length of the box.
+\end{definition}
+
+\begin{definition}[Frequency \(\nu\) of A Standing Wave]
+\label{frequency of a standing wave}
+    The frequency of the \(n\)-th mode of a standing wave is defined as
+    \begin{equation}
+    \nu_n = \frac{c}{\lambda_n},
+    \end{equation}
+    where \(c\) is the speed of light since we're talking about light waves. It measures how fast the angle changes (radians per second).
+\end{definition}
+
+\begin{definition}[Angular Frequency \(\omega\)]
+\label{angular frequency}
+    The angular frequency \(\omega\) is defined as
+    \begin{equation}
+    \omega = 2 \pi \nu,
+    \end{equation}
+    where \(\nu\) is the frequency as defined in \cref{frequency of a standing wave}.
+\end{definition}
+
+Both \(\nu\) and \(\omega\) are rates/speeds. An analogy is to interpret \(\nu\) as pizzas eaten per time, where each pizza has \(2\pi\) slices and \(\omega\) as the total slices eaten per time.
+
+\subsubsection{Ultraviolet Catastrophe and Quantization of Light}
+
+Suppose we have a perfectly absorbent black box with length \(L\) and a small hole inside. We heat the box to a specific temperature (\(T\)). The inside glows, and light bounces around inside. A small beam of light escapes through the hole.
+
+\begin{fact}[Measuring Color of Light]
+\label{Measuring Color of Light}
+    All of wavelength \(\lambda\), frequency \(\nu\) and angular frequency \(\omega\) are measurements of the color of the light.
+\end{fact}
+
+By the classical Rayleigh-Jeans prediction, the Energy Density (amount of energy per unit volume) for a specific frequency is defined as
+\begin{equation}
+U(\omega) = \frac{8\pi\omega^2 k_B T}{c^3},
+\end{equation}
+where \(k_B\) is the Boltzmann constant. The intensity of light is defined as
+\begin{equation}
+I(\lambda, T) = \frac{8 k_B T}{\lambda^4}.
+\end{equation}
+
+Classical physics prediction leads to the ``Ultraviolet Catastrophe": when the wavelength becomes very small (ultraviolet), the energy shoots to infinity. Planck theorized that light must come in packets as a mathematical trick to fix the problem.
+
+\begin{center}
+\begin{tikzpicture}
+    
+    % ---------- Left panel ----------
+    \begin{axis}[
+        width=6cm,
+        height=6cm,
+        xmin=0, xmax=5,
+        ymin=0, ymax=1,
+        axis lines=box,
+        xlabel={$ \lambda $},
+        ylabel={$ I $},
+        ylabel style={rotate=-90},
+        title={predicts},
+        ticks=none
+    ]
+    \addplot[
+        domain=0:5,
+        samples=200,
+        thick
+    ]
+    {exp(-x)};
+    \end{axis}
+    
+    % ---------- Right panel ----------
+    \begin{axis}[
+        width=6cm,
+        height=6cm,
+        at={(7cm,0)},
+        anchor=origin,
+        xmin=0, xmax=5,
+        ymin=0, ymax=1,
+        axis lines=box,
+        xlabel={$ \lambda $},
+        ylabel={$ I $},
+        ylabel style={rotate=-90},
+        title={Planck (blackbody spectrum)},
+        ticks=none
+    ]
+
+    % Common scaling so BOTH fit in the box, and 3000K stays higher than 4000K.
+    % Max of x^3/(exp(x)-1) on [0.01,5] is ~1.421, so divide both by 1.421.
+    \pgfmathsetmacro{\S}{1.421}
+
+    % 3000 K (higher curve)
+    \addplot[
+        domain=0.01:5,
+        samples=400,
+        thick
+    ]
+    {(x^3/(exp(x)-1))/\S};
+    \node at (axis cs:3.1,0.62) {3000 K};
+
+    % 4000 K (lower, left-shifted curve)
+    \addplot[
+        domain=0.01:5,
+        samples=400,
+        thick
+    ]
+    {(0.6*x^3/(exp(1.2*x)-1))/\S};
+    \node at (axis cs:1.95,0.18) {4000 K};
+
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{definition}[Planck Constant]
+\label{Planck Constant}
+    The Planck constant \(h\) is defined as
+    \begin{equation}
+    h = 6.62607015 \times 10^{-34} \, \text{J} \cdot \text{s}.
+    \end{equation}
+\end{definition}
+
+Einstein used Planck's constant to explain the photoelectric effect and won a Nobel's prize.
+
+\begin{definition}[Planck-Einstein Relation I]
+\label{Planck-Einstein Relation 1}
+    The energy of a single photon is
+    \begin{equation}
+    E = h \nu.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Reduced Planck Constant \(\hbar\)]
+\label{Reduced Planck Constant}
+    The reduced Planck constant is defined as
+    \begin{equation}
+    \hbar = \frac{h}{2\pi}.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Planck-Einstein Relation II]
+\label{Planck-Einstein Relation 2}
+    The energy of a single photon with the reduced Planck's constant is
+    \begin{equation}
+    E = \hbar \omega.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Average Energy]
+\label{Average Energy}
+    The average energy is defined as
+    \begin{equation}
+    \langle E_0 \rangle = \frac{h\nu}{e^{\frac{h\nu}{k_B T}} - 1}.
+    \end{equation}
+    The energy cost is now high for higher frequency waves. 
+\end{definition}
+
+Combining the two, we derive a new intensity function for light.
+
+\begin{definition}[Planck's Law]
+\label{Planck's Law}
+    Planck's Law is
+    \begin{equation}
+    I(\nu, T) = \frac{2h\nu^3}{c^3} \frac{1}{e^{\frac{h\nu}{k_B T}} - 1}.
+    \end{equation}
+\end{definition}
+
+\subsubsection{Wave-Particle Duality of Light}
+
+Young's double slit experiment showed that light shows interference patterns:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Brighter bands are constructive interference.
+    \item Darker bands are destructive interference.
+\end{itemize}
+
+Einstein proved using Planck's constant that light behaves like particles.
+
+\begin{definition}[Photon]
+\label{photon}
+    A photon is the fundamental ``packet" of electromagnetic energy (light). It is the smallest possible amount of light that can exist at a specific frequency. You cannot have ``half a photon".
+\end{definition}
+
+Photons have no mass nor charge.
+
+\begin{definition}[Photoelectric Effect]
+    The photoelectric effect refers to the particle nature of light. It is the specific phenomenon where light knocks electrons off a metal.
+\end{definition}
+
+The single photon double-slit experiment showed that light exhibits interference even when there's only one photon and proved the wave-particle duality of light.
+
+\begin{fact}[Wave-Particle Duality of Light]
+\label{wave-paraticle duality of light}
+    Light travels like a wave but hits like bullets. It comes in waves of photons.
+\end{fact}
+
+\subsubsection{Generalization of Quantum Physics from Light to Matter}
+
+Historically, Quantum Physics WAS the physics of light. From 1900-1923: Quantum physics was exclusively about trying to figure out what light was (Planck, Einstein, Compton).
+
+In 1924, Louis de Broglie asked,``If light (waves) can act like particles, can electrons (particles) act like waves?" The single photon double-slit experiment showed that quantum superposition is true. Once that mechanism was proven for light, De Broglie took it and applied it to matter. He described it with
+\begin{equation}
+\lambda = \frac{h}{p}.
+\end{equation}
+
+Schrödinger took it a step further and came up with Schrödinger's equation (wave function \(\Psi\)) to describe the waves of matter. It is the matter-equivalent of Maxwell's equations for light.
+
+\subsection{Classical Mechanics and Stability of Atoms}
+
+Moving on from light to matter, in classical mechanics, electrons are thought to be orbiting the nucleus. Classical electromagnetism says that any charged particle moving in a circle is accelerating, any accelerating charges must emit light (energy). If the electron is constantly emitting energy, it should lose speed and spiral into the nucleus. In reality, the atoms are stable.
+
+\subsubsection{Bohr's Atom Model}
+
+Bohr postulated that the angular momentum \(L\) is quantized. It cannot be any value but must an integer multiple of the reduced Planck's constant \(\hbar\)
+\begin{equation}
+L_n = n\hbar.
+\end{equation}
+
+If the angular momentum is fixed, the orbit is fixed and the electron cannot spiral down.
+
+\begin{definition}[Angular Momentum of A Point Charge]
+\label{Angular Momentum of A Point Charge}
+    The angular momentum of a points charge is defined as
+    \begin{equation}
+    L = I_m \cdot \omega,
+    \end{equation}
+    where \(I_m = mR^2\) is the moment of inertia of a point mass.
+\end{definition}
+
+\subsubsection{Orbiting Electron and Magnetism}
+
+\begin{definition}[Current]
+\label{current}
+    The current \(I\) is defined as
+    \begin{equation}
+    I = \frac{q}{T} = \frac{q\omega}{2\pi}
+    \end{equation}
+    where \(q\) is the charge and \(T\) is orbital period.
+\end{definition}
+
+The orbiting electron behaves like a magnet. A moving charge creates a current \(I\), a current flowing in a circle (loop) creates a magnetic field. Therefore, an orbiting electron must have a magnetic moment \(\bm \mu\).
+
+\begin{definition}[Magnetic Moment]
+\label{magnetic moment}
+    The magnetic moment \(\bm \mu\) is defined as
+    \begin{equation}
+    \bm \mu = I \bm A,
+    \end{equation}
+    where \(\bm A = \pi R^2 \hat{\bm z}\) is the oriented surface with its orientation given by the right-hand rule. It measures how ``magnetic" an orbiting object (in a loop) is and the direction it points.
+\end{definition}
+
+Then using \cref{Angular Momentum of A Point Charge}, \cref{current} and \cref{magnetic moment}, we obtain
+\begin{align}
+\bm \mu &= \frac{q \omega}{2 \pi} \pi R^2 \hat{\bm z} \\
+\bm \mu &= \frac{q}{2} \frac{\bm L}{m},
+\end{align}
+where \(\bm L = mR^2\omega \hat{\bm z}\).
+
+\begin{definition}[Gyromagnetic Ratio]
+\label{gyromagnetic ratio}
+    The gyromagnetic ration is defined as
+    \begin{equation}
+    \frac{\bm \mu}{\bm L} = \frac{q}{2m}.
+    \end{equation}
+\end{definition}
+
+The conservative potential energy is described by
+\begin{equation}
+U(\theta) = - \bm \mu \cdot \bm B.
+\end{equation}
+The torque is defined by
+\begin{equation}
+\bm \tau = \bm \mu \times \bm B.
+\end{equation}
+
+Force is translational and torque is rotational. In a uniform magnetic field, forces are coming from all directions and it keeps the object in place, there is no translational movement, there is only torque.
+
+\begin{example}
+    Show that the torque on a square current loop lying in the \(xy\)-plane with \(\mathbf{B} \parallel \hat{i}\) is directed along the \(y\)-axis.
+
+    Let the magnetic field be \(\mathbf{B} = B\hat{i}\). Consider the two sides of the loop perpendicular to the field at positions \(\mathbf{r}_1 = x_0\hat{i}\) and \(\mathbf{r}_2 = -x_0\hat{i}\), carrying current \(I\) in the \(+\hat{j}\) and \(-\hat{j}\) directions respectively. The Lorentz forces on these segments are
+    \begin{gather}
+    \mathbf{F}_1 = I(L\hat{j}) \times (B\hat{i}) = -ILB\hat{k} \\
+    \mathbf{F}_2 = I(-L\hat{j}) \times (B\hat{i}) = +ILB\hat{k}.
+    \end{gather}
+    Calculating the torque \(\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}\) for each segment relative to the center:
+    \begin{gather}
+    \boldsymbol{\tau}_1 = (x_0\hat{i}) \times (-ILB\hat{k}) = -x_0 ILB(\hat{i} \times \hat{k}) = x_0 ILB\hat{j} \\
+    \boldsymbol{\tau}_2 = (-x_0\hat{i}) \times (+ILB\hat{k}) = -x_0 ILB(\hat{i} \times \hat{k}) = x_0 ILB\hat{j}.
+    \end{gather}
+    Summing the contributions, the total torque is
+    \begin{equation}
+    \boldsymbol{\tau}_{\text{total}} = 2x_0 L I B \hat{j}.
+    \end{equation}
+    Since the area is \(A = 2x_0 L\) and \(\mu = IA\),
+    \begin{equation}
+    \boldsymbol{\tau}_{\text{total}} = \mu B \hat{j}.
+    \end{equation}
+    Thus, the torque vector points purely along the \(y\)-axis.
+\end{example}
+
+\begin{example}
+    Show that the integral definition of torque reduces to the point-particle formula.
+
+    The general definition of torque on a body is the sum of torques on all its infinitesimal parts:
+    \begin{equation}
+    \boldsymbol{\tau} = \int \mathbf{r} \times d\mathbf{F}.
+    \end{equation}
+    Case 1: A Distributed Force (e.g., a current loop). The force is spread out, so \(\mathbf{r}\) changes as you move along the object. You cannot pull \(\mathbf{r}\) out of the integral. You must integrate:
+    \begin{equation}
+    \boldsymbol{\tau} = \oint_{\text{loop}} \mathbf{r}(l) \times d\mathbf{F}(l).
+    \end{equation}
+    Case 2: A Point Particle. Suppose the total force \(\mathbf{F}_{\text{tot}}\) is applied at a single specific location \(\mathbf{r}_0\). We can mathematically represent the force distribution as \(d\mathbf{F} = \mathbf{F}_{\text{tot}} \delta(\mathbf{r} - \mathbf{r}_0) dV\).
+    Substituting this into the integral:
+    \begin{equation}
+    \boldsymbol{\tau} = \int \mathbf{r} \times \left( \mathbf{F}_{\text{tot}} \delta(\mathbf{r} - \mathbf{r}_0) \right) dV.
+    \end{equation}
+    By the sifting property of the Delta function (which picks out the value at \(\mathbf{r}_0\)):
+    \begin{equation}
+    \boldsymbol{\tau} = \mathbf{r}_0 \times \mathbf{F}_{\text{tot}}.
+    \end{equation}
+    Thus, \(\mathbf{r} \times \mathbf{F}\) is just the integral solved for a single point of contact.
+\end{example}
+
+\begin{example}
+    Show why \(\boldsymbol{\tau} = \boldsymbol{\mu} \times \mathbf{B}\) fails for non-uniform fields.
+
+    Consider a square loop of side \(L\) centered at the origin in the \(xy\)-plane.
+    Let the magnetic field vary across the loop:
+    \begin{equation}
+    \mathbf{B}(x) = (B_0 + \alpha x) \hat{k}
+    \end{equation}
+    (The field gets stronger as you move right).
+
+    \textbf{Method 1: The Simple Formula (The Approximation)}
+    We assume the field at the center (\(x=0\)) represents the whole loop.
+    \begin{equation}
+    \mathbf{B}_{center} = B_0 \hat{k}.
+    \end{equation}
+    Since \(\boldsymbol{\mu}\) is along \(\hat{k}\) (normal to the loop) and \(\mathbf{B}\) is along \(\hat{k}\):
+    \begin{equation}
+    \boldsymbol{\tau}_{approx} = \boldsymbol{\mu} \times \mathbf{B}_{center} = (\mu \hat{k}) \times (B_0 \hat{k}) = 0.
+    \end{equation}
+    The formula predicts \textbf{zero torque}.
+
+    \textbf{Method 2: The Integral (The Truth)}
+    We calculate the force on the left wire (at \(x=-L/2\)) and right wire (at \(x=+L/2\)).
+    \begin{gather}
+    \mathbf{F}_{left} = I(L\hat{j}) \times \mathbf{B}(-L/2) = I L (B_0 - \alpha L/2) \hat{i} \\
+    \mathbf{F}_{right} = I(-L\hat{j}) \times \mathbf{B}(+L/2) = -I L (B_0 + \alpha L/2) \hat{i}
+    \end{gather}
+    (Note: The cross products yield forces in the \(x\)-direction, stretching the loop).
+    Now sum the torques \(\mathbf{r} \times \mathbf{F}\). The lever arms are \(\mathbf{r}_{left} = -L/2 \hat{i}\) and \(\mathbf{r}_{right} = +L/2 \hat{i}\).
+    Since \(\mathbf{r}\) and \(\mathbf{F}\) are parallel (both in \(x\)-direction), \(\mathbf{r} \times \mathbf{F} = 0\).
+    
+    \textit{In this specific geometry, they happened to match (both zero), but the internal stresses are different. If the field had a \(y\)-component gradient, the integral would yield a net torque that the simple formula would miss entirely.}
+\end{example}
+
+In a non-uniform magnetic field, the magnetic field gradient generates a force on a magnetic moment
+\begin{equation}
+\bm F = - \bm \nabla U = \bm \nabla (\bm \mu \cdot \bm B).
+\end{equation}
+This is what happens if we sum up the forces from the torque calculation in a messy field.
+
+\subsubsection{Electrons Are Quantum Objects}
+
+In classical physics as \cref{gyromagnetic ratio} shows, if the electron was a spinning ball, the \(g\) factor would be \(1\). But when we measured it experimentally, the \(g\) factor of the electron is \(2\). It shows that the electron’s magnetic moment cannot be explained by orbital motion of charge. To account for this failure of classical physics, a new fundamental property of particles was introduced: an intrinsic angular momentum, called spin.
+
+\begin{definition}[Spin]
+    Spin is an intrinsic angular momentum of a particle. Spin is intrinsic (a fundamental quantum property) like mass, but unlike mass it is quantized and the value is fixed for a given particle species.
+\end{definition}
+
+\begin{definition}[Spin Quantum Number]
+    Spin quantum number \(s\) is an intrinsic property of the particle. It is given by nature and each particle belongs to one category.
+\end{definition}
+
+\begin{note}[Spin Quantum Number of Electron]
+    Electrons are spin \(1/2\) particles.
+\end{note}
+
+\begin{definition}[Spin Magnetic Moment]
+\label{spin magnetic moment}
+    The spin magnetic moment measures how ``magnetic" the particle is due to its intrinsic angular momentum. It is defined as
+    \begin{equation}
+    \bm \mu_{\text{spin}} = g \lp \frac{q}{2m} \rp \bm S,
+    \end{equation}
+    where \(\bm S\) is the spin angular momentum operator/vector.
+\end{definition}
+
+\begin{definition}[Spin Angular Momentum Operator/Vector]
+    \(\bm S\) is the spin angular momentum operator/vector, only one component of \(\bm S\) can be known at a time (Heisenberg uncertainty principle).
+\end{definition}
+
+\begin{definition}[Total Magnetic Moment]
+    The total magnetic moment of an object is the sum of orbital magnetic moment \cref{magnetic moment} and spin magnetic moment \cref{spin magnetic moment}. 
+\end{definition}
+
+\begin{definition}[Magnitude of Spin Angular Momentum Vector]
+    The magnitude of spin angular momentum operator/vector is defined as
+    \begin{equation}
+    \abs{\bm S} = \sqrt{s(s + 1)} \hbar.
+    \end{equation}
+\end{definition}
+
+Note that the electron is not really spinning. If it was, the classical formula \cref{gyromagnetic ratio} would suggest a \(g\) factor of \(1\). This sets up a baseline expectation. If the electron were just a tiny ball of charge spinning on its axis (like the Earth), it must obey this rule.
+
+Electrons are quantum objects because they play by the rules of quantum physics. We can't explain this using classical physics. We need the Dirac Equation (which combines Quantum Mechanics and Special Relativity) to explain why the electron is extra magnetic. This also predicts antimatter.
+
+\subsection{Difference Between Classical Physics and Quantum Physics}
+
+In classical (Newtonian) physics, we thought energy was like a smooth ramp or a stream of water. We could have any amount of energy we wanted.
+
+As quantum physics proved, the real world at quantum level, things are edgy and grainy. That gap between the steps is the ``quantum." Light doesn't flow like a continuous stream; it rains down in little packets called photons. There's no in between gap size. An analogy is that a picture seems smooth when zoomed out but pixilated when zoomed in.
+
+Another difference is that Newtonian mechanics is deterministic, whereas quantum mechanics is probabilistic; this implies that the outcome of a physical event is not certain until it is measured. This is described by the wave function \(\Psi\).
+
+\subsection{The Measurement Problem}
+
+The mathematics of measurement is well-defined, the physical mechanism behind it (often called the ``Measurement Problem'') is not fully understood. There is currently no consensus on what physically constitutes a measurement. We know the end results, but we couldn't agree on how the results are derived.
+
+\subsection{The Next ``Big" Thing}
+
+For Light, we have Maxwell (Wave) and QED (Particle). For Matter, we have Schrödinger (Wave) and the Standard Model (Particle). However, BOTH descriptions are ultimately incomplete because neither theory can currently be unified with General Relativity (Gravity). GR and quantum theory conflicts with each other, when studying black holes and the big bang, neither of them have a valid answer to these questions, we need something that unifies them.
+
+\clearpage
+
+\section*{Lecture 2}
+\addcontentsline{toc}{section}{Lecture 2}
+\stepcounter{section}
+\setcounter{section}{2}
+\setcounter{equation}{0}
+
+\subsection{Stern-Gerlach Experiment}
+
+\subsubsection{Setup of The Experiment}
+
+Stern-Gerlach used a beam of silver atoms produced by evaporating silver metal from an oven. The beam of neutral atoms excited from a small aperture and were sent through the poles of a permanent magnetic that was designed to produce a strong component of the magnetic field gradient in the \(z\)-direction.
+
+\begin{center}
+\begin{tikzpicture}[
+    >=Latex,
+    thick,
+    font=\small
+]
+
+% --- 1. The Oven ---
+\draw[fill=white] (0,-1) rectangle (1,1);
+\draw (1,-0.2) -- (1.2,-0.2); % Nozzle top
+\draw (1,0.2) -- (1.2,0.2);   % Nozzle bottom
+\node[below] at (0.5,-1.2) {Oven};
+
+% --- 2. Coordinate System (Left) ---
+\begin{scope}[shift={(9.5,0)}]
+    \draw[->] (0,0) -- (0,0.8) node[above] {$z$};
+    \draw[->] (0,0) -- (0.8,0) node[right] {$x$};
+    \draw[->] (0,0) -- (-0.4,-0.4) node[left] {$y$};
+\end{scope}
+
+% --- 3. The Magnet (3D Schematic) ---
+% We use simple oblique projection for depth
+
+% Parameters
+\def\magstart{3}
+\def\maglen{3}
+\def\magdepth{0.8}
+\def\gap{0.4}
+
+% North Pole (Bottom - Wedge Shape)
+\draw[fill=gray!10] (\magstart, -1.5) -- (\magstart+\maglen, -1.5) -- (\magstart+\maglen, -\gap) -- (\magstart, -\gap) -- cycle;
+% Depth for N
+\draw[fill=gray!20] (\magstart+\maglen, -1.5) -- (\magstart+\maglen+\magdepth, -1.5+\magdepth) -- (\magstart+\maglen+\magdepth, -\gap+\magdepth) -- (\magstart+\maglen, -\gap) -- cycle;
+% Top edge of N (The Wedge Tip)
+\draw (\magstart, -\gap) -- (\magstart+\magdepth, -\gap+\magdepth) -- (\magstart+\maglen+\magdepth, -\gap+\magdepth);
+
+% South Pole (Top - Concave/Scoop Shape)
+\draw[fill=gray!10] (\magstart, \gap) -- (\magstart+\maglen, \gap) -- (\magstart+\maglen, 1.5) -- (\magstart, 1.5) -- cycle;
+% Depth for S
+\draw[fill=gray!20] (\magstart+\maglen, \gap) -- (\magstart+\maglen+\magdepth, \gap+\magdepth) -- (\magstart+\maglen+\magdepth, 1.5+\magdepth) -- (\magstart+\maglen, 1.5) -- cycle;
+% Bottom edge of S (The curve representation) - usually S is concave, N is pointed.
+% Drawing straight lines for block, will detail profile in the inset.
+\draw (\magstart, \gap) -- (\magstart+\magdepth, \gap+\magdepth) -- (\magstart+\maglen+\magdepth, \gap+\magdepth);
+
+% Labels on Magnet
+\node at (\magstart+\maglen/2 + 0.3, -1) {N};
+\node at (\magstart+\maglen/2 + 0.3, 1) {S};
+\node[below] at (\magstart+\maglen/2, -1.7) {Magnet};
+
+% --- 4. The Beam ---
+% Path: Oven -> Magnet Entry -> Magnet Exit -> Detector
+\draw[dashed, thin] (1.2,0) -- (\magstart, 0);
+
+% Arrow for atoms
+\draw[->] (2, -0.5) -- (2, -0.1);
+\node[below] at (2,-0.5) {\parbox{1.5cm}{\centering silver\\atoms}};
+
+% Path inside magnet (straight)
+\draw[dashed, thin] (\magstart, 0) -- (\magstart+\maglen, 0);
+
+% Path splitting after magnet
+\draw[dashed, thin] (\magstart+\maglen, 0) -- (8.5, 0.8); % Up spin
+\draw[dashed, thin] (\magstart+\maglen, 0) -- (8.5, -0.8); % Down spin
+
+% --- 5. The Detector ---
+\draw[thick] (8.5, -1.5) -- (8.5, 1.5);
+\node[below] at (8.5, -1.7) {Detector};
+% Impact points
+\fill (8.5, 0.8) circle (2pt);
+\fill (8.5, -0.8) circle (2pt);
+
+% =========================
+% DIVIDER
+% =========================
+\draw[gray, thick] (11, -2.2) -- (11, 2.2);
+
+% --- 6. Cross-Section View (Right Inset) ---
+\begin{scope}[shift={(12.5,0)}]
+    % Coordinate system local
+    \draw[->] (1.5,0) -- (1.5,0.8) node[right] {$z$};
+    \draw[->] (1.5,0) -- (2.0,0) node[right] {$x$}; % Actually showing Y direction relative to beam, but label matches image X
+
+    % South Pole (Concave)
+    \draw[thick] (-0.8, 1.5) -- (-0.8, 0.6) to[out=-30, in=210] (0.8, 0.6) -- (0.8, 1.5);
+    \node at (0, 1) {S};
+    
+    % North Pole (Pointed)
+    \draw[thick] (-0.8, -1.5) -- (-0.8, -0.6) -- (0, -0.2) -- (0.8, -0.6) -- (0.8, -1.5);
+    \node at (0, -1) {N};
+    
+    % Field Lines (Arrows N to S)
+    \foreach \x in {-0.4, -0.2, 0, 0.2, 0.4} {
+        \draw[->, thin] (\x, -0.3) -- (\x, 0.5);
+    }
+    
+    % The Atom
+    \draw[dashed] (-1,0) -- (1,0);
+    \fill (0,0) circle (2pt);
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+Because it's a non-uniform magnetic field, the atoms experience a force
+\begin{equation}
+\bm F = - \bm \nabla U = \bm \nabla (\bm \mu \cdot \bm B).
+\end{equation}
+This forces causes translational movement of the atoms. We need to find the \(z\)-component of the force, denoted by \(F_z\). Because of the design of the magnets, the force alongside \(x\) and \(y\) are negligible
+\begin{equation}
+F_z = - \bm \nabla (\mu_x B_x + \mu_y B_y + \mu_z B_z) = - \frac{\partial}{\partial z} (\mu_z B_z).
+\end{equation}
+We treat \(\mu_z\) as a constant coming out of the oven, then
+\begin{equation}
+F_z = - \mu_z \frac{\partial}{\partial z} B_z = (\bm \mu \cdot \hat{\bm z}) \frac{\partial}{\partial z} B_z = \abs{\bm \mu} \cos \theta \frac{\partial}{\partial z} B_z.
+\end{equation}
+We projected \(\bm \mu\) onto \(\hat{\bm z}\) to pick out the \(z\)-component of magnetic moment.
+
+\begin{note}[Dot Product as Projection]
+    The dot product $\bm{A} \cdot \bm{B}$ can be interpreted as the scalar projection of $\bm{A}$ onto the direction of $\bm{B}$, scaled by the magnitude of $\bm{B}$.
+\end{note}
+
+\subsubsection{Results of The Experiment}
+
+The classical view predicts a continuously smear across the detector, because the silver atoms coming out of the oven have their magnetic moment randomly aligned. They have no preferred orientation.
+
+Instead, they observed two distinct peaks. The result was initially interpreted incorrectly as a confirmation of Bohr’s ``space quantization" which suggested orbits could only exist at specific angles relative to the magnetic field. At the time, they did not know the magnetic moment actually originated from intrinsic spin, not orbital motion. Ultimately, the Stern-Gerlach experiment proved that Bohr's semi-quantum model of defined circular tracks was physically incorrect. While the idea of quantization was validated, the specific model of orbiting electrons was discarded.
+
+\subsubsection{Spin-1/2 Particles}
+
+We now mathematically describe the two spots observed in the Stern-Gerlach experiment. Since there is only \(\bm \mu_{\text{spin}}\) present,
+\begin{equation}
+\bm \mu_\text{total} = \bm \mu_\text{spin} = g \lp \frac{q}{2m} \rp \bm S.
+\end{equation}
+The two distinct peaks the experiment showed can only be explained if \(\bm S\), the spin angular momentum is quantized. The magnitudes of the deflections are consistent with the values of
+\begin{equation}
+S_z = \pm \frac{\hbar}{2}.
+\end{equation}
+The axis which we measured spin is arbitrary, this means the outcome of the measurement would be \(\pm \hbar/2\) regardless of the direction of the magnetic field. We conclude that Electron are spin-1/2 particles: they only have two states.
+
+\subsection{The Quantum State Vector}
+
+\subsubsection{Dirac Notation}
+
+We use the Dirac Notation, created by Paul Dirac, to denote the state of spin.
+
+\begin{definition}[Ket]
+    The ket, denoted by
+    \begin{equation}
+    \ket{\Psi}
+    \end{equation}
+    refers to a state vector in a Hilbert space. It is analogous to the column vector.
+\end{definition}
+
+\begin{note}
+     The \(\ket{+}\) refers to spins deflected upward and \(\ket{-}\) refers to the spins deflected downward. All of the following are equivalent
+    \begin{equation}
+    \ket{+} = \ket{+ \hbar / 2} = \ket{\uparrow} = \ket{+\hat{\bm z}}.
+    \end{equation}   
+\end{note}
+
+\begin{definition}[Quantum State of Spin]
+    In general, the quantum state of spin can be expressed as a linear combination of states \(\ket{+}\) and \(\ket{-}\)
+    \begin{equation}
+    \ket{\Psi} = a \ket{+} + b \ket{-}
+    \end{equation}
+    where \(a\) and \(b\) are complex coefficients.
+\end{definition}
+
+\subsubsection{Postulate 1}
+
+\begin{theorem}[Postulate 1]
+    Postulate 1 of quantum mechanics says that the state of a quantum system, including all the information you can know about it, is represented mathematically by a normalized ket \(\ket{\Psi}\).
+\end{theorem}
+
+\subsection{S-G Experiment Revisited}
+
+Let 100 electrons pass through the analyzer, after we take a measurement with the analyzer oriented in the \(z\) direction, we get a 50/50 chance of measuring spin up and spin down.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven (bracket-like shape) ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer ---
+      \draw (0.6,1.5) -- (5.0,1.5);
+      \node[above] at (2.8,1.6) {$| \Psi \rangle$};
+      \node[below] at (2.8,1.4) {$100$};
+    
+      % --- Analyzer box ---
+      \draw (5.0,0.5) rectangle (7.2,2.5);
+      \node[below] at (6.1,-0.4) {Analyzer};
+    
+      % internal divider (Z vs arrows)
+      \draw (6.1,0.5) -- (6.1,2.5);
+      \node at (5.55,1.5) {$z$};
+    
+      % internal horizontal divider in arrow column
+      \draw (6.1,1.5) -- (7.2,1.5);
+      \node at (6.65,2.0) {$\uparrow$};
+      \node at (6.65,1.0) {$\downarrow$};
+    
+      % --- Outputs ---
+      \draw (7.2,2.0) -- (9.0,2.0);
+      \draw (7.2,1.0) -- (9.0,1.0);
+    
+      \node[right] at (9.0,2.0) {$|+\rangle_z \; 50$};
+      \node[right] at (9.0,1.0) {$|-\rangle_z \; 50$};
+    \end{tikzpicture}
+\end{center}
+
+Suppose we block the lower half of the analyzer in the \(z\) direction and add another \(z\) analyzer right after, we obtain 50 spin up electrons and 0 spin down electrons. The state of the particles is not affected by passing through the second \(z\) analyzer.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer 1 ---
+      \draw (0.6,1.5) -- (4.0,1.5);
+      \node[above] at (2.3,1.6) {$|\Psi\rangle$};
+      \node[below] at (2.3,1.4) {$100$};
+    
+      % --- Analyzer 1 (Z) ---
+      \begin{scope}[shift={(4.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 1};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+    
+      % --- Output 1 / Input 2 ---
+      % Top path: Goes into Analyzer 2
+      \draw (6.2,2.0) -- (8.0,2.0);
+      \node[above] at (7.1,2.0) {$50$};
+      
+      % Bottom path: Blocked
+      \draw (6.2,1.0) -- (7.5,1.0);
+      \draw[line width=3pt] (7.5, 0.7) -- (7.5, 1.3); % The Block
+      \node[below] at (6.8,1.0) {$50$};
+    
+      % --- Analyzer 2 (Z) ---
+      \begin{scope}[shift={(8.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 2};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Final Outputs ---
+      \draw (10.2,2) -- (12.0,2);
+      \draw (10.2,1) -- (12.0,1);
+    
+      \node[right] at (12.0,2) {$|+\rangle_z \; 50$};
+      \node[right] at (12.0,1) {$|-\rangle_z \; 0$};
+    \end{tikzpicture}
+\end{center}
+
+If we the second \(z\) analyzer with an \(x\) analyzer, we get 25 spin up and 25 spin down electrons in the \(x\) direction.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer 1 ---
+      \draw (0.6,1.5) -- (4.0,1.5);
+      \node[above] at (2.3,1.6) {$|\Psi\rangle$};
+      \node[below] at (2.3,1.4) {$100$};
+    
+      % --- Analyzer 1 (Z) ---
+      \begin{scope}[shift={(4.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 1};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+    
+      % --- Output 1 / Input 2 ---
+      % Top path: Goes into Analyzer 2
+      \draw (6.2,2.0) -- (8.0,2.0);
+      \node[above] at (7.1,2.0) {$50$};
+      
+      % Bottom path: Blocked
+      \draw (6.2,1.0) -- (7.5,1.0);
+      \draw[line width=3pt] (7.5, 0.7) -- (7.5, 1.3); % The Block
+      \node[below] at (6.8,1.0) {$50$};
+    
+      % --- Analyzer 2 (Z) ---
+      \begin{scope}[shift={(8.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 2};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$x$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Final Outputs ---
+      \draw (10.2,2) -- (12.0,2);
+      \draw (10.2,1) -- (12.0,1);
+    
+      \node[right] at (12.0,2) {$|+\rangle_x \; 25$};
+      \node[right] at (12.0,1) {$|-\rangle_x \; 25$};
+    \end{tikzpicture}
+\end{center}
+
+If we had 1000 particles passing through a \(z\) analyzer with spin down particles blocked, an \(x\) analyzer with spin down particles blocked, and then a \(z\) analyzer, we would have 125 spin up and 125 spin down in the \(z\) direction.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer 1 ---
+      \draw (0.6,1.5) -- (4.0,1.5);
+      \node[above] at (2.3,1.6) {$|\Psi\rangle$};
+      \node[below] at (2.3,1.4) {$1000$};
+    
+      % --- Analyzer 1 (Z) ---
+      \begin{scope}[shift={(4.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 1};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+    
+      % --- Output 1 / Input 2 ---
+      % Top path: Goes into Analyzer 2
+      \draw (6.2,2.0) -- (8.0,2.0);
+      \node[above] at (7.1,2.0) {$500$};
+      
+      % Bottom path: Blocked
+      \draw (6.2,1.0) -- (7.5,1.0);
+      \draw[line width=3pt] (7.5, 0.7) -- (7.5, 1.3); % The Block
+      \node[below] at (6.8,1.0) {$500$};
+    
+      % --- Analyzer 2 (X) ---
+      \begin{scope}[shift={(8.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 2};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$x$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Output 2 / Input 3 ---
+      % Top path: Goes into Analyzer 3
+      \draw (10.2,2.0) -- (12.0,2.0);
+      \node[above] at (11.1,2.0) {$250$};
+      \node[above] at (11.2,2.5) {$|+\rangle_x$};
+      
+      % Bottom path: Blocked
+      \draw (10.2,1.0) -- (11.5,1.0);
+      \draw[line width=3pt] (11.5, 0.7) -- (11.5, 1.3); % The Block
+      \node[below] at (10.8,1.0) {$250$};
+      \node[below] at (10.9,0.5) {$|-\rangle_x$};
+      
+      % --- Analyzer 3 (Z) ---
+      \begin{scope}[shift={(12.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 3};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Final Outputs ---
+      \draw (14.2,2) -- (15.0,2);
+      \draw (14.2,1) -- (15.0,1);
+    
+      \node[right] at (15.0,2) {$|+\rangle_z \; 125$};
+      \node[right] at (15.0,1) {$|-\rangle_z \; 125$};
+    \end{tikzpicture}
+\end{center}
+
+\begin{note}
+    The measurement of \(S_x\) disturbs our knowledge of \(S_z\), we cannot know \(S_x\) and \(S_z\) simultaneously. Measurement of different orthogonal components of \(\bm S\) are incompatible: a measurement of one component of \(\bm S\) disturbs the outcome of the other component.
+\end{note}
+
+However, if we switch the order of the \(x\) analyzer and the second \(z\) analyzer.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer 1 ---
+      \draw (0.6,1.5) -- (4.0,1.5);
+      \node[above] at (2.3,1.6) {$|\Psi\rangle$};
+      \node[below] at (2.3,1.4) {$1000$};
+    
+      % --- Analyzer 1 (Z) ---
+      \begin{scope}[shift={(4.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 1};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+    
+      % --- Output 1 / Input 2 ---
+      % Top path: Goes into Analyzer 2
+      \draw (6.2,2.0) -- (8.0,2.0);
+      \node[above] at (7.1,2.0) {$500$};
+      
+      % Bottom path: Blocked
+      \draw (6.2,1.0) -- (7.5,1.0);
+      \draw[line width=3pt] (7.5, 0.7) -- (7.5, 1.3); % The Block
+      \node[below] at (6.8,1.0) {$500$};
+    
+      % --- Analyzer 2 (Z) ---
+      \begin{scope}[shift={(8.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 2};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Output 2 / Input 3 ---
+      % Top path: Goes into Analyzer 3
+      \draw (10.2,2.0) -- (12.0,2.0);
+      \node[above] at (11.1,2.0) {$500$};
+      \node[above] at (11.2,2.5) {$|+\rangle_z$};
+      
+      % Bottom path: Blocked
+      \draw (10.2,1.0) -- (11.5,1.0);
+      \draw[line width=3pt] (11.5, 0.7) -- (11.5, 1.3); % The Block
+      \node[below] at (10.8,1.0) {$0$};
+      \node[below] at (10.9,0.5) {$|-\rangle_z$};
+      
+      % --- Analyzer 3 (X) ---
+      \begin{scope}[shift={(12.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 3};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$x$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Final Outputs ---
+      \draw (14.2,2) -- (15.0,2);
+      \draw (14.2,1) -- (15.0,1);
+    
+      \node[right] at (15.0,2) {$|+\rangle_x \; 250$};
+      \node[right] at (15.0,1) {$|-\rangle_x \; 250$};
+    \end{tikzpicture}
+\end{center}
+
+The output of two times as large as before. This demonstrates an important difference between classical and quantum measurements
+
+\begin{fact}
+    Classical measurements do not disturb the state of the system. Therefore, we get the same outcome regardless of the order in which the measurements are performed. For quantum measurements, in contrast, the order can determine the outcome, provided some of the measurements are incompatible.
+\end{fact}
+
+\clearpage
+
+\section*{Lecture 3}
+\addcontentsline{toc}{section}{Lecture 3}
+\stepcounter{section}
+\setcounter{section}{3}
+\setcounter{equation}{0}
+
+\subsection{S-G Experiment Revisited Continued}
+
+Suppose we combine the two paths from A2 and send it to A3 without counting how many spins exit each of the two ports of A2.
+
+\begin{center}
+    \begin{tikzpicture}[x=1cm,y=1cm, line cap=round, line join=round, thick]
+      % --- Oven ---
+      \draw (0,0) -- (0,3);
+      \draw (0,3) -- (0.6,3);
+      \draw (0,0) -- (0.6,0);
+      \draw (0.6,0) -- (0.6,3);
+      \node[below] at (0.3,-0.4) {Oven};
+    
+      % --- Beam line from oven to analyzer 1 ---
+      \draw (0.6,1.5) -- (4.0,1.5);
+      \node[above] at (2.3,1.6) {$|\Psi\rangle$};
+    
+      % --- Analyzer 1 (Z) ---
+      \begin{scope}[shift={(4.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 1};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+    
+      % --- Output 1 / Input 2 ---
+      % Top path: Goes into Analyzer 2
+      \draw (6.2,2.0) -- (8.0,2.0);
+      \node[above] at (7.1,2.0) {$100$};
+      
+      % Bottom path: Blocked
+      \draw (6.2,1.0) -- (7.5,1.0);
+      \draw[line width=3pt] (7.5, 0.7) -- (7.5, 1.3); % The Block
+    
+      % --- Analyzer 2 (X) ---
+      \begin{scope}[shift={(8.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 2};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$x$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Output 2 / Input 3 ---
+      % Top path: Goes into Analyzer 3
+      \draw (10.2,2.0) -- (12.0,1.5);
+      
+      % Bottom path: Blocked
+      \draw (10.2,1.0) -- (12,1.5);
+      
+      % --- Analyzer 3 (Z) ---
+      \begin{scope}[shift={(12.0,0)}]
+        \draw (0,0.5) rectangle (2.2,2.5);
+        \node[below] at (1.1,-0.4) {Analyzer 3};
+        
+        % Internal divider
+        \draw (1.1,0.5) -- (1.1,2.5);
+        \node at (0.55,1.5) {$z$};
+        
+        % Internal arrows
+        \draw (1.1,1.5) -- (2.2,1.5);
+        \node at (1.65,2.0) {$\uparrow$};
+        \node at (1.65,1.0) {$\downarrow$};
+      \end{scope}
+      
+      % --- Final Outputs ---
+      \draw (14.2,2) -- (15.0,2);
+      \draw (14.2,1) -- (15.0,1);
+    
+      \node[right] at (15.0,2) {$|+\rangle_z \; 100$};
+      \node[right] at (15.0,1) {$|-\rangle_z \; 0$};
+    \end{tikzpicture}
+\end{center}
+
+There is no classical analog for this type of probability addition. Classically, we would expect the outcome to be 50/50. The S-G Experiment exhibits an identical interference phenomenon as observed in Young's double slit experiment for waves, where adding two waves of equal amplitude that interfere destructively to produce zero amplitude. Later, physicists realized it is not just an analogy. It is the actual reality of the particle.
+
+\begin{note}[Why we must switch to Wave Mechanics (The ``Nature's Rulebook" Argument)]
+    The last S-G Experiment presents a paradox: we opened two paths ($X$-Up and $X$-Down), yet fewer particles exited the bottom port than if we had only opened one.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Classical Logic Fails:} In classical probability, opening more paths always increases the chance of an outcome ($P_{total} = P_1 + P_2$). This would predict a $50\%$ output.
+        \item \textbf{Wave Logic Succeeds:} To obtain the observed $0\%$ output, ``nature's rulebook" must allow for subtraction. This is only possible if we sum \textit{amplitudes} ($\Psi$), not probabilities.
+    \end{itemize}
+    This implies that nature assigns an intrinsic ``phase" (sign) to each path. For the spin-down exit, nature defines the two paths as having opposite signs ($+A$ and $-A$ where $A$ is a general stand-in for ``some amount of amplitude."). 
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Top Exit ($Z$-Up): Constructive Interference} \\
+        Nature's rule for the top exit accepts both $X$-paths with the same positive sign.
+        \begin{itemize}[nosep, label=\tiny$\bullet$]
+            \item Path 1 ($X$-Up contribution): $+A$
+            \item Path 2 ($X$-Down contribution): $+A$
+            \item \textbf{Result:} $(+A) + (+A) = 2A$. The waves reinforce each other, creating a 100\% probability of exiting here.
+        \end{itemize}
+
+        \item \textbf{Bottom Exit ($Z$-Down): Destructive Interference} \\
+        Nature's rule for the bottom exit requires the $X$-Down path to flip its sign relative to the $X$-Up path.
+        \begin{itemize}[nosep, label=\tiny$\bullet$]
+            \item Path 1 ($X$-Up contribution): $+A$
+            \item Path 2 ($X$-Down contribution): $-A$
+            \item \textbf{Result:} $(+A) + (-A) = 0$. The waves perfectly cancel out, resulting in zero probability of exiting here.
+        \end{itemize}
+    \end{itemize}
+    This forces us to treat the electron not as a discrete particle deciding between two options, but as a wave traversing both paths simultaneously and interfering with itself.
+\end{note}
+
+\subsection{Young's Double Slit Experiment}
+
+\begin{quote}
+    ``If you accept that light waves can cancel each other out to create darkness, you must accept that electron paths can cancel each other out to create zero probability."
+    \par\hfill --- Louis de Broglie, \emph{probably}
+\end{quote}
+
+\begin{note}[Context: The Connection Between Light and Matter]
+    We introduce Young's Double Slit experiment (light) to make the strange behavior of the electron (matter) feel less magical. We already accept that light waves can interfere destructively to create ``dark spots" (zero intensity). By showing that the electron in S-G Experiment 4 also produces a ``zero spot" (0 spin-down particles), the lecture forces the conclusion: \textit{since electrons interfere like light, they must be behaving like waves.}
+    This pedagogical shift mirrors the actual history of quantum physics:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Light:} First, Young proved light was a wave (interference). Later, Einstein and Planck discovered it also behaves like a particle (photons).
+        \item \textbf{Matter:} In 1924, \textbf{Louis de Broglie} asked the reverse question: \textit{``If light waves can act like particles, can matter particles (like electrons) act like waves?"}
+        \item \textbf{Proof:} Experiments like the one in this lecture confirm de Broglie's theory. We now know that ``solid" matter (fermions) exhibits the same wave-particle duality as light (bosons).
+    \end{itemize}
+\end{note}
+
+\begin{note}[Standard Model Context: Matter vs. Force Carriers]
+    In the Standard Model, these are the two fundamental categories of particles:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Matter (Fermions):} The ``stuff" of the universe (atoms, stars, people).
+        \begin{itemize}[nosep, label=\tiny$\bullet$]
+            \item \textbf{Key Rule:} They obey the \textbf{Pauli Exclusion Principle}, meaning two fermions cannot occupy the same space at the same time (this is why matter feels solid).
+            \item \textbf{Examples:} Quarks (protons/neutrons), Leptons (\textbf{electrons}).
+        \end{itemize}[nosep, label=\tiny$\bullet$]
+
+        \item \textbf{Force Carriers (Bosons):} The ``messengers" that carry forces between matter.
+        \begin{itemize}
+            \item \textbf{Key Rule:} They \textbf{do not} obey the Exclusion Principle. Multiple bosons can occupy the same space simultaneously (e.g., photons in a laser).
+            \item \textbf{Examples:} \textbf{Photons} (light), Gluons, W \& Z Bosons.
+        \end{itemize}
+    \end{itemize}
+    \textit{Significance:} The lecture proves that ``solid" fermions (electrons) exhibit the same wave-like interference as ``ghostly" bosons (photons).
+\end{note}
+
+\subsubsection{The Experimental Setup}
+
+Consider a monochromatic plane wave impinging on a barrier with two narrow slits.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Monochromatic:} The light consists of a single frequency (one color).
+    \item \textbf{Plane Wave:} The wavefronts are straight and parallel, propagating in a single direction.
+\end{itemize}
+
+When the light passes through the slits, it is diffracted. The light emerges from each slit not as a straight beam, but as expanding spherical wavefronts.
+
+\begin{center}
+\begin{tikzpicture}[>=Latex, thick]
+    % Plane Waves
+    \foreach \x in {-1.5, -1.0, -0.5} {
+        \draw[red!70!black] (\x, -1.5) -- (\x, 1.5);
+    }
+    \draw[->] (-1, 0) -- (-0.2, 0) node[midway, below, font=\scriptsize] {Propagation};
+    \node[align=center, font=\scriptsize] at (-1.5, 1.8) {Monochromatic\\Plane Wave};
+
+    % Barrier
+    \draw[line width=2pt] (0, -2) -- (0, -0.6);
+    \draw[line width=2pt] (0, -0.4) -- (0, 0.4);
+    \draw[line width=2pt] (0, 0.6) -- (0, 2);
+
+    % Spherical Waves (Diffraction)
+    \foreach \r in {0.2, 0.5, 0.8, 1.1, 1.4} {
+        \draw[red] (0, 0.5) arc (-90:90:\r) coordinate (top\r);
+        \draw[red] (0, -0.5) arc (90:-90:\r) coordinate (bot\r);
+    }
+    
+    % Screen
+    \draw[line width=2pt] (2.5, -2) -- (2.5, 2);
+    \node[below] at (2.5, -2) {Screen};
+
+    % Labels
+    \node[align=center, font=\scriptsize] at (0, -2.3) {Light passes\\through two slits};
+    \node[align=center, font=\scriptsize] at (1.5, 1.8) {Spherical\\Wavefronts};
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Classical Prediction vs. Quantum Reality}
+
+If we analyze the slits individually (blocking one at a time), we observe patterns that resemble a classical distribution of particles.
+
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Slit 1 Open (Slit 2 Closed):} A distribution centered behind Slit 1.
+    \item \textbf{Slit 2 Open (Slit 1 Closed):} A distribution centered behind Slit 2.
+\end{itemize}
+
+This behavior is analogous to the Stern-Gerlach Experiment 4 (sequences A and B), where particles take a definite path.
+
+\begin{note}[The Classical Hypothesis]
+    For classical particles (like tennis balls or sand), the two single-slit patterns would simply add up.
+    \begin{equation}
+    I_{\text{total}} = I_1 + I_2
+    \end{equation}
+    This would result in a broad, single curve with no wave-like characteristics. This result is the \textbf{Classical Probability Distribution}.
+\end{note}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex, thick, scale=0.9]
+    % --- LEFT: INDIVIDUAL PATTERNS ---
+    \begin{scope}[shift={(0,0)}]
+        \node at (1.5, 2.5) {\textbf{Individual Slits}};
+        % Slits
+        \draw[line width=1.5pt] (0, -1.5) -- (0, -0.4);
+        \draw[line width=1.5pt] (0, -0.2) -- (0, 0.2);
+        \draw[line width=1.5pt] (0, 0.4) -- (0, 1.5);
+        \node[left, font=\scriptsize] at (0, 0.3) {1};
+        \node[left, font=\scriptsize] at (0, -0.3) {2};
+
+        % Patterns
+        \draw[dashed, blue] (1.5, 0.3) -- (2.5, 0.3); % Axis 1
+        \draw[red, thick] plot [smooth] coordinates {(2.5, 0.3) (2.8, 0.8) (2.8, -0.2) (2.5, 0.3)}; % Bell 1 rotated?
+        % Let's draw them as profiles on the screen
+        \draw[thin] (2.5, -1.5) -- (2.5, 1.5); % Screen
+        
+        % Curve 1 (Top)
+        \draw[blue, thick] plot[variable=\y, domain=-0.5:1.5, samples=50] ({2.5 + 0.8*exp(-(\y-0.5)^2/0.1)}, \y);
+        \draw[dashed, blue] (0, 0.5) -- (2.5, 0.5);
+        
+        % Curve 2 (Bottom)
+        \draw[blue, thick] plot[variable=\y, domain=-1.5:0.5, samples=50] ({2.5 + 0.8*exp(-(\y+0.5)^2/0.1)}, \y);
+        \draw[dashed, blue] (0, -0.5) -- (2.5, -0.5);
+        
+        \node[right, align=left, font=\tiny] at (3.5, 0.5) {Pattern with\\Slit 1 open};
+        \node[right, align=left, font=\tiny] at (3.5, -0.5) {Pattern with\\Slit 2 open};
+    \end{scope}
+
+    % --- RIGHT: CLASSICAL SUM ---
+    \begin{scope}[shift={(7,0)}]
+        \node at (1.5, 2.5) {\textbf{Classical Prediction}};
+        % Slits
+        \draw[line width=1.5pt] (0, -1.5) -- (0, -0.4);
+        \draw[line width=1.5pt] (0, -0.2) -- (0, 0.2); % Open
+        \draw[line width=1.5pt] (0, 0.4) -- (0, 1.5); % Open
+        
+        % Screen
+        \draw[thin] (2.5, -1.5) -- (2.5, 1.5);
+        
+        % Sum Curve (Big Bell)
+        \draw[red, thick] plot[variable=\y, domain=-1.5:1.5, samples=50] ({2.5 + 1.2*exp(-(\y)^2/0.4)}, \y);
+        
+        \node[right, align=left, font=\tiny, red] at (3.8, 0) {Sum of two\\single patterns};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\subsubsection{Interference: The Quantum Reality}
+
+However, we observe that the waves from the two slits \textbf{interfere}.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Constructive Interference:} Max light intensity, high probability of photons.
+    \item \textbf{Destructive Interference:} Min light intensity, low probability of photons.
+\end{itemize}
+
+Physically, we interpret the intensity as being proportional to the probability of observing a photon. The interference intensity is calculated by squaring the sum of the field amplitudes, not the sum of intensities.
+
+\begin{equation}
+I \propto |\psi_{\text{total}}|^2 = |\psi_1 + \psi_2|^2
+\end{equation}
+
+\begin{note}[Euler's Formula and Wave Notation]
+    Euler's formula relates complex exponentials to trigonometric functions:
+    \begin{equation}
+    e^{i\theta} = \cos\theta + i\sin\theta.
+    \end{equation}
+    Using this, we can convert between sinusoidal waves and exponential waves:
+    \begin{equation}
+    \cos\theta = \frac{e^{i\theta} + e^{-i\theta}}{2}, \quad \sin\theta = \frac{e^{i\theta} - e^{-i\theta}}{2i}.
+    \end{equation}
+    In the context of the traveling wave equation $a(x,t) = \frac{A}{2} e^{i(kr - \omega t)}$, the exponent represents the phase $\theta = kr - \omega t$, where:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item $i$: The imaginary unit ($\sqrt{-1}$).
+        \item $k$: The \textbf{wavenumber} ($k = \frac{2\pi}{\lambda}$), which relates to spatial frequency. It is the number of waves that fit in a $2\pi$ interval of a wave of wavelength $\lambda$.
+        \item $r$: The distance the wave has traveled.
+        \item $\omega$: The \textbf{angular frequency} ($\omega = 2\pi f$), which relates to how fast the wave oscillates in time.
+        \item $t$: Time.
+    \end{itemize}
+    We use the complex form because exponentials are mathematically easier to manipulate (add, multiply, differentiate) than sines and cosines.
+\end{note}
+
+Since we now know that we cannot add the probabilities like the classical view predicts, we add their wave amplitude instead. Also note that we are now switching to matter.
+
+\subsubsection{Calculations of The Interference Pattern}
+
+The total wave amplitude at a point $P$ on the screen is the superposition (sum) of the waves from both slits.
+\begin{align}
+    a(x) &= a_1 + a_2 \\
+    &= \frac{A}{2} e^{i(kr_1 - \omega t)} + \frac{A}{2} e^{i(kr_2 - \omega t)}
+\end{align}
+We can factor out the time-dependent term and the amplitude constant:
+\begin{equation}
+    a(x) = \frac{A}{2} \lp e^{ikr_1} + e^{ikr_2} \rp e^{-i\omega t}
+\end{equation}
+
+\begin{note}[Intensity vs. Amplitude]
+    We do not observe the amplitude $a(x)$ directly. Instead, we observe the \textbf{Intensity} $I(x)$, which represents the probability of finding a photon at $P$.
+    \begin{equation}
+    I(x) \propto |a(x)|^2 = a(x) \cdot a^*(x)
+    \end{equation}
+\end{note}
+
+\begin{note}[Bridging the Gap: From Wave Intensity to Particle Probability]
+    The jump from calculating a wave's ``Intensity'' to a particle's ``Probability'' relies on the following logic:
+    \begin{enumerate}[nosep]
+        \item \textbf{Classical Wave Picture:} In classical optics, Intensity ($I$) is defined as the energy density of the light wave. Brighter light means higher energy density.
+        \begin{equation} I \propto |A|^2 \end{equation}
+        \item \textbf{Particle Picture:} Einstein proved that light energy is quantized into photons. The total energy at any spot is simply the number of photons ($N$) times the energy of a single photon ($hf$).
+        \begin{equation} \text{Total Energy} \propto N \end{equation}
+        \item \textbf{The Connection:} Therefore, regions of high wave intensity ($|A|^2$) correspond to regions with a high density of photons.
+        \item \textbf{The Single-Particle Limit:} If we dim the light source until only \textbf{one} photon is in the apparatus at a time, the ``intensity distribution'' represents the likelihood of finding that single photon.
+        \begin{itemize}[nosep, label=\tiny$\bullet$]
+            \item High Intensity $\rightarrow$ High Probability of detection.
+            \item Zero Intensity (Destructive Interference) $\rightarrow$ Zero Probability of detection.
+        \end{itemize}
+    \end{enumerate}
+    Thus, calculating the classical intensity $|A|^2$ gives us the \textbf{Probability Density Function} for the quantum particle.
+\end{note}
+
+Calculating the magnitude squared of the total amplitude:
+\begin{align}
+    I(x) &= \abs{\frac{A}{2} \lp e^{ikr_1} + e^{ikr_2} \rp e^{-i\omega t}}^2 \\
+    &= \lp \frac{A^2}{4} \rp \abs{e^{-i\omega t}}^2 \abs{e^{ikr_1} + e^{ikr_2}}^2 \\
+    &= \frac{A^2}{4} \cdot 1 \cdot \lp e^{ikr_1} + e^{ikr_2} \rp \lp e^{-ikr_1} + e^{-ikr_2} \rp \\
+    &= \frac{A^2}{4} \lp 1 + e^{ik(r_1 - r_2)} + e^{-ik(r_1 - r_2)} + 1 \rp \\
+    &= \frac{A^2}{4} \lp 2 + 2\cos(k[r_1 - r_2]) \rp \\
+    &= \frac{A^2}{2} \lb 1 + \cos(k[r_1 - r_2]) \rb
+\end{align}
+where we used Euler's identity $(e^{i\theta} + e^{-i\theta}) = 2\cos(\theta)$.
+
+\begin{note}[Calculating Magnitude with Complex Conjugates]
+    To find the squared magnitude (Intensity) of a complex wave function $a(x)$, we multiply the function by its complex conjugate $a^*(x)$.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{The Conjugate Rule:} To find the conjugate, replace every $i$ with $-i$.
+        \begin{equation}
+        \text{If } z = re^{i\theta}, \quad \text{then } z^* = re^{-i\theta}.
+        \end{equation}
+        \item \textbf{The Calculation:} Multiplying a complex number by its conjugate always yields a real number:
+        \begin{equation}
+        |z|^2 = z \cdot z^* = (re^{i\theta})(re^{-i\theta}) = r^2 e^{i(\theta - \theta)} = r^2.
+        \end{equation}
+    \end{itemize}
+    This mathematical trick ensures that physical observables (like light intensity or particle probability) are always real, positive numbers.
+\end{note}
+
+\subsubsection{Geometric Approximation}
+
+From the geometry of the experiment, assuming the screen distance $l$ is much larger than the slit separation $h$ ($l \gg h, x$), the path difference is approximately:
+\begin{equation}
+r_1 - r_2 \approx \frac{hx}{l}.
+\end{equation}
+Substituting this and $k = \frac{2\pi}{\lambda}$ into the intensity equation, we obtain the final distribution:
+\begin{equation}
+I(x) = \lp \frac{A^2}{2} \rp \lb 1 + \cos \lp \frac{2\pi h}{\lambda l} x \rp \rb
+\end{equation}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=10cm, height=5cm,
+        axis lines=middle,
+        xlabel={$\frac{hx}{\lambda l}$},
+        ylabel={$I(x)$},
+        ymin=0, ymax=1.2,
+        xmin=-1.2, xmax=1.2,
+        xtick={-1, -0.5, 0, 0.5, 1},
+        ytick={1},
+        yticklabels={$A^2$},
+        axis line style={->},
+        xlabel style={at={(axis description cs:1,0.1)},anchor=north},
+        ylabel style={at={(axis description cs:0.5,1)},anchor=south},
+    ]
+    
+    % Plotting A^2/2 * (1 + cos(2*pi*x))
+    % We normalize A^2=1 for the plot, so max height is 1.
+    \addplot[
+        domain=-1.2:1.2,
+        samples=100,
+        thick
+    ]
+    {0.5 * (1 + cos(deg(2*pi*x)))};
+    
+    % Dashed line for A^2 max
+    \draw[dashed] (axis cs:-1.2, 1) -- (axis cs:1.2, 1);
+    
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+This result confirms that the interference pattern (wiggles) arises from the wave nature of the particles. Even if we turn the light down to one photon at a time, this probability distribution still governs where that single photon will land.
+
+\subsection{Single-Particle Interference}
+
+\subsubsection{Superposition of Paths}
+
+The double slit experiment reveals a fundamental difference in how we conceptualize the motion of particles.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Classical View:} A particle travels from point A to point B by choosing \textit{either} Path 1 \textit{or} Path 2.
+    \item \textbf{Quantum View:} A quantum particle takes \textbf{both paths} simultaneously.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[>=Latex, thick]
+    % Nodes
+    \fill (0,0) circle (2pt) node[left] {$A$};
+    \fill (6,0) circle (2pt) node[right] {$B$};
+    
+    % Barrier Line
+    \draw[line width=1.5pt] (3, -1.5) -- (3, -0.2);
+    \draw[line width=1.5pt] (3, 0.2) -- (3, 1.5);
+    
+    % Path 1 (Top)
+    \draw[->, dashed] (0,0) .. controls (1.5, 1) and (4.5, 1) .. (6,0);
+    \node[above, font=\small] at (3, 0.8) {Path 1};
+    
+    % Path 2 (Bottom)
+    \draw[->, dashed] (0,0) .. controls (1.5, -1) and (4.5, -1) .. (6,0);
+    \node[below, font=\small] at (3, -0.8) {Path 2};
+\end{tikzpicture}
+\end{center}
+
+To calculate the probability of the particle going from A to B, we must sum the \textbf{probability amplitudes} for all possible paths first, and then square the sum.
+
+\subsubsection{Adding Probabilities: Classical vs. Quantum}
+
+Let the amplitude for Path 1 be $\psi_1 = a_1 e^{i\phi_1}$ and for Path 2 be $\psi_2 = a_2 e^{i\phi_2}$.
+
+\textbf{1. Classical Way (Adding Probabilities)} \\
+Classically, we assume the events are mutually exclusive (it took path 1 OR path 2). We sum the individual probabilities.
+\begin{align}
+    P_{\text{classical}} &= \abs{a_1 e^{i\phi_1}}^2 + \abs{a_2 e^{i\phi_2}}^2 \\
+    &= a_1^2 + a_2^2
+\end{align}
+Note that there are no cross-terms; the total probability is just the sum of the intensities.
+
+\textbf{2. Quantum Way (Adding Amplitudes)} \\
+Quantum mechanially, we sum the amplitudes first.
+\begin{align}
+    P_{\text{quantum}} &= \abs{a_1 e^{i\phi_1} + a_2 e^{i\phi_2}}^2 \\
+    &= (a_1 e^{-i\phi_1} + a_2 e^{-i\phi_2})(a_1 e^{i\phi_1} + a_2 e^{i\phi_2}) \\
+    &= a_1^2 + a_2^2 + a_1 a_2 e^{-i(\phi_1 - \phi_2)} + a_1 a_2 e^{i(\phi_1 - \phi_2)} \\
+    &= a_1^2 + a_2^2 + \underbrace{2a_1 a_2 \cos(\phi_1 - \phi_2)}_{\text{Interference Term}}
+\end{align}
+The presence of the interference term explains the ``wiggles'' (fringes) observed in the experiment.
+
+\begin{note}[Generalizing the Interference Rule]
+    We are now moving from the specific geometry of the double-slit experiment to the \textbf{general rule} for adding quantum probabilities.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{General Case (Slide 14):} For any two paths with amplitudes $a_1$ and $a_2$, the probability is:
+        \begin{equation}
+        P = a_1^2 + a_2^2 + 2a_1 a_2 \cos(\phi_1 - \phi_2)
+        \end{equation}
+        \item \textbf{Simplification to 2-Slit (Slide 11):} In the double-slit experiment, the slits are identical, so the amplitudes are equal ($a_1 = a_2 = \frac{A}{2}$). Substituting this into the general equation:
+        \begin{align}
+            P &= \lp\frac{A}{2}\rp^2 + \lp\frac{A}{2}\rp^2 + 2\lp\frac{A}{2}\rp\lp\frac{A}{2}\rp \cos(\delta) \\
+            &= \frac{A^2}{4} + \frac{A^2}{4} + \frac{A^2}{2}\cos(\delta) \\
+            &= \frac{A^2}{2} \lb 1 + \cos(\delta) \rb
+        \end{align}
+    \end{itemize}
+    This confirms that our previous calculation was just a specific symmetric case of this universal quantum law.
+\end{note}
+
+\subsubsection{The Effect of Measurement (Collapse)}
+
+What happens if we try to "catch" the particle taking a specific path? Suppose we place a detector on Path 1.
+
+\begin{center}
+\begin{tikzpicture}[>=Latex, thick]
+    % Nodes
+    \fill (0,0) circle (2pt) node[left] {$A$};
+    \fill (6,0) circle (2pt) node[right] {$B$};
+    
+    % Barrier Line
+    \draw[line width=1.5pt] (3, -1.5) -- (3, -0.2);
+    \draw[line width=1.5pt] (3, 0.2) -- (3, 1.5);
+    
+    % Path 1 (Top) with Detector
+    \draw[->, dashed] (0,0) .. controls (1.5, 1) and (4.5, 1) .. (6,0);
+    \node[above, font=\small] at (2, 0.8) {Path 1};
+    
+    % Detector Box
+    \draw[fill=white] (2.8, 0.6) rectangle (3.2, 1.0);
+    \node[right, font=\scriptsize] at (3.2, 0.8) {Detector};
+    \draw[red, decorate, decoration={snake, amplitude=.4mm, segment length=2mm, post length=1mm}] (3.0, 0.8) -- (3.5, 1.3);
+
+    % Path 2 (Bottom)
+    \draw[->, dashed] (0,0) .. controls (1.5, -1) and (4.5, -1) .. (6,0);
+    \node[below, font=\small] at (3, -0.8) {Path 2};
+\end{tikzpicture}
+\end{center}
+
+\begin{note}[Collapse of the Wavefunction]
+    If we place a device that can determine which path the particle takes, the interference pattern disappears.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item The act of observation localizes the particle to a single path.
+        \item The particle no longer exists in a superposition of ``both paths.''
+        \item We recover the \textbf{classical probability distribution} ($P = P_1 + P_2$).
+    \end{itemize}
+    This phenomenon is referred to as the \textbf{collapse of the wavefunction}: the measurement forces the quantum system to choose a definite state, destroying the interference.
+\end{note}
+
+\clearpage
+
+\section*{Lecture 4}
+\addcontentsline{toc}{section}{Lecture 4}
+\stepcounter{section}
+\setcounter{section}{4}
+\setcounter{equation}{0}
+
+
+
+\end{document}
+
+% ---------- EXTRA COMMANDS ----------
+% LIST
+[nosep, leftmargin=*]
+[nosep, label=\tiny$\bullet$]
+
+% ENUMERATE LABEL TO ABC
+[label(breaking lable in cref)=(\alph*)]
+
+% INSERT MEDIA
+\includegraphics[width=\linewidth]{}
+
+% MINI PAGE 
+\begin{minipage}[t]{\linewidth}
+    \begin{center}
+    \adjustbox{valign=t}{
+    \includegraphics[width=0.5\linewidth]{q6b.jpeg}
+    }
+    \end{center}
+\end{minipage}

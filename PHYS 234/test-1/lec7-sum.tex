@@ -1,0 +1,145 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{physics} % For bra-ket notation \ket{}, \bra{}, \braket{}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=1in}
+
+\title{Lecture 7: Projection Operators - Summary \& Formula Sheet}
+\author{Based on Lecture by Raffi Budakian (Univ. of Waterloo)}
+\date{Week of January 26, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Lecture Overview}
+\begin{itemize}
+    \item \textbf{Topic:} Projection Operators, Measurement (Postulate 5), and Stern-Gerlach Analysis.
+    \item \textbf{Goal:} Develop an operator formalism for calculating measurement outcomes and analyzing quantum systems.
+\end{itemize}
+
+\section{1. The Projection Operator}
+The lecture introduces the projection operator to formalize how we describe quantum states and measurements.
+
+\subsection{Definition}
+For a state $\ket{\psi}$ expanded in a basis of eigenvectors $\ket{a_n}$ (where $\ket{\psi} = \sum c_n \ket{a_n}$), the projection operator $\hat{P}_n$ is defined as the outer product of the eigenket with its own bra:
+\begin{equation}
+    \hat{P}_n \equiv \ket{a_n}\bra{a_n}
+\end{equation}
+
+\subsection{Action on a State}
+When $\hat{P}_n$ acts on an arbitrary state $\ket{\psi}$, it ``projects'' out the component of $\ket{\psi}$ corresponding to $\ket{a_n}$:
+\begin{equation}
+    \hat{P}_n \ket{\psi} = \ket{a_n}\braket{a_n}{\psi} = c_n \ket{a_n}
+\end{equation}
+
+\subsection{Matrix Representation}
+While the inner product $\braket{\psi}{\psi}$ is a scalar, the outer product $\ket{\psi}\bra{\psi}$ creates an $n \times n$ matrix (or tensor).
+\begin{itemize}
+    \item \textbf{Example ($S_z$ Operator):}
+    \begin{align}
+        \hat{P}_+ &= \ket{+}\bra{+} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} \begin{pmatrix} 1 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \\
+        \hat{P}_- &= \ket{-}\bra{-} = \begin{pmatrix} 0 \\ 1 \end{pmatrix} \begin{pmatrix} 0 & 1 \end{pmatrix} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}
+    \end{align}
+\end{itemize}
+
+\section{2. Key Properties \& Theorems}
+
+\subsection{Completeness Relation}
+The sum of all projection operators for a complete basis equals the identity operator. This implies that the probability of finding the system in \textit{any} valid state sums to 1:
+\begin{equation}
+    \sum_n \hat{P}_n = \sum_n \ket{a_n}\bra{a_n} = \mathbb{1}
+\end{equation}
+
+\subsection{Spectral Decomposition}
+Any observable operator $\hat{A}$ can be written as a sum of its eigenvalues weighted by their corresponding projection operators:
+\begin{equation}
+    \hat{A} = \sum_n a_n \ket{a_n}\bra{a_n}
+\end{equation}
+
+\section{3. Measurement \& Postulate 5}
+This section formally defines the effect of measurement on a quantum state.
+
+\subsection{The Collapse}
+A measurement of observable $\hat{A}$ yielding result $a_n$ ``projects'' or ``collapses'' the initial state $\ket{\psi_i}$ onto the eigenstate $\ket{a_n}$.
+
+\subsection{Postulate 5 Formula}
+The state after measurement ($\ket{\psi_f}$) is the projection of the initial state, normalized by the probability amplitude:
+\begin{equation}
+    \ket{\psi_f} = \frac{\hat{P}_n \ket{\psi_i}}{\sqrt{\bra{\psi_i}\hat{P}_n\ket{\psi_i}}}
+\end{equation}
+\textit{Note:} The denominator ensures normalization. Any overall phase factor $e^{i\alpha}$ is physically irrelevant.
+
+\section{4. Expectation Value}
+The expectation value represents the average value of an operator for a given state. It is the sum of eigenvalues weighted by their probabilities:
+\begin{equation}
+    \langle \hat{A} \rangle = \bra{\psi} \hat{A} \ket{\psi} = \sum_n a_n |c_n|^2
+\end{equation}
+
+\section{5. Analysis of S-G Experiments}
+
+\subsection{Experiment 3: Measurement Interruption}
+\textbf{Setup:} Oven $\to$ Analyzer 1 ($z$) $\to$ Analyzer 2 ($x$) $\to$ Analyzer 3 ($z$).
+\begin{itemize}
+    \item The state enters Analyzer 2 (x-basis) and is projected into superpositions of z-basis states.
+    \item \textbf{Result:} Because the x-basis measurement ``scrambles'' the z-information, the probability for each final outcome (Ports 3a+, 3a-, 3b+, 3b-) is exactly $1/4$ ($25\%$).
+\end{itemize}
+
+\subsection{Experiment 4: Recombination (No Measurement)}
+\textbf{Setup:} Similar to Exp 3, but beams from Analyzer 2 are recombined without detection.
+\begin{itemize}
+    \item \textbf{Analysis:} The action of splitting and recombining is equivalent to applying the sum of projections, which is Identity:
+    \begin{equation}
+        \hat{P}_{total} = \ket{+}_x\bra{+}_x + \ket{-}_x\bra{-}_x = \mathbb{1}
+    \end{equation}
+    \item \textbf{Result:} The state passes through unchanged ($\ket{+} \to \ket{+}$). Probability of exiting $\ket{+}$ port of A3 is $100\%$.
+\end{itemize}
+
+\newpage
+
+\section*{Midterm Formula Sheet}
+\addcontentsline{toc}{section}{Midterm Formula Sheet}
+
+\begin{enumerate}
+    \item \textbf{Projection Operator Definition}
+    \begin{equation}
+        \hat{P}_n = \ket{a_n}\bra{a_n}
+    \end{equation}
+
+    \item \textbf{Completeness Relation (Resolution of Identity)}
+    \begin{equation}
+        \sum_n \hat{P}_n = \mathbb{1}
+    \end{equation}
+
+    \item \textbf{Spectral Decomposition}
+    \begin{equation}
+        \hat{A} = \sum_n a_n \hat{P}_n = \sum_n a_n \ket{a_n}\bra{a_n}
+    \end{equation}
+
+    \item \textbf{Post-Measurement State (Postulate 5)}
+    \begin{equation}
+        \ket{\psi_{final}} = \frac{\hat{P}_n \ket{\psi_{initial}}}{\sqrt{\bra{\psi_{initial}}\hat{P}_n\ket{\psi_{initial}}}}
+    \end{equation}
+
+    \item \textbf{Expectation Value}
+    \begin{equation}
+        \langle \hat{A} \rangle = \bra{\psi} \hat{A} \ket{\psi}
+    \end{equation}
+
+    \item \textbf{Probability of Measuring $a_n$}
+    \begin{equation}
+        P(a_n) = \bra{\psi} \hat{P}_n \ket{\psi} = |\braket{a_n}{\psi}|^2
+    \end{equation}
+\end{enumerate}
+
+\section*{Core Takeaway}
+Measurement is an active mathematical operation (projection) that fundamentally alters the state.
+\begin{itemize}
+    \item \textbf{Measure/Block:} Apply a single $\hat{P}_n$ $\rightarrow$ Collapse state.
+    \item \textbf{No Measurement (Recombine):} Apply $\sum \hat{P}_n = \mathbb{1}$ $\rightarrow$ State is unchanged.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,529 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=0.8in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\section*{Lecture 9}
+\addcontentsline{toc}{section}{Lecture 9}
+\stepcounter{section}
+\setcounter{section}{9}
+\setcounter{equation}{0}
+
+\subsection{Surface Forces and Pressure}
+
+Last time, using Newton's 2nd Law and including gravity (volume force) and surface forces, we obtained the integral form of the momentum equation:
+\[
+\iiint_{W(t)} \rho \frac{D u_i}{Dt} \, dV = - \iiint_{W(t)} \rho \frac{\partial \Pi}{\partial x_i} \, dV + \oiint_{\partial W(t)} t_i \, dS.
+\]
+
+Today, we focus on the surface force \& rewrite it as a triple integral over \(W(t)\).
+
+\begin{center}
+\begin{tikzpicture}[scale=1, line cap=round, line join=round]
+    % Sphere Outline
+    \draw[thick] (0,0) circle (1.2);
+    
+    % Equator (3D effect)
+    \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+    \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+    
+    % Label W(t) inside
+    \node at (-2,0.3) {\small $W(t)$};
+    
+    % Surface patch (small square on surface)
+    \begin{scope}[rotate=45]
+        \draw[fill=white] (0.8,-0.15) rectangle (1.1,0.15);
+        % Normal vector n-hat
+        \draw[->, thick] (0.95, 0) -- (1.8, 0) node[right] {$\hat{\bm n}$};
+    \end{scope}
+
+    % Labels to the right of the sphere
+    \node[align=left, anchor=west] at (2, 0.2) {$\partial W(t) = \text{boundary}$};
+    \node[align=left, anchor=west] at (2, -0.4) {$d\bm f = \bm t \, ds$};
+\end{tikzpicture}
+\end{center}
+
+On each subsurface, we have
+\[
+d\bm f = \bm t \, ds
+\]
+where \(\bm t\) is the stress vector. Let's consider a state of equilibrium where there is no movement
+\[
+\bm u = \vec{0}.
+\]
+
+\subsubsection{The Stress Vector in Equilibrium}
+
+Consider a state of equilibrium where there is no movement (\(\bm u = \vec{0}\)).
+Recall that fluids in equilibrium cannot resist shear forces (stresses). Since we have \(\bm u = \vec{0}\), in equilibrium, the surface force must be parallel to the normal vector \(\hat{\bm n}\). Then the stress tensor is
+\[
+\bm t = - p(\bm x) \hat{\bm n},
+\]
+where we call \(p(\bm x)\) the pressure. The negative sign indicates that pressure acts \emph{inward} on the volume (compression).
+
+Our global expression for the surface force becomes
+\[
+\bm F_s = \oiint_{\partial W(t)} - p \hat{\bm n} \, dS.
+\]
+
+\subsubsection{Derivation of Pressure Force}
+
+To rewrite this surface integral as a volume integral, we consider two approaches: a heuristic Taylor expansion and a formal proof using Gauss' Theorem.
+
+\begin{note}[Heuristic Derivation using Taylor Expansion]
+    Consider the pressure on a small material volume (a cube) with side lengths \(dx, dy, dz\) such that \(dV = dx \, dy \, dz \ll 1\).
+    
+    \begin{center}
+        \begin{tikzpicture}[
+        x={(-0.5cm,-0.4cm)}, y={(1cm,0cm)}, z={(0cm,1cm)}, % Define 3D axis orientation
+        scale=2,
+        >=Stealth
+        ]
+
+        % --- Definitions ---
+        \def\s{1.2} % Cube side length
+
+        % --- Axes ---
+        % Draw axes starting from the origin (back corner of the cube)
+        \draw[->] (0,0,0) -- (\s+0.8,0,0) node[below left] {$x$};
+        \draw[->] (0,0,0) -- (0,\s+0.8,0) node[right] {$y$};
+        \draw[->] (0,0,0) -- (0,0,\s+0.8) node[above] {$z$};
+
+        % --- Cube (Visible Lines Only) ---
+        % We removed the dashed lines from (0,0,0) because they overlap the axes.
+        
+        % Front Face (x=s)
+        \draw (\s,0,0) -- (\s,\s,0) -- (\s,\s,\s) -- (\s,0,\s) -- cycle;
+        
+        % Top Face (z=s)
+        \draw (0,0,\s) -- (\s,0,\s) -- (\s,\s,\s) -- (0,\s,\s) -- cycle;
+        
+        % Right Face (y=s)
+        \draw (0,\s,0) -- (\s,\s,0) -- (\s,\s,\s) -- (0,\s,\s) -- cycle;
+        
+        % Bottom Face edges (visible ones not on axes)
+        % (s,0,0) to (s,s,0) is part of Front Face
+        % (0,s,0) to (s,s,0) is part of Right Face
+        
+        % Left Face edges (visible ones not on axes)
+        % (0,0,s) to (0,s,s) is part of Top/Right boundary
+        
+        % --- Completing the "Wireframe" feel without the hidden back lines ---
+        % We need to make sure the cube looks "anchored". 
+        % The lines (s,0,0)--(s,s,0) and (0,s,0)--(s,s,0) define the bottom visible corner.
+        
+        % Pressure Vectors
+        % Top (pushing down)
+        \draw[->] (0.5*\s, 0.5*\s, \s + 0.6) -- (0.5*\s, 0.5*\s, \s);
+        \node[right] at (0.5*\s, 0.5*\s, \s + 0.6) {$p(z+dz)dxdy$};
+        
+        % Bottom (pushing up)
+        \draw[->] (0.5*\s, 0.5*\s, -0.6) -- (0.5*\s, 0.5*\s, 0);
+        \node[right] at (0.5*\s, 0.5*\s, -0.6) {$p(z)dxdy$};
+
+        \end{tikzpicture}
+    \end{center}
+
+    The units of \(\bm t\) are \([\bm t] = \text{N}/\text{m}^2\).
+    We will look at the balance of forces in the \(z\)-direction. For the difference in this force from the two faces, we Taylor expand about \(z\).
+    \begin{align*}
+        dF_z &= p(x,y,z) \, dx dy - p(x,y,z+dz) \, dx dy \\
+        &= (p(x,y,z) - p(x,y,z+dz)) \, dx dy \\
+        &= (p(x,y,z) - [p(x,y,z) + dz \frac{\partial p}{\partial z}(x,y,z) + \dots]) \, dx dy \\
+        &= - \frac{\partial p}{\partial z}(x,y,z) \, dx dy dz \\
+        &= - \frac{\partial p}{\partial z} \, dV.
+    \end{align*}
+    Similarly,
+    \[
+    dF_x = - \frac{\partial p}{\partial x}(x,y,z) \, dx dy dz \quad \& \quad dF_y = - \frac{\partial p}{\partial y}(x,y,z) \, dx dy dz
+    \]
+    Combining these into a vector equation:
+    \[
+    d\bm F = (dF_x, dF_y, dF_z) = - \lp \frac{\partial p}{\partial x}, \frac{\partial p}{\partial y}, \frac{\partial p}{\partial z} \rp \, dV = - \nabla p \, dV.
+    \]
+    Integrating over the whole volume, the surface force can be written as:
+    \[
+    \bm F_s = - \iiint_{W(t)} \nabla p \, dV.
+    \]
+\end{note}
+
+This very rough calculation suggests the following identity.
+
+\begin{theorem}[Gradient Theorem Corollary]
+    \label{pressure gradient identity}
+    \[
+    \oiint_{\partial W(t)} p \, \hat{\bm n} \, dS = \iiint_{W(t)} \nabla p \, dV.
+    \]
+\end{theorem}
+
+\begin{proof}
+    The idea of the proof is to write the identity in component form using Gauss' Divergence Theorem.
+    Recall Gauss' Divergence Theorem states:
+    \[
+    \iiint_W \nabla \cdot \bm U \, dV = \oiint_{\partial W} \bm U \cdot \hat{\bm n} \, dS.
+    \]
+    We want to show:
+    \[
+    \oiint_{\partial W(t)} p (n_x, n_y, n_z) \, dS = \iiint_{W(t)} \lp \frac{\partial p}{\partial x}, \frac{\partial p}{\partial y}, \frac{\partial p}{\partial z} \rp \, dV.
+    \]
+    This corresponds to 3 scalar equations.
+    
+    \textbf{For the x-direction:} Pick the vector field \(\bm U = (p, 0, 0)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial x}\).
+    Applying Gauss' Theorem:
+    \[
+    \iiint_{W(t)} \frac{\partial p}{\partial x} \, dV = \oiint_{\partial W(t)} (p, 0, 0) \cdot \hat{\bm n} \, dS = \oiint_{\partial W(t)} p n_x \, dS.
+    \]
+    \textbf{For the y-direction:} Pick \(\bm U = (0, p, 0)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial y}\).
+    \[
+    \iiint_{W(t)} \frac{\partial p}{\partial y} \, dV = \oiint_{\partial W(t)} p n_y \, dS.
+    \]
+    \textbf{For the z-direction:} Pick \(\bm U = (0, 0, p)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial z}\).
+    \[
+    \iiint_{W(t)} \frac{\partial p}{\partial z} \, dV = \oiint_{\partial W(t)} p n_z \, dS.
+    \]
+    Combining these 3 scalar equations into a vector equation yields the result.
+\end{proof}
+
+\subsection{Hydrostatics}
+
+Given this identity, we return to Newton's 2nd Law in a state of rest (\(\bm u = \vec{0}\)). The acceleration term is zero.
+\begin{align*}
+    0 &= - \iiint_{W(t)} \rho \nabla \Pi \, dV - \oiint_{\partial W(t)} p \hat{\bm n} \, dS \\
+      &= \iiint_{W(t)} \lb - \rho \nabla \Pi - \nabla p \rb \, dV \\
+      &= - \iiint_{W(t)} \lb \rho \nabla \Pi + \nabla p \rb \, dV.
+\end{align*}
+Since this holds for any arbitrary volume \(W(t)\), we apply the Dubois-Reymond Lemma (localization) to get:
+\[
+\rho \nabla \Pi + \nabla p = 0.
+\]
+Assuming gravity acts in the vertical direction, \(\Pi = gz\) and \(\nabla \Pi = g \hat{\bm z}\).
+
+\begin{definition}[Hydrostatic Balance]
+    The hydrostatic balance equation is
+    \[
+    \nabla p = - \rho \nabla \Pi = - \rho g \hat{\bm z},
+    \]
+    where \(\Pi = gz\). In component form:
+    \[
+    \frac{\partial p}{\partial x} = 0, \quad \frac{\partial p}{\partial y} = 0, \quad \frac{\partial p}{\partial z} = - \rho g.
+    \]
+    This describes the perfect balance between the forces of gravity and pressure.
+\end{definition}
+
+\subsubsection{Hydrostatic Balance of the Ocean}
+
+Suppose we consider a simple ocean at rest (\(\bm u = \bm 0\)), and the density is constant \(\rho = \rho_0\) (incompressible).
+Since \(\frac{\partial p}{\partial x} = 0\) and \(\frac{\partial p}{\partial y} = 0\), pressure depends only on \(z\), i.e., \(p(z)\).
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth]
+    % Air/Ocean interface
+    \draw[thick] (0,0) -- (6,0) node[right] {$z=0$};
+    \node at (3, 0.4) {air};
+    \node at (3, -0.4) {ocean};
+
+    % Define the curve of the ocean bottom
+    \def\oceanbottom{
+        (0,-2.5) .. controls (1,-2.8) and (2,-1.5) .. (3,-2.2) .. controls (4,-3.0) and (5,-2.0) .. (6,-2.5)
+    }
+
+    % 1. Fill the ground with hatching (Pattern)
+    % We extend the path down to -3.5 to create a closed shape for filling
+    \fill[pattern=north east lines, pattern color=black!60] 
+        \oceanbottom -- (6,-3.5) -- (0,-3.5) -- cycle;
+
+    % 2. Draw the thick boundary line on top
+    \draw[thick, smooth] \oceanbottom node[right] {$z = -H(x,y)$};
+\end{tikzpicture}
+\end{center}
+
+The vertical equation is:
+\[
+\frac{\partial p}{\partial z} = - g \rho_0.
+\]
+We integrate from depth \(z\) to the surface \(z=0\):
+\begin{align*}
+    \int_z^0 \frac{dp}{dz} \, dz &= \int_z^0 - g \rho_0 \, dz \\
+    p(z)\Big|_z^0 &= -g \rho_0 z \Big|_z^0 \\
+    p(0) - p(z) &= 0 - (- g \rho_0 z) = g \rho_0 z \\
+    p(z) &= p(0) - \rho_0 g z.
+\end{align*}
+If we denote the atmospheric pressure as \(P_{\text{atmosphere}} = p(0)\), then
+\[
+p(z) = P_{\text{atmosphere}} - \rho_0 g z.
+\]
+
+\begin{note}
+    Since \(z\) is negative underwater, \(-\rho_0 g z\) is a positive term.
+    The pressure at \(z\) is equal to the pressure of the atmosphere plus the weight of the fluid column above per unit area:
+    \[
+    \frac{\rho_0 g (-z) dA}{dA} = \frac{m g}{dA}.
+    \]
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=1.2]
+            % Axes
+            \draw[->, thick] (0,0) -- (4,0) node[right] {$p$};
+            \draw[->, thick] (0,0) -- (0,-3) node[below] {$z$};
+
+            % Label for z-axis direction
+            % (Implicitly z is depth here based on the graph direction)
+
+            % The Plot
+            % Starts at P_atmosphere on the x-axis and increases linearly as z goes down
+            \draw[thick] (1,0) -- (3.5,-2.5);
+
+            % Intercept Label
+            \draw (1,0.1) -- (1,-0.1); % tick mark
+            \node[above] at (1,0.1) {$P_{\text{atmosphere}}$};
+
+        \end{tikzpicture}
+    \end{center}
+\end{note}
+
+\begin{example}[Numerical Scale]
+    It is observed that \(P_{\text{atmosphere}} \approx 10^5 \, \text{N}/\text{m}^2\).
+    The depth of the ocean is \(\le 10 \, \text{km} = 10^4 \, \text{m}\).
+    The density of water is \(\rho_0 \approx 10^3 \, \text{kg}/\text{m}^3\) and \(g \approx 10 \, \text{m}/\text{s}^2\).
+    
+    At the top of the ocean: \(p \approx 10^5 \, \text{N}/\text{m}^2\).
+    
+    At the bottom of the ocean:
+    \[
+    p \approx 10^5 \, \text{N}/\text{m}^2 + \lp 10^3 \frac{\text{kg}}{\text{m}^3} \rp \lp 10 \frac{\text{m}}{\text{s}^2} \rp \lp 10^4 \, \text{m} \rp \approx 10^8 \, \text{N}/\text{m}^2.
+    \]
+    The pressure at the bottom is 1000 times larger than at the surface.
+\end{example}
+
+\subsubsection{Hydrostatic Balance for the Atmosphere}
+
+The density of air changes a lot (it is compressible). To describe air, you need an equation of state. One choice is the Ideal Gas Law:
+\[
+p = \rho R T, \quad R \approx 287 \, \frac{\text{J}}{\text{kg}\cdot\text{K}}.
+\]
+The temperature is not constant, but if we assume it is for simplicity (say \(T = T_0 = \text{const}\)), we get simple equations.
+From the ideal gas law: \(\rho = \frac{p}{R T_0}\).
+Substitute this into the vertical hydrostatic equation:
+\[
+\frac{dp}{dz} = - g \rho = - \frac{g p}{R T_0}.
+\]
+This is a separable ODE:
+\[
+\frac{dp}{p} = - \frac{g}{R T_0} dz \quad \Rightarrow \quad \ln p = - \frac{g z}{R T_0} + C.
+\]
+Solving for \(p\):
+\[
+p(z) = p(0) e^{-z/H}, \quad \text{where } H \equiv \frac{R T_0}{g}.
+\]
+\(H\) is called the \textbf{Scale Height}. For \(T_0 \approx 20^\circ\text{C}\), \(H \approx 8.4 \, \text{km}\).
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    % Axes
+    \draw[->] (0,0) -- (4,0) node[right] {$T$};
+    \draw[->] (0,0) -- (0,4) node[above] {$z$};
+    
+    % Ticks
+    \draw (0.1, 1) -- (-0.1, 1) node[left] {\small 0 km};
+    \draw (0.1, 2) -- (-0.1, 2) node[left] {\small 10 km};
+    \draw (0.1, 3.5) -- (-0.1, 3.5) node[left] {\small 50 km};
+    
+    % Temperature Profile (approximate)
+    \draw[thick] (3, 0.5) -- (1.5, 2) -- (3, 3.5);
+    \draw[dashed] (1.5, 0) -- (1.5, 2);
+    
+    % Labels
+    \node[below] at (1.5, 0) {\small -40$^\circ$C};
+    \node[below] at (3, 0) {\small 20$^\circ$C};
+\end{tikzpicture}
+\end{center}
+
+\end{document}

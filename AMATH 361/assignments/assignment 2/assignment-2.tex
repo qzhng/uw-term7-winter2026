@@ -1,0 +1,529 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=0.8in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\newpage
+\section*{Question 2}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item 
+    \begin{align*}
+        \frac{D(f + g)}{Dt} &= \frac{\partial (f + g)}{\partial t} + \bm{u} \cdot \nabla (f + g) \\
+        &= \frac{\partial f}{\partial t} + \frac{\partial g}{\partial t} + \bm{u} \cdot (\nabla f + \nabla g) \quad \text{(by vector identity)} \\
+        &= \frac{\partial f}{\partial t} + \frac{\partial g}{\partial t} + \bm{u} \cdot \nabla f + \bm{u} \cdot \nabla g \\
+        &= \frac{\partial f}{\partial t} + \bm{u} \cdot \nabla f + \frac{\partial g}{\partial t} + \bm{u} \cdot \nabla g \\
+        &= \frac{Df}{Dt} + \frac{Dg}{Dt}.
+    \end{align*}
+    \item
+    \begin{align*}
+        \frac{D(fg)}{Dt} &= \frac{\partial (fg)}{\partial t} + \bm{u} \cdot \nabla (fg) \\
+        &= f \frac{\partial g}{\partial t} + \frac{\partial f}{\partial t} g + \bm{u} \cdot (f (\nabla g) + (\nabla f) g) \quad \text{(by vector identity)} \\
+        &= \frac{\partial f}{\partial t} g + \bm{u} \cdot ((\nabla f)g) + f \frac{\partial g}{\partial t} + \bm{u} \cdot (f (\nabla g)) \\
+        &= \frac{Df}{Dt} g + f \frac{Dg}{Dt}.
+    \end{align*}
+    \item
+    \begin{align*}
+        \nabla (h \circ g) &= \lp \frac{\partial (h \circ g)}{\partial x_1}, \frac{\partial (h \circ g)}{\partial x_2}, \frac{\partial (h \circ g)}{\partial x_3} \rp\\
+        &= \lp (h' \circ g) \frac{\partial g}{\partial x_1}, (h' \circ g) \frac{\partial g}{\partial x_2}, (h' \circ g) \frac{\partial g}{\partial x_3} \rp \\
+        &= (h' \circ g) \nabla g.
+    \end{align*}
+    Then:
+    \begin{align*}
+        \frac{D(h \circ g)}{Dt} &= \frac{\partial (h \circ g)}{\partial t} + \bm{u} \cdot \nabla (h \circ g) \\
+        &= (h' \circ g) \frac{\partial g}{\partial t} + [\bm{u} \cdot (h' \circ g) \nabla g] \\
+        &= (h' \circ g) \lp \frac{\partial g}{\partial t} + \bm{u} \cdot \nabla g \rp \\
+        &= (h' \circ g) \frac{Dg}{Dt}.
+    \end{align*}
+\end{enumerate}
+
+\newpage
+\section*{Question 3}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+To find the rate of change of temperature with respect to time as measured by the airplane, we solve for the material derivative of \(T\) w.r.t. \(t\).
+\begin{align*}
+    \frac{Df}{Dt} &= \frac{\partial T}{\partial t} + \bm{u} \cdot \nabla T \\
+    &= \frac{\partial T}{\partial t} + u_x \frac{\partial T}{\partial x} + u_z \frac{\partial T}{\partial z}.
+\end{align*}
+For each component:
+\begin{align*}
+    % first term
+    \frac{\partial T}{\partial t} &= -\frac{24}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right), \\[10pt]
+    % second term
+    u_x \frac{\partial T}{\partial x} &= 10 \cos(30^\circ) \cdot 8 \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \left( \frac{1}{2000} \right) \\
+    &= 5\sqrt{3} \cdot \frac{8}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \\
+    &= \frac{40\sqrt{3}}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right), \\[10pt]
+    % third term
+    u_z \frac{\partial T}{\partial z} &= 10 \sin(30^\circ) \cdot 8 \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \frac{\partial}{\partial z}\left(\frac{x + \alpha z - 3t}{2000}\right) \\
+    &= 5 \cdot 8 \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \left( \frac{100}{2000} \right) \\
+    &= \frac{4000}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right).
+\end{align*}
+Plugging in the numerical values:
+\begin{align*}
+    \frac{Df}{Dt} &= \left( -\frac{24}{2000} + \frac{40\sqrt{3}}{2000} + \frac{4000}{2000} \right) \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \\
+    &= \frac{3976 + 40\sqrt{3}}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \\
+    &\approx \frac{3976 + 69.28}{2000} \operatorname{sech}^2\left(\frac{x + \alpha z - 3t}{2000}\right) \\
+    &\approx 2.023 \operatorname{sech}^2\left(\frac{x + 100 z - 3t}{2000}\right) \unit{\degreeCelsius\per\second}.
+\end{align*}
+The extreme value occurs when the hyperbolic secant term is 1, the maximum rate of change of approximately \SI{2.023}{\degreeCelsius\per\second}.
+
+\newpage
+\section*{Question 4}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Computing the Jacobian $J$ of the transformation:
+    \begin{align*}
+        J = \frac{\partial(x,y)}{\partial(r,\theta)} &= \begin{vmatrix}
+            \frac{\partial x}{\partial r} & \frac{\partial x}{\partial \theta} \\
+            \frac{\partial y}{\partial r} & \frac{\partial y}{\partial \theta}
+        \end{vmatrix} \\
+        &= \begin{vmatrix}
+            a \cos\theta & -ar \sin\theta \\
+            b \sin\theta & br \cos\theta
+        \end{vmatrix} \\
+        &= (a \cos\theta)(br \cos\theta) - (-ar \sin\theta)(b \sin\theta) \\
+        &= abr (\cos^2\theta + \sin^2\theta) \\
+        &= abr.
+    \end{align*}
+    Substituting the transformation into the equation of the ellipse $x^2/a^2 + y^2/b^2 = 1$ yields the limits for $r$:
+    \begin{align*}
+        \frac{(ar \cos\theta)^2}{a^2} + \frac{(br \sin\theta)^2}{b^2} &= 1 \\
+        r^2 (\cos^2\theta + \sin^2\theta) &= 1 \\
+        r^2 &= 1 \implies r = 1.
+    \end{align*}
+    The limits are $0 \le r \le 1$ and $0 \le \theta \le 2\pi$. The area $A$ is therefore:
+    \begin{align*}
+        A &= \iint_R dx \, dy = \iint_R J \, dr \, d\theta \\
+        &= \int_0^{2\pi} \int_0^1 abr \, dr \, d\theta \\
+        &= ab \int_0^{2\pi} d\theta \int_0^1 r \, dr \\
+        &= ab (2\pi) \lb \frac{r^2}{2} \rb_0^1 \\
+        &= \pi ab.
+    \end{align*}
+    \item We rewrite the integral $I(t)$ using the transformation to coordinates $(r, \theta)$. Since the limits for $r$ ($0$ to $1$) and $\theta$ ($0$ to $2\pi$) are constant in time:
+    \begin{equation*}
+        I(t) = \int_0^{2\pi} \int_0^1 f(x(r,\theta,t), y(r,\theta,t), t) \, J(r,\theta,t) \, dr d\theta.
+    \end{equation*}
+    Therefore:
+    \begin{align*}
+        \frac{dI}{dt} &= \frac{d}{dt} \int_0^{2\pi} \int_0^1 f J \, dr d\theta \\
+        &= \int_0^{2\pi} \int_0^1 \frac{\partial}{\partial t} (f J) \, dr d\theta.
+    \end{align*}
+    By the product rule:
+    \begin{equation*}
+        \frac{\partial}{\partial t} (f J) = \frac{df}{dt} J + f \frac{\partial J}{\partial t}.
+    \end{equation*}
+    By the chain rule:
+    \begin{align*}
+        \frac{df}{dt} &= \frac{\partial f}{\partial t} + \frac{\partial f}{\partial x}\frac{\partial x}{\partial t} + \frac{\partial f}{\partial y}\frac{\partial y}{\partial t} \\
+        &= f_t + \nabla f \cdot \bm{v}, \quad \text{where } \bm{v} = \lp \frac{\partial x}{\partial t}, \frac{\partial y}{\partial t} \rp.
+    \end{align*}
+    Substituting this back into the integral:
+    \begin{align*}
+        \frac{dI}{dt} &= \int_0^{2\pi} \int_0^1 \lb (f_t + \bm{v} \cdot \nabla f) J + f \frac{\partial J}{\partial t} \rb \, dr d\theta \\
+        &= \int_0^{2\pi} \int_0^1 (f_t + \bm{v} \cdot \nabla f) J \, dr d\theta + \int_0^{2\pi} \int_0^1 f \frac{\partial J}{\partial t} \, dr d\theta.
+    \end{align*}
+    Since $J \, dr d\theta = dx dy$:
+    \begin{equation*}
+        \frac{dI}{dt} = \iint_R [f_t + \bm{v} \cdot \nabla f] \, dx dy + \iint_R f \frac{\partial J}{\partial t} \, dr d\theta.
+    \end{equation*}
+    \item To find \(\bm{v}\):
+    \begin{align*}
+        v_x = \frac{\partial x}{\partial t} = a'(t) r \cos \theta = \frac{a'(t)}{a(t)} x \\
+        v_y = \frac{\partial y}{\partial t} = b'(t) r \sin \theta = \frac{b'(t)}{b(t)} y .
+    \end{align*}
+    Then:
+    \begin{align*}
+        \nabla \cdot \bm{v} &= \lp\frac{\partial}{\partial x}, \frac{\partial}{\partial y}\rp \lp\frac{a'(t)}{a(t)} x, \frac{b'(t)}{b(t)} y\rp \\
+        &= \frac{a'(t)}{a(t)} + \frac{b'(t)}{b(t)}.
+    \end{align*}
+    From part a, we know that
+    \[
+    J = a(t) b(t) r,
+    \]
+    hence:
+    \[\frac{\partial J}{\partial t} = r (a'(t) b(t) + a(t) b'(t))\]
+    and
+    \[(\nabla \cdot \bm{v}) J = \lp\frac{a'(t)}{a(t)} + \frac{b'(t)}{b(t)}\rp a(t) b(t) r = r (a'(t) b(t) + a(t) b'(t)) = \frac{\partial J}{\partial t}.\]
+    Substituting the results into the final expression in part b:
+    \begin{align*}
+        \frac{dI}{dt} &= \iint_R [f_t + \bm{v} \cdot \nabla f] \, dx dy + \iint_R f (\nabla \cdot \bm{v}) J \, dr d\theta \\
+        &= \iint_R [f_t + \bm{v} \cdot \nabla f] \, dx dy + \iint_R f (\nabla \cdot \bm{v}) \, dx dy \\
+        &= \iint_R f_t + \bm{v} \cdot \nabla f + f (\nabla \cdot \bm{v}) \, dx dy.
+    \end{align*}
+    Then splitting the integral and by vector identity:
+    \begin{align}
+        \frac{dI}{dt} &= \iint_R f_t \, dx dy + \iint_R \bm{v} \cdot \nabla f + f (\nabla \cdot \bm{v}) \, dx dy \notag \\
+        \label{q3pc-result1}
+        &= \iint_R f_t \, dx dy + \iint_R \nabla \cdot (f \bm{v}) \, dx dy.
+    \end{align}
+    We rewrite \ref{q3pc-result1} with Divergence Theorem:
+    \[\iint_R f_t \, dx dy + \iint_R \nabla \cdot (f \bm{v}) \, dx dy = \iint_R f_t \, dx dy + \int_{\partial R} f \bm{v} \cdot \hat{\bm{n}} \, ds.\]
+\end{enumerate}
+
+\newpage
+\section*{Question 5}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Since the vector field has no $y$ dependency:
+    \begin{align*}
+        \nabla \cdot \bm{u} &= \frac{\partial u}{\partial x} + \frac{\partial w}{\partial z} \\
+        &= \frac{\partial}{\partial x} [am \cos(kx + mz - \omega t)] + \frac{\partial}{\partial z} [-ak \cos(kx + mz - \omega t)] \\
+        &= -amk \sin(kx + mz - \omega t) - (-akm \sin(kx + mz - \omega t)) \\
+        &= -amk \sin(kx + mz - \omega t) + amk \sin(kx + mz - \omega t) \\
+        &= 0.
+    \end{align*}
+    Since $\nabla \cdot \bm{u} = 0$, the flow is incompressible.
+    \item Since the vector field has no $y$ dependency:
+    \begin{align*}
+        (\nabla \times \bm{u})_y &= \frac{\partial u}{\partial z} - \frac{\partial w}{\partial x} \\
+        &= \frac{\partial}{\partial z} [am \cos(kx + mz - \omega t)] - \frac{\partial}{\partial x} [-ak \cos(kx + mz - \omega t)] \\
+        &= -am^2 \sin(kx + mz - \omega t) - [ -(-ak^2 \sin(kx + mz - \omega t)) ] \\
+        &= -am^2 \sin(kx + mz - \omega t) - ak^2 \sin(kx + mz - \omega t) \\
+        &= -a(m^2 + k^2) \sin(kx + mz - \omega t).
+    \end{align*}
+    Since the curl is not identically zero, the flow is not irrotational.
+    \item From part a, we know that $\nabla \cdot \bm{u} = 0$, therefore we only need to check whether the material derivative satisfies:
+    \[
+    \frac{D\rho}{Dt} = \frac{\partial \rho}{\partial t} + \bm{u} \cdot \nabla \rho = 0.
+    \]
+    The derivatives are:
+    \begin{gather*}
+        \frac{\partial \rho}{\partial t} = a \frac{N^2}{g} \frac{k}{\omega} \cos(kx + mz - \omega t) (-\omega) = -a \frac{N^2}{g} k \cos(kx + mz - \omega t) \\
+        \frac{\partial \rho}{\partial x} = a \frac{N^2}{g} \frac{k}{\omega} \cos(kx + mz - \omega t) (k) = a \frac{N^2}{g} \frac{k^2}{\omega} \cos(kx + mz - \omega t) \\
+        \frac{\partial \rho}{\partial z} = -\frac{N^2}{g} + a \frac{N^2}{g} \frac{k}{\omega} \cos(kx + mz - \omega t) (m).
+    \end{gather*}
+    We define $\phi = kx + mz - \omega t$. Substituting these into the material derivative:
+    \begin{align*}
+        \frac{D\rho}{Dt} &= \frac{\partial \rho}{\partial t} + u \frac{\partial \rho}{\partial x} + w \frac{\partial \rho}{\partial z} \\
+        &= -a \frac{N^2}{g} k \cos(\phi) + [am \cos(\phi)] \left( a \frac{N^2}{g} \frac{k^2}{\omega} \cos(\phi) \right) \\
+        &\quad + [-ak \cos(\phi)] \left( -\frac{N^2}{g} + a \frac{N^2}{g} \frac{mk}{\omega} \cos(\phi) \right) \\
+        &= -a \frac{N^2}{g} k \cos(\phi) + \frac{a^2 m k^2 N^2}{g \omega} \cos^2(\phi) + a \frac{N^2}{g} k \cos(\phi) - \frac{a^2 m k^2 N^2}{g \omega} \cos^2(\phi) \\
+        &= 0.
+    \end{align*}
+    Since $D\rho/Dt = 0$, mass is conserved, so this density field is possible.
+\end{enumerate}
+
+\newpage
+\section*{Question 6}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+The continuity equation from the lecture is:
+\begin{equation*}
+    \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \bm{u}) = 0.
+\end{equation*}
+Since $\rho$ and $t$ are scalars, the term $\partial \rho / \partial t$ is invariant. Then for $\nabla \cdot (\rho \bm{u})$ to be invariant, we only need $\nabla \cdot \bm{u}$ to be invariant. From the given transformation matrix, in terms of the new coordinates $(x', y')$:
+\begin{align*}
+    x' &= x \cos\theta + y \sin\theta \\
+    y' &= -x \sin\theta + y \cos\theta.
+\end{align*}
+The differential operators are:
+\begin{align*}
+    \frac{\partial}{\partial x} &= \frac{\partial x'}{\partial x}\frac{\partial}{\partial x'} + \frac{\partial y'}{\partial x}\frac{\partial}{\partial y'} = \cos\theta \frac{\partial}{\partial x'} - \sin\theta \frac{\partial}{\partial y'} \\
+    \frac{\partial}{\partial y} &= \frac{\partial x'}{\partial y}\frac{\partial}{\partial x'} + \frac{\partial y'}{\partial y}\frac{\partial}{\partial y'} = \sin\theta \frac{\partial}{\partial x'} + \cos\theta \frac{\partial}{\partial y'}.
+\end{align*}
+The velocity components $(u, v)$ in terms of the primed components $(u', v')$ are:
+\begin{align*}
+    u &= u' \cos\theta - v' \sin\theta \\
+    v &= u' \sin\theta + v' \cos\theta.
+\end{align*}
+Substituting the operators and velocity components into the divergence expression:
+\begin{align*}
+    \nabla \cdot \bm{u} &= \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} \\
+    &= \left( \cos\theta \frac{\partial}{\partial x'} - \sin\theta \frac{\partial}{\partial y'} \right) (u' \cos\theta - v' \sin\theta) \\
+    &\quad + \left( \sin\theta \frac{\partial}{\partial x'} + \cos\theta \frac{\partial}{\partial y'} \right) (u' \sin\theta + v' \cos\theta) \\
+    &= (\cos^2\theta) \frac{\partial u'}{\partial x'} - (\cos\theta \sin\theta) \frac{\partial v'}{\partial x'} - (\sin\theta \cos\theta) \frac{\partial u'}{\partial y'} + (\sin^2\theta) \frac{\partial v'}{\partial y'} \\
+    &\quad + (\sin^2\theta) \frac{\partial u'}{\partial x'} + (\sin\theta \cos\theta) \frac{\partial v'}{\partial x'} + (\cos\theta \sin\theta) \frac{\partial u'}{\partial y'} + (\cos^2\theta) \frac{\partial v'}{\partial y'} \\
+    &= (\cos^2\theta + \sin^2\theta) \frac{\partial u'}{\partial x'} + (\sin^2\theta + \cos^2\theta) \frac{\partial v'}{\partial y'} \\
+    &\quad + (-\cos\theta \sin\theta + \sin\theta \cos\theta) \frac{\partial v'}{\partial x'} + (-\sin\theta \cos\theta + \cos\theta \sin\theta) \frac{\partial u'}{\partial y'}.
+\end{align*}
+The cross terms cancel and the squared terms sum to 1:
+\[
+\nabla \cdot \bm{u} = \frac{\partial u'}{\partial x'} + \frac{\partial v'}{\partial y'} = \nabla' \cdot \bm{u}'.
+\]
+Since the divergence form is identical in the primed system, the continuity equation is invariant.
+
+\newpage
+\section*{Question 7}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+From the lecture:
+\begin{equation*}
+    \frac{dV}{dt} = \iiint_{W(t)} \nabla \cdot \bm{u} \, dV.
+\end{equation*}
+We compute the divergence of the given velocity field $\bm{u} = (u, v, w)$:
+\begin{align*}
+    \nabla \cdot \bm{u} &= \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z} \\
+    &= \frac{\partial}{\partial x}(x + xy) + \frac{\partial}{\partial y}\left(\frac{1}{2}y - \frac{1}{2}y^2\right) + \frac{\partial}{\partial z}(-z + x) \\
+    &= (1 + y) + \left(\frac{1}{2} - y\right) + (-1) \\
+    &= 0.5 \, \text{s}^{-1}.
+\end{align*}
+Since the divergence is a constant:
+\begin{align*}
+    \frac{dV}{dt} &= \iiint_{W(t)} 0.5 \, dV \\
+    &= 0.5 \iiint_{W(t)} 1 \, dV.
+\end{align*}
+Therefore:
+\[
+\frac{dV}{dt} = 0.5 V.
+\]
+Integrating:
+\begin{align*}
+    \int_{V_0}^{V(t)} \frac{dV}{V} &= \int_0^t 0.5 \, dt \\
+    \ln\left(\frac{V(t)}{V_0}\right) &= 0.5t \\
+    V(t) &= V_0 e^{0.5t}.
+\end{align*}
+Substituting the initial values $V_0 = 3 \, \text{m}^3$ and $t = 2 \, \text{s}$:
+\[
+V(2) = 3 e^{0.5(2)} = 3 e^1 \approx 8.154 \, \text{m}^3.
+\]
+The volume after 2 seconds is approximately \SI{8.15}{\cubic\meter}.
+
+\newpage
+\section*{Question 8}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+By definition:
+\[
+H = \frac{\text{mass of chemical}}{\text{volume}} = \frac{\text{mass of chemical}}{\text{total mass}} \times \frac{\text{total mass}}{\text{volume}} = c \rho.
+\]
+We follow the procedure  used to derive the continuity equation starting from mass conservation. Since the chemical is conserved:
+\[
+\frac{d}{dt} \iiint_{W(t)} H \, dV = 0.
+\]
+Applying the Reynolds Transport Theorem:
+\[
+\iiint_{W(t)} \left( \frac{\partial H}{\partial t} + \nabla \cdot (H \bm{u}) \right) dV = 0.
+\]
+By the localization theorem:
+\begin{equation*}
+    \frac{\partial H}{\partial t} + \nabla \cdot (H \bm{u}) = 0.
+    \label{eq:H_conservation}
+\end{equation*}
+Substituting $H = \rho c$:
+\[
+\frac{\partial (\rho c)}{\partial t} + \nabla \cdot (\rho c \bm{u}) = 0.
+\]
+Expanding using the product rule and vector identity:
+\begin{gather*}
+    c \frac{\partial \rho}{\partial t} + \rho \frac{\partial c}{\partial t} + c \nabla \cdot (\rho \bm{u}) + \rho \bm{u} \cdot \nabla c = 0 \\
+    c \underbrace{\left[ \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \bm{u}) \right]}_{\text{Continuity Eq. for Fluid}} + \rho \left[ \frac{\partial c}{\partial t} + \bm{u} \cdot \nabla c \right] = 0.
+\end{gather*}
+The first term is zero because the fluid satisfies mass conservation, hence:
+\[
+\rho \left( \frac{\partial c}{\partial t} + \bm{u} \cdot \nabla c \right) = 0.
+\]
+Since $\rho \neq 0$, $\left( \frac{\partial c}{\partial t} + \bm{u} \cdot \nabla c \right)$ must be zero. This is the material derivative $Dc/Dt$, so the simplified equation is:
+\[
+\frac{Dc}{Dt} = 0.
+\]
+
+\newpage
+\section*{Question 9}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+    \nabla \cdot \bm{u} = \frac{\partial (-y)}{\partial x} + \frac{\partial (x)}{\partial y} = 0 + 0 = 0.
+    \]
+    Since the divergence is zero everywhere, the flow is incompressible.
+
+    \item
+    \[
+    \zeta = (\nabla \times \bm{u})_z = \frac{\partial v}{\partial x} - \frac{\partial u}{\partial y} = \frac{\partial (x)}{\partial x} - \frac{\partial (-y)}{\partial y} = 1 - (-1) = 2.
+    \]
+    The flow has a constant vorticity of 2.
+
+    \item Since $\rho$ is a function of $r$:
+    \[\frac{\partial \rho}{\partial t} = 0.\]
+    Using the product rule:
+    \[
+    \bm{u} \cdot \nabla \rho + \rho (\nabla \cdot \bm{u}) = 0.
+    \]
+    From part (a), $\nabla \cdot \bm{u} = 0$, so the continuity equation reduces to $\bm{u} \cdot \nabla \rho = 0$.
+    Given $\rho = F(r)$ where $r = \sqrt{x^2 + y^2}$, the gradient is radial:
+    \[
+    \nabla \rho = F'(r) \nabla r = F'(r) \left( \frac{x}{r}, \frac{y}{r} \right).
+    \]
+    Therefore:
+    \[
+    \bm{u} \cdot \nabla \rho = (-y, x) \cdot \frac{F'(r)}{r} (x, y) = \frac{F'(r)}{r} (-yx + xy) = 0.
+    \]
+    This is zero for any differentiable function $F$. Therefore, any differentiable function $F(r)$ satisfies the continuity equation.
+
+    \item
+    \begin{minipage}[t]{\linewidth}
+        \begin{center}
+        \adjustbox{valign=t}{
+        \includegraphics[width=0.5\linewidth]{IMG_2262.jpg}
+        }
+        \end{center}
+    \end{minipage}
+    
+    The velocity vectors are always tangent to the circles $r = \text{const}$. Since the density $\rho = F(r)$ is constant along these circles, the fluid particles move along contours of constant density. Thus, the density of a fluid particle does not change as it moves.
+
+    \item We parametrize the curve with $x = R \cos \theta, y = R \sin \theta$ for $\theta \in [0, 2\pi]$.
+    Then $\bm{u} = (-R \sin \theta, R \cos \theta)$ and $d\bm{s} = (-R \sin \theta, R \cos \theta) \, d\theta$.
+    The circulation is:
+    \begin{align*}
+        C &= \oint \bm{u} \cdot \hat{\bm{t}} \, ds = \int_0^{2\pi} (-R \sin \theta, R \cos \theta) \cdot (-R \sin \theta, R \cos \theta) \, d\theta \\
+        &= \int_0^{2\pi} (R^2 \sin^2 \theta + R^2 \cos^2 \theta) \, d\theta \\
+        &= \int_0^{2\pi} R^2 \, d\theta \\
+        &= 2\pi R^2.
+    \end{align*}
+
+    \item Using Stokes' Theorem:
+    \[
+    C = \oint \bm{u} \cdot d\bm{l} = \iint_A (\nabla \times \bm{u}) \cdot \hat{\bm{k}} \, dA.
+    \]
+    From part b, $\nabla \times \bm{u} = 2$.
+    \[
+    C = \iint_A 2 \, dA = 2 \times (\text{Area of Ellipse}).
+    \]
+    The area of an ellipse is $\pi a b$, so:
+    \[
+    C = 2 \pi a b.
+    \]
+
+    \item Using the Divergence Theorem:
+    \[
+    \text{Flux} = \iint_A (\nabla \cdot \bm{u}) \, dA.
+    \]
+    From part a, $\nabla \cdot \bm{u} = 0$. Therefore:
+    \[
+    \text{Flux} = 0.
+    \]
+\end{enumerate}
+
+\newpage
+\section*{Question 10}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Given that:
+    \[
+    I(t) = \oint_{C(0)} f_i(\bm{\Phi}(\bm{a}, t), t) \frac{\partial \Phi_i}{\partial a_k} \, da_k.
+    \]
+    Since the integration domain $C(0)$ and the variable $\bm{a}$ are independent of time:
+    \begin{align*}
+        \frac{dI}{dt} &= \oint_{C(0)} \frac{\partial}{\partial t} \left( f_i \frac{\partial \Phi_i}{\partial a_k} \right) \, da_k \\
+        &= \oint_{C(0)} \left( \frac{d f_i}{dt} \frac{\partial \Phi_i}{\partial a_k} + f_i \frac{\partial}{\partial t} \left( \frac{\partial \Phi_i}{\partial a_k} \right) \right) \, da_k.
+    \end{align*}
+    The time derivative of $f_i$ holding $\bm{a}$ fixed is the material derivative by definition. For the second term:
+    \[
+    \frac{\partial}{\partial t} \left( \frac{\partial \Phi_i}{\partial a_k} \right) = \frac{\partial}{\partial a_k} \left( \frac{\partial \Phi_i}{\partial t} \right) = \frac{\partial u_i}{\partial a_k}.
+    \]
+    By the chain rule:
+    \[\frac{\partial u_i}{\partial a_k} = \frac{\partial u_i}{\partial x_j} \frac{\partial x_j}{\partial a_k} = \frac{\partial u_i}{\partial x_j} \frac{\partial \Phi_j}{\partial a_k}.\]
+    Substituting back:
+    \[
+    \frac{dI}{dt} = \oint_{C(0)} \left[ \frac{Df_i}{Dt} \frac{\partial \Phi_i}{\partial a_k} + f_i \frac{\partial u_i}{\partial x_j} \frac{\partial \Phi_j}{\partial a_k} \right] \, da_k.
+    \]
+    From the lecture notes with Einstin summation notation:
+    \[
+    dx_i = \frac{\partial \Phi_i}{\partial a_k} \, da_k \quad \text{and} \quad dx_j = \frac{\partial \Phi_j}{\partial a_k} \, da_k.
+    \]
+    Applying this to the integrand:
+    \begin{align*}
+        \frac{dI}{dt} &= \oint_{C(t)} \frac{Df_i}{Dt} \, dx_i + \oint_{C(t)} f_i \frac{\partial u_i}{\partial x_j} \, dx_j \\
+        &= \oint_{C(t)} \frac{D\bm{f}}{Dt} \cdot d\bm{x} + \oint_{C(t)} f_i \, \left( \frac{\partial u_i}{\partial x_j} dx_j \right). \tag{\textasteriskcentered}
+    \end{align*}
+    Using the substituion given by the question, the final rate of change is:
+    \[
+    \frac{dI}{dt} = \oint_{C(t)} \frac{D\bm{f}}{Dt} \cdot d\bm{x} + \oint_{C(t)} \bm{f} \cdot d\bm{u}.
+    \]
+
+    \item Substituting $\bm{f} = \bm{u}$ into equation (\textasteriskcentered):
+    \[
+    \frac{d\Gamma}{dt} = \oint_{C(t)} \frac{D\bm{u}}{Dt} \cdot d\bm{x} + \oint_{C(t)} u_i \frac{\partial u_i}{\partial x_j} \, dx_j.
+    \]
+    We know that
+    \[u_i \frac{\partial u_i}{\partial x_j} = \frac{\partial}{\partial x_j} \left( \frac{1}{2} u_i u_i \right) = \frac{\partial}{\partial x_j} \left( \frac{1}{2} |\bm{u}|^2 \right).\]
+    Therefore:
+    \[
+    \oint_{C(t)} \bm{u} \cdot d\bm{u} = \oint_{C(t)} d\left( \frac{1}{2} |\bm{u}|^2 \right).
+    \]
+    Since we are integrating around a closed loop, this integral vanishes:
+    \[
+    \oint_{C(t)} d\left( \frac{1}{2} |\bm{u}|^2 \right) = 0.
+    \]
+    Therefore, the rate of change of circulation simplifies to:
+    \[
+    \frac{d\Gamma}{dt} = \oint_{C(t)} \frac{D\bm{u}}{Dt} \cdot d\bm{x}.
+    \]
+\end{enumerate}
+
+\end{document}
+
+% ---------- EXTRA COMMANDS ----------
+% LIST
+[nosep, leftmargin=*]
+[nosep, label=\tiny$\bullet$]
+
+% ENUMERATE LABEL TO ABC
+[label(breaking lable in cref)=(\alph*)]
+
+% INSERT MEDIA
+\includegraphics[width=\linewidth]{}
+
+% MINI PAGE 
+\begin{minipage}[t]{\linewidth}
+    \begin{center}
+    \adjustbox{valign=t}{
+    \includegraphics[width=0.5\linewidth]{q6b.jpeg}
+    }
+    \end{center}
+\end{minipage}

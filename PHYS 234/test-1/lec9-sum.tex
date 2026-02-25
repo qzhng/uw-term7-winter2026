@@ -1,0 +1,139 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{geometry}
+\usepackage{physics} % For bra-ket notation \ket{}, \bra{}, \braket{}
+\usepackage{hyperref}
+
+\geometry{a4paper, margin=1in}
+
+\title{Lecture 9: The Uncertainty Principle - Summary \& Formula Sheet}
+\author{Based on Lecture by Raffi Budakian (Univ. of Waterloo)}
+\date{Week of Feb. 2, 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Lecture Overview}
+\begin{itemize}
+    \item \textbf{Topic:} Commutators, The Generalized Uncertainty Principle, and Total Spin Magnitude.
+    \item \textbf{Goal:} Quantify the limit of simultaneous knowledge for incompatible observables.
+\end{itemize}
+
+\section{1. The Commutator}
+The order in which operators are applied matters. This is analogous to 3D rotations, where rotating around Z then X produces a different result than rotating X then Z. We quantify this difference using the commutator.
+
+\subsection{Definition}
+\begin{equation}
+    [\hat{A}, \hat{B}] \equiv \hat{A}\hat{B} - \hat{B}\hat{A}
+\end{equation}
+\begin{itemize}
+    \item If $[\hat{A}, \hat{B}] = 0$: Operators commute (independent, compatible).
+    \item If $[\hat{A}, \hat{B}] \neq 0$: Operators do not commute (incompatible).
+\end{itemize}
+
+\section{2. Spin Commutation Relations}
+Using the matrix representations of the spin operators, we can derive their commutation relations.
+
+\subsection{Derivation for $S_x, S_z$}
+\begin{align}
+    [S_x, S_z] &= S_x S_z - S_z S_x \nonumber \\
+               &= \frac{\hbar^2}{4} \left[ \begin{pmatrix}0&1\\1&0\end{pmatrix}\begin{pmatrix}1&0\\0&-1\end{pmatrix} - \begin{pmatrix}1&0\\0&-1\end{pmatrix}\begin{pmatrix}0&1\\1&0\end{pmatrix} \right] \nonumber \\
+               &= -i\hbar S_y
+\end{align}
+Note: $[A, B] = -[B, A]$, so $[S_z, S_x] = i\hbar S_y$.
+
+\subsection{Cyclic Relations}
+The relations follow a cyclic pattern ($x \to y \to z \to x$):
+\begin{align}
+    [S_x, S_y] &= i\hbar S_z \\
+    [S_y, S_z] &= i\hbar S_x \\
+    [S_z, S_x] &= i\hbar S_y
+\end{align}
+
+\section{3. The Generalized Uncertainty Principle}
+The uncertainty principle is not just about position and momentum; it applies to any two non-commuting observables.
+
+\subsection{The Inequality}
+\begin{equation}
+    \Delta A \Delta B \geq \frac{1}{2} |\langle [\hat{A}, \hat{B}] \rangle|
+\end{equation}
+Where $\Delta A$ is the RMS deviation (uncertainty) of the measurement.
+
+\subsection{Application to Spin}
+For a Spin-1/2 system, the uncertainty relationship between $S_x$ and $S_y$ is:
+\begin{equation}
+    \Delta S_x \Delta S_y \geq \frac{\hbar}{2} |\langle S_z \rangle|
+\end{equation}
+If the particle is in the eigenstate $\ket{+}$:
+\begin{itemize}
+    \item $\langle S_z \rangle = \hbar/2$
+    \item Minimum uncertainty: $\Delta S_x \Delta S_y \geq \hbar^2/4$.
+    \item Since $\Delta S_x = \Delta S_y = \hbar/2$, the product is exactly $\hbar^2/4$. The uncertainty is minimized but non-zero.
+\end{itemize}
+
+\section{4. Magnitude of Spin Vector}
+While we cannot know the components ($S_x, S_y, S_z$) simultaneously, we can determine the total magnitude of the spin vector.
+
+\subsection{Total Spin Operator $S^2$}
+\begin{equation}
+    S^2 = \vec{S} \cdot \vec{S} = S_x^2 + S_y^2 + S_z^2
+\end{equation}
+Since $S_i^2 = \frac{\hbar^2}{4}\mathbb{1}$ for all $i$:
+\begin{equation}
+    S^2 = \frac{3\hbar^2}{4}\mathbb{1}
+\end{equation}
+This operator commutes with all components: $[S^2, S_i] = 0$.
+
+\subsection{Length of the Vector}
+The magnitude (norm) of the spin vector is the square root of the eigenvalue of $S^2$:
+\begin{equation}
+    ||\vec{S}|| = \sqrt{\frac{3\hbar^2}{4}} = \frac{\sqrt{3}}{2}\hbar
+\end{equation}
+
+\newpage
+
+\section*{Midterm Formula Sheet}
+\addcontentsline{toc}{section}{Midterm Formula Sheet}
+
+\begin{enumerate}
+    \item \textbf{Commutator Definition}
+    \begin{equation}
+        [\hat{A}, \hat{B}] = \hat{A}\hat{B} - \hat{B}\hat{A}
+    \end{equation}
+
+    \item \textbf{Spin Commutation Relations}
+    \begin{equation}
+        [S_x, S_y] = i\hbar S_z \quad \text{(cyclic)}
+    \end{equation}
+
+    \item \textbf{Generalized Uncertainty Principle}
+    \begin{equation}
+        \Delta A \Delta B \geq \frac{1}{2} |\langle [\hat{A}, \hat{B}] \rangle|
+    \end{equation}
+
+    \item \textbf{Spin Uncertainty Limit}
+    \begin{equation}
+        \Delta S_x \Delta S_y \geq \frac{\hbar}{2} |\langle S_z \rangle|
+    \end{equation}
+
+    \item \textbf{Total Spin Operator}
+    \begin{equation}
+        S^2 = \frac{3\hbar^2}{4}\mathbb{1}
+    \end{equation}
+
+    \item \textbf{Spin Vector Magnitude}
+    \begin{equation}
+        ||\vec{S}|| = \frac{\sqrt{3}\hbar}{2}
+    \end{equation}
+\end{enumerate}
+
+\section*{Core Takeaway}
+\textbf{The Quantum Cone:} The magnitude of the spin vector ($ \approx 0.866 \hbar$) is strictly larger than the maximum measurable projection on any axis ($0.5 \hbar$).
+\begin{itemize}
+    \item The spin vector can never perfectly align with the Z-axis.
+    \item It must precess in a "cone" to satisfy the uncertainty relations for $S_x$ and $S_y$.
+\end{itemize}
+
+\end{document}

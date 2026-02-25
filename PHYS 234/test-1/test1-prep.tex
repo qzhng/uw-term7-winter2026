@@ -1,0 +1,167 @@
+\documentclass[11pt, letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{physics} % Critical for Dirac notation \bra \ket
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{hyperref}
+
+% Page Geometry
+\geometry{margin=1in}
+
+% Custom Colors
+\definecolor{highlight}{RGB}{240, 248, 255}
+\definecolor{border}{RGB}{70, 130, 180}
+
+% Custom Box for Definitions
+\newtcolorbox{defnbox}[1]{colback=highlight, colframe=border, title={\textbf{#1}}}
+
+\title{\textbf{Quantum Mechanics Study Guide}\\ \large Lectures 6 -- 9: Operators, Projections, and Uncertainty}
+\author{Based on Lectures by R. Budakian}
+\date{Winter 2026}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\vspace{1cm}
+\hrule
+\vspace{1cm}
+
+\section{Lecture 6: Generalized Quantum Systems}
+
+\subsection{Core Concepts}
+\begin{itemize}
+    \item \textbf{Postulate 2:} Physical observables are represented by \textbf{operators} acting on kets.
+    \item \textbf{Postulate 3:} Measurement outcomes are the \textbf{eigenvalues} $\{a_n\}$ of that operator.
+    \item \textbf{Hermitian Operators:} Observables must be Hermitian ($\hat{A} = \hat{A}^\dagger$) because:
+    \begin{enumerate}
+        \item They have \textbf{real eigenvalues} (measurement results must be real).
+        \item Eigenvectors with distinct eigenvalues are \textbf{orthogonal}.
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Matrix Representation (How to Build Operators)}
+To represent an operator $\hat{A}$ as a matrix in a specific basis $\{|a_n\rangle\}$, calculate the matrix elements $A_{nm}$:
+\begin{equation}
+    A_{nm} = \mel{a_n}{\hat{A}}{a_m}
+\end{equation}
+If the basis consists of eigenvectors of $\hat{A}$, the matrix is \textbf{diagonal} with eigenvalues on the diagonal.
+
+\begin{defnbox}{Memorize: Spin Matrices (in Z-basis)}
+For a spin-1/2 particle, the operators in the $S_z$ basis are:
+\begin{align*}
+    S_z &= \frac{\hbar}{2} \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} \\
+    S_x &= \frac{\hbar}{2} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \\
+    S_y &= \frac{\hbar}{2} \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}
+\end{align*}
+\end{defnbox}
+
+\section{Lecture 7: Projection Operators}
+
+\subsection{The Projection Operator}
+A projector isolates the component of a vector along a specific direction (eigenstate).
+\begin{equation}
+    \hat{P}_n \equiv \ket{a_n}\bra{a_n}
+\end{equation}
+
+\subsection{Important Identities}
+\begin{itemize}
+    \item \textbf{Completeness Relation:} Summing all projectors returns the identity matrix. Use this to insert "1" into equations to simplify them.
+    \begin{equation}
+        \sum_n \hat{P}_n = \sum_n \ket{a_n}\bra{a_n} = \mathbb{I}
+    \end{equation}
+    \item \textbf{Spectral Decomposition:} Any operator can be written as a sum of its eigenvalues weighted by its projectors.
+    \begin{equation}
+        \hat{A} = \sum_n a_n \hat{P}_n = \sum_n a_n \ket{a_n}\bra{a_n}
+    \end{equation}
+\end{itemize}
+
+\subsection{Postulate 5: Measurement Collapse}
+If you measure observable $\hat{A}$ and get result $a_n$, the state collapses.
+\begin{defnbox}{Collapse Formula}
+\begin{equation}
+    \ket{\psi_f} = \frac{\hat{P}_n \ket{\psi_i}}{\sqrt{\ev{\hat{P}_n}{\psi_i}}}
+\end{equation}
+\end{defnbox}
+
+\subsection{Solving Stern-Gerlach (S-G) Problems}
+\textbf{Problem Type:} "What is the probability of exiting the final port?" or "What is the final state?"
+
+\textbf{Step-by-Step Method:}
+\begin{enumerate}
+    \item \textbf{Identify the Input:} Start with the initial state vector $\ket{\psi_{in}}$.
+    \item \textbf{Apply Projectors:} For every S-G analyzer the particle passes through, apply the corresponding projection operator.
+    \begin{itemize}
+        \item Example: Passing through an $S_z+$ filter means applying $\hat{P}_{z+} = \ket{+}\bra{+}$.
+        \item $\ket{\psi_{after}} = \hat{P}_{filter} \ket{\psi_{before}}$.
+    \end{itemize}
+    \item \textbf{Normalize (if asking for state):} If asking for the state after measurement, divide by the norm (length) of the vector.
+    \item \textbf{Calculate Probability (if asking for prob):}
+    \begin{equation}
+        P = |\braket{\text{final state}}{\text{current state}}|^2 \quad \text{OR} \quad P = \ev{\hat{P}_{final}}{\psi_{current}}
+    \end{equation}
+\end{enumerate}
+
+\section{Lecture 8: Expectation Values}
+
+\subsection{Definitions}
+The \textbf{Expectation Value} is the average result of a large number of measurements on identical systems.
+\begin{equation}
+    \ev{\hat{A}} = \ev{\hat{A}}{\psi}
+\end{equation}
+
+The \textbf{RMS Deviation} (Uncertainty) is:
+\begin{equation}
+    \Delta A = \sqrt{\ev{A^2} - \ev{A}^2}
+\end{equation}
+
+\subsection{Calculation Strategy}
+To calculate $\Delta A$:
+\begin{enumerate}
+    \item Calculate $\ev{A}$:
+    \[ \ev{A} = \mel{\psi}{\hat{A}}{\psi} \]
+    (Matrix multiplication: Row Vector $\times$ Matrix $\times$ Column Vector).
+    \item Calculate $\hat{A}^2$: Square the matrix $\hat{A}$.
+    \item Calculate $\ev{A^2}$:
+    \[ \ev{A^2} = \mel{\psi}{\hat{A}^2}{\psi} \]
+    \item Plug into the RMS formula.
+\end{enumerate}
+
+\section{Lecture 9: The Uncertainty Principle}
+
+\subsection{Commutators}
+The commutator measures if two operators commute (order doesn't matter) or not.
+\begin{equation}
+    [\hat{A}, \hat{B}] \equiv \hat{A}\hat{B} - \hat{B}\hat{A}
+\end{equation}
+\begin{itemize}
+    \item If $[\hat{A}, \hat{B}] = 0$: The observables are \textbf{compatible}. They share a common basis and can be measured simultaneously with arbitrary precision.
+    \item If $[\hat{A}, \hat{B}] \neq 0$: The observables are \textbf{incompatible}.
+\end{itemize}
+
+\subsection{Spin Commutation Relations}
+Remember the cyclic permutation ($x \to y \to z \to x$):
+\begin{align*}
+    [S_x, S_y] &= i\hbar S_z \\
+    [S_y, S_z] &= i\hbar S_x \\
+    [S_z, S_x] &= i\hbar S_y
+\end{align*}
+
+\subsection{Heisenberg Uncertainty Principle}
+The general form for any two operators:
+\begin{defnbox}{General Uncertainty Relation}
+\begin{equation}
+    \Delta A \Delta B \ge \frac{1}{2} |\ev{[\hat{A}, \hat{B}]}|
+\end{equation}
+\end{defnbox}
+
+\subsection{Useful Identity: Magnitude of Spin}
+While individual components are uncertain, the \textit{magnitude} of the spin vector is constant:
+\begin{equation}
+    \hat{S}^2 = \hat{S}_x^2 + \hat{S}_y^2 + \hat{S}_z^2 = \frac{3\hbar^2}{4} \mathbb{I}
+\end{equation}
+
+\end{document}

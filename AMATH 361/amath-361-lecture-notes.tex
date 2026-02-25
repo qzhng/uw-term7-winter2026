@@ -1,0 +1,3120 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\newtcolorbox{important}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+\newtcolorbox{insight}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=blue!5,
+  colframe=blue!75,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\pagenumbering{alph}
+\begin{titlepage}
+    \centering
+    \vspace*{5cm} % Pushes the title down the page
+    {\Large \textbf{AMATH 361}} \\[1em]
+    {\Large \textbf{Continuum Mechanics}} \\[1em]
+    {\Large \textbf{Lecture Notes}} \\[1em]
+    {\Large Winter 2026}
+\end{titlepage}
+\clearpage
+
+\pagenumbering{roman}
+\tableofcontents
+\numberwithin{equation}{section}
+\clearpage
+
+\pagenumbering{arabic}
+
+\section*{Lecture 1}
+\addcontentsline{toc}{section}{Lecture 1}
+\stepcounter{section}
+\setcounter{section}{1}
+\setcounter{equation}{0}
+
+\subsection{Einstein Summation Convention}
+
+A vector in \(\mathbb{R}^3\) can be written as
+\begin{equation}
+    \begin{bmatrix}
+        x_1 \\
+        x_2 \\
+        x_3
+    \end{bmatrix}
+    = a_1 \hat{\bm{e}}_1 + a_2 \hat{\bm{e}}_2 + a_3 \hat{\bm{e}}_3
+    = \sum_{i=1}^3 a_i \hat{\bm{e}}_i,
+\end{equation}
+where each \(a_i\) is a coordinate and \(\hat{\bm{e}}_i\) are the basis vectors.
+
+To further simply vector notation, we use Einstein summation convention.
+
+\begin{definition}[Einstein Summation Convention]
+    \begin{equation}
+        \sum a_i\hat{\bm{e}}_i = a_i \hat{\bm{e}}_i,
+    \end{equation}
+    the summation sign is dropped whenever the same index repeated twice in a term.
+\end{definition}
+
+\begin{important}[Important Note]
+    In the context of tensors and Einstein notation, ``contracting" and ``being summed over" are the same thing. Contracting means we are reducing the rank (the number of indices) of the object.
+
+    Difference bewteen contraction and Simplification:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item To sum (contract): You just need the index to appear twice. Order doesn't matter for the ability to sum. 
+        \item To substitute (simplify): You need one of the parts to be a Kronecker Delta (or an inner product of orthonormal basis vectors). In this case, the order matters because it determines which index in the final result gets replaced.
+    \end{itemize}
+\end{important}
+
+\begin{note}[Difference between Dummy and Free Index]
+    A \textbf{dummy index} is an index that is summed over; it may be renamed freely and has no independent meaning. It carries no positional information and does not denote the true order of an object.
+    A \textbf{free index} is an index that is not summed; it labels a specific component or equation and cannot be renamed arbitrarily. It therefore carries positional information.
+\end{note}
+
+In Cartesian coordinates, we do not differentiate between superscripts and subscripts because vectors and co-vectors are equivalent.
+
+\subsection{Tensor}
+
+Tensor is an object that transforms in a particular way. 
+
+\subsubsection{Vectors And Covectors}
+
+\begin{definition}[Contravariant]
+    Vectors (column vectors) are denoted with an upper index \(v^j\). They are contravariant.
+\end{definition}
+
+\begin{definition}[Covariant]
+    Covectors (row vectors) are denoted with a lower index \(v_j\). They are covariant.
+\end{definition}
+
+\emph{The following two subsections are in 3-dimensional Cartesian space.}
+
+\subsubsection{Describing the Same Object with Different Basis (Rotated with Original)}
+
+\begin{definition}[Inner Product]
+\label{inner product}
+    The inner product of two vectors is defined as
+    \begin{equation}
+    \lp \bm{a}, \bm{b} \rp = \|\bm{a}\| \, \|\bm{b}\| \cos \theta,
+    \end{equation}
+    where \(\theta\) is the angle between \(\bm{a}\) and \(\bm{b}\). The inner product measures how much one vector points in the other vector's direction.
+\end{definition}
+
+Consider a rotation of \(\hat{\bm{e}}_1, \hat{\bm{e}}_2, \hat{\bm{e}}_3\) (orthonormal basis) in a horizontal plane,
+\begin{center}
+    \begin{tikzpicture}[>=Stealth, line cap=round, line join=round, scale=1]
+    
+      \def\L{3.5}
+      \def\ang{35} % numeric angle in degrees
+    
+      \draw[->, line width=1pt] (0,0) -- (\L,0) node[below right] {$\hat{\bm e}_2$};
+      \draw[->, line width=1pt] (0,0) -- (0,\L) node[above] {$\hat{\bm e}_1$};
+    
+      \draw[->, line width=1pt] (0,0) -- ({\L*cos(\ang)},{\L*sin(\ang)}) node[above right] {$\hat{\bm e}'_2$};
+      \draw[->, line width=1pt] (0,0) -- ({-\L*sin(\ang)},{\L*cos(\ang)}) node[above left] {$\hat{\bm e}'_1$};
+    
+      \draw[line width=0.8pt] (1.1,0) arc[start angle=0, end angle=\ang, radius=1.1];
+      \node at (1.4,0.3) {$\alpha_{11}$};
+    
+      \draw[line width=0.8pt] (0,1.1) arc[start angle=90, end angle={90+\ang}, radius=1.1];
+      \node at (-0.42,1.3) {$\alpha_{22}$};
+    
+    \end{tikzpicture}
+\end{center}
+where \(\alpha_{ij}\) is the angle between \(\hat{\bm{e}}_i\) and \(\hat{\bm{e}}_j'\). The non-primed bases span \(\mathbb{R}^3\), so
+\begin{equation}
+\label{rotated basis in original basis}
+\hat{\bm{e}}_j' = a_k \hat{\bm{e}}_k
+\end{equation}
+with a summation over the index \(k\). For each coordinate in \cref{rotated basis in original basis}, take the inner product with the \(i\)-th original basis from the representation summed over \(k\).
+\begin{equation}
+\label{coordinate as inner product}
+(\hat{\bm{e}}_j', \hat{\bm{e}}_i) = (a_k\hat{\bm{e}}_k, \hat{\bm{e}}_i) = a_k(\hat{\bm{e}}_k, \hat{\bm{e}}_i) = a_k \delta_{ki} = a_i
+\end{equation}
+\begin{fact}[Vector Basis Identity]
+\label{vector basis identity}
+    Any vectors can be reconstructed by summing its projecting onto basis vectors.
+    \begin{equation}
+    \bm{v} = (\bm{v}, \hat{\bm{e}}_k) \, \hat{\bm{e}}_k.
+    \end{equation}
+\end{fact}
+\noindent Using \cref{inner product} and \cref{vector basis identity}, \cref{rotated basis in original basis} can be rewritten as
+\begin{align}
+    \hat{\bm{e}}_j' &= (\hat{\bm{e}}_j', \hat{\bm{e}}_k) \, \hat{\bm{e}}_k \\
+    \label{inner product as coordinate of original basis}
+    &= \cos \alpha_{kj} \, \hat{\bm{e}}_k.
+\end{align}
+with a summation over \(k\).
+
+\begin{insight}[Index Contraction \& The Hidden Transpose]
+    \textbf{Algebra vs. Structure (The Slots)} \\
+    The slot of the dummy index determines whether a row or column is contracted. While the summation is algebraically identical in $C_{ij}v_j$ and $C_{ji}v_j$, the structure implies different operations:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item Summing on \textbf{Slot 2} ($j$ in $C_{ij}$) $\rightarrow$ Standard Matrix Mult ($[C]$).
+        \item Summing on \textbf{Slot 1} ($i$ in $C_{ij}$) $\rightarrow$ Transpose Mult ($[C]^T$).
+    \end{itemize}
+
+    \textbf{The "Hidden" Transpose Mechanism} \\
+    You do \textbf{not} need to swap indices to $C_{ji}$ to invert the transformation. The summation index itself acts as the operator.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Forward ($t_i$):} $t_i = C_{ij} t'_j$. Summing on Slot 2 moves across rows (Old $\to$ New).
+        \item \textbf{Reverse ($t'_j$):} $t'_j = C_{ij} t_i$. Summing on Slot 1 moves down columns (New $\to$ Old).
+    \end{itemize}
+    
+    \textbf{Crucial Note:} $C_{ij}$ and $C_{ji}$ are different values. To perform the inverse (transpose) operation, keep the symbol fixed as $C_{ij}$ and simply \textbf{move the summation to the first slot}.
+\end{insight}
+
+\subsubsection{Describing the Same Object with Different Basis (Original in Rotated)}
+
+Similarly, define
+\begin{equation}
+\label{original basis in rotated basis}
+\hat{\bm{e}}_j = b_k\hat{\bm{e}}_k'
+\end{equation}
+and project \(\hat{\bm{e}}_j\) onto each \(\hat{\bm{e}}_i'\) to find the coordinate.
+\begin{equation}
+    (\hat{\bm{e}}_j, \hat{\bm{e}}_i') = (b_k\hat{\bm{e}}_k', \hat{\bm{e}}_i') = b_k \delta_{ki} = b_i.
+\end{equation}
+Then \cref{original basis in rotated basis} becomes
+\begin{align}
+    \hat{\bm{e}}_j &= (\hat{\bm{e}}_j, \hat{\bm{e}}_k') \, \hat{\bm{e}}_k' \notag \\
+    \label{inner product as coordinate of rotated basis}
+    &= \cos \alpha_{jk} \, \hat{\bm{e}}_k'.
+\end{align}
+with a summation over \(k\). \Cref{inner product as coordinate of original basis} and \cref{inner product as coordinate of rotated basis} are dependent, renaming the index, we get
+\begin{equation}
+\label{change of basis}
+    \hat{\bm{e}}_j = \cos \alpha_{jk} \cos \alpha_{\ell k} \hat{\bm{e}}_\ell.
+\end{equation}
+Note that \(j\) is a free index, so \cref{change of basis} is a vector equation. Since \(\hat{\bm{e}}_j\) and \(\hat{\bm{e}}_k\) are the same basis,
+\begin{equation}
+\cos \alpha_{jk} \cos \alpha_{\ell k} = \delta_{j \ell}.
+\end{equation}
+We define \(C_{jk} = \cos \alpha_{jk}\), \(C_{\ell k} = \cos \alpha_{\ell k}\) because each \(C_{jk}\) and \(C_{\ell k}\) come from the inner product and make up the same matrix \(C\). Then
+\begin{equation}
+\label{coordinate in rotation matrix}
+    C_{jk}C_{\ell k} = (CC^T)_{j \ell} = \delta_{j\ell}.
+\end{equation}
+Hence
+\begin{equation}
+\label{orthogonal C and identity}
+    CC^T = I,
+\end{equation}
+where \(I\) is the identity matrix and \(C\) is an orthogonal matrix.
+
+\begin{table}[htbp]
+\centering
+\begin{adjustbox}{width=\textwidth}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{llll}
+\hline
+\textbf{Operation Type} & \textbf{Index Notation} & \textbf{Matrix Notation} & \textbf{Notes} \\ \hline
+Matrix-Vector & $A_{ik}v_k$ & $\bm{A}\bm{v}$ & Summing over columns of $A$. \\
+Vector-Matrix & $v_i A_{ij}$ & $\bm{v}^T \bm{A}$ & Summing over rows of $A$. \\
+Standard Product & $A_{ik}B_{kj}$ & $\bm{AB}$ & Summing "inner" indices (cols of $A$, rows of $B$). \\
+Row-Row Product & $A_{ik}B_{jk}$ & $\bm{AB}^T$ & Both use the 2nd index; equivalent to $A$ times $B^T$. \\
+Col-Col Product & $A_{ki}B_{kj}$ & $\bm{A}^T\bm{B}$ & Both use the 1st index; equivalent to $A^T$ times $B$. \\
+Inner Product & $u_i v_i$ & $\bm{u} \cdot \bm{v}$ & Results in a scalar (Rank 0). \\
+Transpose & $A_{ji}$ & $\bm{A}^T$ & Simply swapping the index "slots". \\ \hline
+\end{tabular}
+\end{adjustbox}
+\caption{Tensor Index vs. Matrix Notation Summary}
+\end{table}
+
+\subsubsection{Summary}
+A vector \(\bm{x}\) in \(\mathbb{R}^3\) can be expressed with different bases
+\begin{equation}
+\bm{x} = x_k \hat{\bm{e}}_k = x_k' \hat{\bm{e}}_k'.
+\end{equation}
+Project this vector onto \(\hat{\bm{e}}_l\)
+\begin{align}
+    (x_k \hat{\bm{e}}_k, \hat{\bm{e}}_\ell) &=  (x_k' \hat{\bm{e}}_k', \hat{\bm{e}}_\ell) \\
+    x_k \delta_{kl} &= x_k' \cos \alpha_{lk} \\
+    \bm x &= C \bm x'.
+\end{align}
+Project this vector onto \(\hat{\bm{e}}_l'\)
+\begin{align}
+    (x_k \hat{\bm{e}}_k, \hat{\bm{e}}_\ell') &=  (x_k' \hat{\bm{e}}_k', \hat{\bm{e}}_\ell') \\
+    x_k \cos \alpha_{kl} &= x_k' \delta_{lk} \\
+    C^T \bm x &= \bm x'.
+\end{align}
+Alternatively,
+\begin{align}
+    \bm x &= C \bm x' \\
+    C^T \bm x &= C^TC \bm x' \\
+    C^T \bm x &= \bm x' \quad (\text{since } CC^T = I).
+\end{align}
+
+\begin{definition}[Order-1 Tensor]
+\label{1-tensor}
+    An order-1 tensor is an object that obeys the transformation law \(\bm x' = C^T \bm x\), where \(C^T\) is the coordinate transformation matrix. In other words, the object is only a tensor if the predicted object with the transformation law aligns with how it actually transforms.
+\end{definition}
+
+The coordinate transformation matrix is the rotation matrix in 3-dimensional Cartesian space. \emph{This is the default we assume for this course and \(C\) is always the Cartesian rotation matrix.}
+\clearpage
+
+\section*{Lecture 2}
+\addcontentsline{toc}{section}{Lecture 2}
+\stepcounter{section}
+\setcounter{section}{2}
+\setcounter{equation}{0}
+
+\subsection{First-Order Tensor}
+
+\(\bm x\) is a first-order tensor if given to a matrix \(C_{jk} = \cos \alpha_{jk}\), then
+\begin{equation}
+\bm x = C \bm x', \quad \bm x' = C^T \bm x.
+\end{equation}
+
+\begin{example}
+    The position of an object is a first-order tensor.
+\end{example}
+
+\begin{example}
+    Show that velocity is a first-order tensor.
+
+    Let \(\bm x\) and \(\bm x'\) be the positions, then the respective velocities are
+    \begin{equation}
+    \bm v = \frac{d\bm x}{dt}, \quad \bm v' = \frac{d\bm x'}{dt}.
+    \end{equation}
+    By definition,
+    \begin{gather}
+    \bm x = C \bm x' \\
+    \frac{d\bm x}{dt} = C \frac{d\bm x'}{dt} \\
+    \bm v = C \bm v'.
+    \end{gather}
+    Similarly
+    \begin{gather}
+    \bm x' = C^T \bm x \\
+    \frac{d\bm x'}{dt} = C^T \frac{d\bm x}{dt} \\
+    \bm v' = C^T \bm v.
+    \end{gather}
+    This method applies to any order of derivative.
+\end{example}
+
+\begin{definition}[Order-0 Tensor]
+    A zeroth-order tensor is one that has a single real number that does not change under rotation.
+\end{definition}
+
+\begin{example}
+    Mass is a zeroth-order tensor.
+\end{example}
+
+\begin{example}
+    Let \(\bm v = \begin{bmatrix}
+        v_1 \\
+        v_2 \\
+        v_3
+    \end{bmatrix}\), any element of a first order tensor is not a zeroth-order tensor.
+\end{example}
+
+\begin{definition}[Isotropic Tensor]
+    A tensor whose components are invariant with respect to rotation is isotropic.
+\end{definition}
+
+\subsection{Transformation of Second-Order Tensor}
+
+\begin{definition}[Second-Order Tensor]
+    A second-order tensor is a matrix \(T_{ij}\) that transforms in a particular way.
+\end{definition}
+
+In first order, we have
+\begin{equation}
+x_i = C_{ik}x_k', \quad x_i' = C_{ki}x_k.
+\end{equation}
+Not that \(C_{ki} = C^T_{ik}\). Then
+\begin{align}
+    T_{ij} &= C_{ik} C_{jl} T_{kl}', \\
+    T_{ij}' &= C_{ik} C_{jl} T_{kl}.
+\end{align}
+So the rotation happens twice.
+
+\begin{note}[Third-Order Tensor]
+    A third-order tensor satisfies
+    \begin{equation}
+    T_{ijk} = C_{il} C_{jm} C_{kn} T_{lmn}'.
+    \end{equation}
+\end{note}
+
+A second-order tensor in matrix form is
+\begin{equation}
+T_{ij} = C_{ik} T_{kl}' C_{jl} = C_{ik} T_{kl}' C_{lj}^T
+\end{equation}
+or equivalently
+\begin{equation}
+T = CT'C^T,
+\end{equation}
+and
+\begin{equation}
+T' = C^T T C.
+\end{equation}
+
+\begin{definition}
+    The Levi-Civita symbol is defined as
+    \begin{equation}
+    \varepsilon_{ijk} =
+    \begin{cases}
+        1 \quad & ijk = 123, 231, 312 \\
+        -1 \quad & ijk = 321, 213, 132 \\
+        0 \quad & \text{else}.
+    \end{cases}
+    \end{equation}
+\end{definition}
+
+\begin{theorem}[Levi-Civita contraction identity]
+    The Levi-Civita contraction identity is
+    \begin{equation}
+    \varepsilon_{ijk}\varepsilon_{ilm} = \delta_{jl}\delta_{km} - \delta_{jm}\delta_{kl}.
+    \end{equation}
+\end{theorem}
+
+\subsection{Symmetric \& Anti-Symmetric Tensor}
+
+\begin{definition}[Symmetric Tensor]
+    A tensor \(T_{ij}\) is symmetric if
+    \begin{equation}
+    T_{ij} = T_{ji}.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Anti-Symmetric Tensor]
+    A tensor \(T_{ij}\) is anti-symmetric if
+    \begin{equation}
+    T_{ij} = -T_{ji}.
+    \end{equation}
+\end{definition}
+
+Any second-order tensor \(T_{ij}\) can be decomposed into symmetric and anti-symmetric parts:
+\begin{align}
+    T_{ij} &= \frac{1}{2} T_{ij} + \frac{1}{2} T_{ij} \\
+    &= \frac{1}{2}(T_{ij} + T_{ji}) + \frac{1}{2}(T_{ij} - T_{ji}).
+\end{align}
+We define
+\begin{align}
+    T_{(ij)} &= \frac{1}{2}(T_{ij} + T_{ji}), \\
+    T_{[ij]} &= \frac{1}{2}(T_{ij} - T_{ji}),
+\end{align}
+where \(T_{(ij)}\) is the symmetric part and \(T_{[ij]}\) is the anti-symmetric part.
+
+\begin{note}
+The symmetric tensor \(T_{(ij)}\) has \(6\) free elements, and the anti-symmetric tensor \(T_{[ij]}\) has \(3\) free elements.
+\end{note}
+
+\subsection{Tensor Products and Contraction}
+
+\begin{definition}[Contracted Tensor Product (Matrix Product)]
+    The contracted tensor product is defined as
+    \begin{equation}
+    S_{ik} T_{kj} = A_{ij}, \quad ST = A.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Tensor Inner Product]
+    The tensor inner product is defined as
+    \begin{equation}
+    S_{ij} T_{ji} = a,
+    \end{equation}
+    where \(a\) is a scalar.
+\end{definition}
+
+\begin{definition}[Tensor Product (Dyadic Product)]
+    The tensor (dyadic) product of two vectors is defined as
+    \begin{equation}
+    T_{ij} = u_i v_j.
+    \end{equation}
+    In matrix form,
+    \begin{equation}
+    T = \bm u \bm v^T \neq \bm v^T \bm u \neq \bm v \bm u^T,
+    \end{equation}
+    where the order of multiplication matters.
+\end{definition}
+
+\begin{definition}[Contraction]
+    Given a second-order tensor \(T_{ij}\), its contraction is defined as
+    \begin{equation}
+    \mathrm{tr}(T) = T_{ii},
+    \end{equation}
+    which is a scalar and isotropic.
+\end{definition}
+
+\begin{note}
+The stress tensor \(T_{ij}\) will be defined later.
+\end{note}
+
+Surface tensor force: let \(\hat{\bm n}\) be the unit outward normal to the surface. Then the stress (vector) is
+\begin{equation}
+t_i = n_j T_{ji}, \quad \bm t = \hat{\bm n}^T T.
+\end{equation}
+
+\subsubsection{Geometry}
+
+\(\tau_{ij}\) will yield the surface force in the \(i\)-th direction due to a unit normal in the \(j\)-th direction. \(\tau_{1i}\) force is in different directions and corresponds to the first row of a matrix.
+
+\begin{center}
+\begin{tikzpicture}[
+  line cap=round,line join=round,
+  x={(1.2cm,0cm)},            % x1
+  y={(-0.85cm,-0.55cm)},      % x3 (down-left)
+  z={(0cm,1.2cm)},            % x2
+  >=Stealth,
+  scale=0.8
+]
+
+% --- size and key points ---
+\def\s{3}
+
+\coordinate (O)  at (0,0,0);
+\coordinate (X)  at (4.3,0,0);
+\coordinate (Y)  at (0,4.0,0);
+\coordinate (Z)  at (0,0,4.0);
+
+\coordinate (A)  at (0,0,0);
+\coordinate (B)  at (\s,0,0);
+\coordinate (C)  at (\s,\s,0);
+\coordinate (D)  at (0,\s,0);
+
+\coordinate (A1) at (0,0,\s);
+\coordinate (B1) at (\s,0,\s);
+\coordinate (C1) at (\s,\s,\s);
+\coordinate (D1) at (0,\s,\s);
+
+% --- cube edges ---
+\draw[thick] (A)--(B)--(C)--(D)--cycle;
+\draw[thick] (A1)--(B1)--(C1)--(D1)--cycle;
+\draw[thick] (A)--(A1);
+\draw[thick] (B)--(B1);
+\draw[thick] (C)--(C1);
+\draw[thick] (D)--(D1);
+
+% --- axes ---
+\draw[very thick,->] (O) -- (X) node[below right] {$x_1$};
+\draw[very thick,->] (O) -- (Z) node[above] {$x_2$};
+\draw[very thick,->] (O) -- (Y) node[below left] {$x_3$};
+
+\node[below left] at (O) {$O$};
+
+% --- colors ---
+\colorlet{rcol}{red!85!black}
+\colorlet{gcol}{green!70!black}
+\colorlet{bcol}{cyan!60!blue}
+
+% =========================
+% Right face (normal x1): red  tau_11, tau_12, tau_13
+% =========================
+\coordinate (Pr) at (\s,1.25,1.25);
+
+\draw[very thick,->,rcol] (Pr) -- ++(0.95,0,0);
+\node[rcol,anchor=west] at ($(Pr)+(0.98,0,0)$) {$\tau_{11}$};
+
+\draw[very thick,->,rcol] (Pr) -- ++(0,0,1.05);
+\node[rcol,anchor=west] at ($(Pr)+(0,0,1.10)$) {$\tau_{12}$};
+
+\draw[very thick,->,rcol] (Pr) -- ++(0,0.95,0);
+\node[rcol,anchor=west] at ($(Pr)+(0.2,1.02,0)$) {$\tau_{13}$};
+
+% =========================
+% Top face (normal x2): green tau_22, tau_21, tau_23
+% =========================
+\coordinate (Pg) at (1.3,1.4,\s);
+
+\draw[very thick,->,gcol] (Pg) -- ++(0,0,1.05);
+\node[gcol,anchor=south] at ($(Pg)+(0,0,1.10)$) {$\tau_{22}$};
+
+\draw[very thick,->,gcol] (Pg) -- ++(0.95,0,0);
+\node[gcol,anchor=west] at ($(Pg)+(0.98,0,0)$) {$\tau_{21}$};
+
+\draw[very thick,->,gcol] (Pg) -- ++(0,0.95,0);
+\node[gcol,anchor=west] at ($(Pg)+(0.2,1.02,0)$) {$\tau_{23}$};
+
+% =========================
+% Left face (normal x3): blue tau_33, tau_31, tau_32
+% =========================
+\coordinate (Pb) at (0.5,\s,1.5);
+
+\draw[very thick,->,bcol] (Pb) -- ++(0,0.95,0);
+\node[bcol,anchor=west] at ($(Pb)+(0.2,1.02,0)$) {$\tau_{33}$};
+
+\draw[very thick,->,bcol] (Pb) -- ++(0.95,0,0);
+\node[bcol,anchor=west] at ($(Pb)+(0.98,0,0)$) {$\tau_{31}$};
+
+\draw[very thick,->,bcol] (Pb) -- ++(0,0,1.05);
+\node[bcol,anchor=west] at ($(Pb)+(0,0,1.10)$) {$\tau_{32}$};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{example}
+\label{stress tensor transforms}
+Given
+\begin{equation}
+t_i = n_j \tau_{ji},
+\end{equation}
+and \(t_i, n_i\) are first-order tensors, show that \(\tau_{ij}\) transforms like a second-order tensor.
+\begin{insight}[Refined Understanding: Tensor Covariance]
+A physical relationship, such as $t_i = n_j \tau_{ji}$, must be \textbf{form-invariant} (covariant) across all coordinate systems.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Physical Law:} $t_i = n_j \tau_{ji}$ and $t'_k = n'_\ell \tau'_{\ell k}$ are the same ``Truth" in different frames.
+    \item \textbf{Tensor Transformation:} If $t_i$ and $n_i$ are first-order tensors, they obey:
+    \begin{equation}
+        t_i = C_{ki} t'_k \quad \text{and} \quad n_j = C_{\ell j} n'_\ell
+    \end{equation}
+    \item \textbf{The Result:} Substituting these into the physical law \textit{forces} the coefficients $\tau_{ji}$ to transform as a 2nd-order tensor to maintain equality:
+    \begin{equation}
+        \tau_{ij} = C_{ik} C_{j \ell} \tau'_{k \ell}
+    \end{equation}
+\end{itemize}
+\textit{Conclusion: Changing the frame (priming) is mathematically equivalent to rotating the coordinate system, leaving the physical law unchanged while transforming the components.}
+\end{insight}
+We have
+\begin{equation}
+t_i = n_j \tau_{ji}, \quad
+t_i' = n_j' \tau_{ji}'.
+\end{equation}
+Assume \(\bm t\) and \(\hat{\bm n}\) are first-order tensors. Then
+\begin{equation}
+t_i = C_{ki} t_k', \quad
+t_i' = C_{ik} t_k,
+\end{equation}
+and
+\begin{equation}
+n_i = C_{ki} n_k'.
+\end{equation}
+Claim:
+\begin{equation}
+\tau_{ij} = C_{ik} C_{jl} \tau_{kl}'.
+\end{equation}
+Starting from
+\begin{equation}
+t_i = n_j \tau_{ji},
+\end{equation}
+substitute the transformation laws:
+\begin{align}
+t_i &= C_{ki} t_k' \notag \\
+&= C_{ki} n_j' \tau_{jk}'.
+\end{align}
+Using
+\begin{equation}
+n_j' = C_{mj} n_m,
+\end{equation}
+we obtain
+\begin{align}
+C_{ki} t_k' &= C_{mj} n_m \tau_{jk}' \notag \\
+&= n_m \left( C_{mj} \tau_{jk}' \right).
+\end{align}
+Since the rotation matrix is the same,
+\begin{equation}
+C_{mi} C_{ik} = \delta_{mk},
+\end{equation}
+we arrive at
+\begin{equation}
+n_m \tau_{mi} = n_m C_{mj} C_{ik} \tau_{jk}'.
+\end{equation}
+Because \(n_m\) is arbitrary,
+\begin{equation}
+\tau_{mi} = C_{mj} C_{ik} \tau_{jk}'.
+\end{equation}
+Renaming dummy indices gives
+\begin{equation}
+\tau_{ij} = C_{ik} C_{jl} \tau_{kl}'.
+\end{equation}
+\end{example}
+\clearpage
+
+\section*{Lecture 3}
+\addcontentsline{toc}{section}{Lecture 3}
+\stepcounter{section}
+\setcounter{section}{3}
+\setcounter{equation}{0}
+
+\subsection{Introduction}
+
+\subsubsection{What is Continuum Mechanics?}
+
+Continuum mechanics is the science of how matter deforms and flows at scaled much larger than the intermolecular distances.
+
+\subsubsection{Matter}
+
+\begin{definition}[Four States of Matter]
+\label{four states of matter}
+    The four states of matter are:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item Solids: Molecules can vibrate but do not move freely (molecules are tightly packed).
+        \item Liquids: Have a clear shape but they can deform to fill a container (molecules are not as close as in solids).
+        \item Gases: Do not have a fixed shape or volume \& expand to fill a container (molecules are further apart).
+        \item Plasmas: High energy state, can be thought of as an electromagnetic fluid (liquid or gas).
+    \end{itemize}
+\end{definition}
+
+Typically, matter can be roughly divided into fluids (liquids and gases).
+
+\begin{definition}[Two Properties of Fluids]
+    The two properties are:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item They tend of fill the containers.
+        \item They don't resist shearing and stretches.
+    \end{itemize}
+\end{definition}
+
+Solids can resist shearing and stretching but tend to return to their original position before the disturbance.
+
+Application of continuum mechanics include: climate \& weather, aerodynamics, blood flow, lava flow, solar physics and etc.
+
+\subsection{The Continuum Hypothesis}
+
+\subsubsection{The Continuum Hypothesis}
+
+\begin{theorem}[The Continuum Hypothesis]
+\label{the continuum hypothesis}
+    Even though matter is made of discrete molecules, at larger scale it seems continuous. Doing so simplifies the equations for studying molecules. This an approximation that becomes more accurate the more molecules we include.
+\end{theorem}
+
+The continuum hypothesis is a justification where on large enough length scale, we are justified in treating an object as a continuum. 
+
+We use Newton's 2nd law and a conservation law to describe the properties of the continuum. For a fluid, we obtain the \emph{Navier-Stokes equations (1822)}.
+
+The following properties of matter will be discussed:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\rho(\bm x, t)\): mass density \([\text{kg}/\text{m}^3]\),
+    \item \(\bm u(\bm x, t)\): velocity \([\text{m}/\text{s}]\),
+    \item \(p(\bm x, t)\): pressure \([\text{N}/\text{m}^2]\).
+\end{itemize}
+
+\subsubsection{Continuum Approximation of Density}
+
+To build a methodology where we can define the density of a continuum, we consider a cube of length \(\ell\) and center \(\bm x\).
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, scale=1]
+    
+      % --- cube parameters ---
+      \def\a{3}      % cube edge length
+      \def\dx{1.2}   % depth offset
+      \def\dy{0.9}   % depth offset
+    
+      % --- front face ---
+      \draw (0,0) -- (\a,0) -- (\a,\a) -- (0,\a) -- cycle;
+    
+      % --- back face ---
+      \draw (\dx,\dy) -- (\a+\dx,\dy) -- (\a+\dx,\a+\dy) -- (\dx,\a+\dy) -- cycle;
+    
+      % --- connecting edges ---
+      \draw (0,0) -- (\dx,\dy);
+      \draw (\a,0) -- (\a+\dx,\dy);
+      \draw (0,\a) -- (\dx,\a+\dy);
+      \draw (\a,\a) -- (\a+\dx,\a+\dy);
+    
+      % --- point inside the cube ---
+      \fill (1.7,1.7) circle (1.6pt);
+      \node[right=4pt] at (1.7,1.7) {$\vec{x}$};
+    
+      % --- length label ---
+      \node[left=6pt] at (0,1.5) {$\ell$};
+    
+    \end{tikzpicture}
+\end{center}
+The average density over the cube can be defined as
+\begin{equation}
+\label{average density over cube ell 1}
+    \rho_{\ell}(\bm x) = \frac{M_{\ell}(\bm x)}{\ell^3},
+\end{equation}
+which depends on what \(\ell\) we choose. If matter was \emph{truly} continuous, we can take the limit as \(\ell \to 0\) and obtain the density at \(\bm x\).
+\begin{definition}[The Continuum Approximation]
+\label{continuum approximation}
+    The continuum approximation is
+    \begin{equation}
+        \rho(\bm x) = \lim_{\ell \to 0}\frac{M_\ell(\bm x)}{\ell^3}.
+    \end{equation}
+\end{definition}
+Since Matter is not continuous, we define the average density to be \cref{continuum approximation} as \(\ell\) gets smaller and starts to converge. We don't go any smaller because our expression will diverge.
+\begin{center}
+    \begin{tikzpicture}[scale=0.6, transform shape, >=Stealth, font=\small]
+      % --- geometry helpers ---
+      \def\xmax{9.0}
+      \def\ymax{5.2}
+    
+      % --- axes ---
+      \draw[->, line width=0.6pt] (0,0) -- (\xmax,0) node[below right=2pt] {$\ell\,[\mathrm{m}]$};
+      \draw[->, line width=0.6pt] (0,0) -- (0,\ymax) node[above left=2pt] {$\rho_\ell(\vec{x})$};
+    
+      % --- ticks (choose positions freely; these are “layout” positions) ---
+      \coordinate (tMolInt) at (1.6,0);  % boundary between molecular and intermediate (unlabeled tick)
+      \coordinate (t1)      at (4.2,0);  % 10^-6
+      \coordinate (t2)      at (7.2,0);  % 10^-4
+    
+      \draw[line width=0.6pt] (tMolInt) ++(0, 0.18) -- ++(0,-0.36);
+    
+      \draw[line width=0.6pt] (t1) ++(0, 0.18) -- ++(0,-0.36);
+      \node[below=8pt] at (t1) {$10^{-6}$};
+    
+      \draw[line width=0.6pt] (t2) ++(0, 0.18) -- ++(0,-0.36);
+      \node[below=8pt] at (t2) {$10^{-4}$};
+    
+      % --- scale labels: put them ALL on the same baseline ---
+      \def\scaley{-1.25} % <- move this down/up to taste; all three will stay aligned
+      \node[align=center] at (2.8,\scaley) {molecular\\scales};
+      \node[align=center] at (5.6,\scaley) {intermediate\\scales};
+      \node[align=center] at (8,\scaley) {macro\\scales};
+    
+      % --- curve (hand-shaped with coordinates; tweak points for your exact look) ---
+      \draw[line width=1.0pt]
+        plot[smooth] coordinates {
+          (0.85,3.2)
+          (1.10,1.2)
+          (1.35,0.9)
+          (1.65,3.7)
+          (1.95,4.4)
+          (2.20,2.4)
+          (2.45,3.8)
+          (2.70,3.0)
+          (2.95,3.6)
+          (3.25,3.2)
+          (3.60,3.35)
+          (4.20,3.25)
+          (5.20,3.25)
+          (6.30,3.30)
+          (7.10,3.45)
+          (7.70,3.75)
+          (8.20,4.25)
+          (8.60,4.80)
+        };
+    
+      % --- annotations ---
+      \node[align=center] at (5.75,2.25) {matter looks\\continuous \&\\we are converging};
+      \node[font=\normalsize] at (8.25,3.6) {gas};
+    
+    \end{tikzpicture}
+\end{center}
+The continuum approximation is valid in the intermediate scale and larger. The converging \(\ell\) depends on the matter. Taking \(\ell\) to be small, in the intermediate rate, can allow for convergence. We use this expression \cref{continuum approximation} as the average density at \(\bm x\).
+
+For the continuum hypothesis (approximation) to be valid, we need that the characterize length scale, \(L\), of the system, is much larger than the mean free path (the average distance molecules are allowed to move), \(\lambda\), of the particles (\(L \gg \lambda\)).
+
+\begin{example}[\(\lambda\) of Air at Sea Level]
+    For air at sea level, \(\lambda = 70 \, \text{nm} \simeq 10^{-7} \, \text{nm}\). If \(L \approx 1 \, \text{mm}\), then
+    \begin{equation}
+    \frac{\lambda}{L} = \frac{10^{-7} \, \text{m}}{10^{-3} \, \text{m}} = 10^{-4} \ll 1.
+    \end{equation}
+    If we need \(\frac{\lambda}{L} \ll 10^{-2}\), then \(L \gg 100 \times \lambda = 10^{-5} \, \text{m}\), or \(10 \, \mu\text{m}\). \(\lambda\) for liquids and solids are even smaller, so we need even larger \(L\), the length of the system.
+\end{example}
+
+\begin{important}[Assumption of Continuum Hypothesis]
+    We assume the continuum hypothesis for the rest of the course.
+\end{important}
+
+\subsection{Kinematics}
+
+\begin{definition}[Kinematics \& Dynamics]
+\label{kinematics}
+    Kinematics is the study of motion without reference to forces. When we include forces, we have \emph{dynamics}.
+\end{definition}
+
+\subsubsection{Fluid Parcel}
+
+We introduce the idea of ``fluid parcel", which is the fluid at a point. Since we are assuming matter is continuous at our scales of interest, we can suppose we have well-defined properties:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\rho(\bm x, t)\): mass density,
+    \item \(\bm u(\bm x, t)\): velocity.
+\end{itemize}
+
+\begin{definition}[Pathlines]
+    If \(\bm x(t)\) is the position of a fluid parcel at time \(t\), it must satisfy
+\begin{equation}
+\label{pathlines}
+    \frac{d\bm x}{dt} = \bm u(\bm x(t), t).
+\end{equation}
+The solutions to the system of DEs are the trajectories and are called pathlines.
+\end{definition}
+
+\begin{example}
+    Find the pathlines (trajectories) for the case where \(\bm u(\bm x, t) = \bm x\).
+
+    The system of DEs becomes,
+    \begin{equation}
+    \frac{d\bm x}{dt} = \bm x \quad \text{or} \quad \frac{dx}{dt} = x, \, \frac{dy}{dt} = y, \, \frac{dz}{dt} = z.
+    \end{equation}
+    The solutions are
+    \begin{align}
+        x &= x_0e^t \\
+        y &= y_0e^t \\
+        z &= z_0e^t,
+    \end{align}
+    or \(\bm x = \bm x(0)e^t\), where \(\bm x(0) = (x_0, y_0, z_0)\). Notice that
+    \begin{equation}
+    \frac{x}{y} = \frac{x_0 e^t}{y_0 e^t} = \text{constant},
+    \end{equation}
+    so the results are lines.
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, line cap=round, line join=round, scale=1]
+
+          % Axes
+          \draw[->, line width=1pt] (0,-2.2) -- (0,2.2) node[above] {$y$};
+          \draw[->, line width=1pt] (-2.8,0) -- (2.8,0) node[right] {$x$};
+        
+          % Rays (solution curves are lines through the origin)
+          \foreach \ang in {0,45,90,135,180,225,270,315} {
+            \draw[->, line width=1pt] (0,0) -- ({2*cos(\ang)},{2*sin(\ang)});
+          }
+        
+        \end{tikzpicture}
+    \end{center}
+\end{example}
+
+\begin{example}
+    Find the pathlines for \(\bm u = \lp \frac{x}{t + 
+    \alpha}, x + \frac{y}{t + \alpha} \rp\) for \(t \geq 0, \, \alpha > 0\).
+
+    The system of DEs becomes,
+    \begin{equation}
+        \frac{dx}{dt} = \frac{x}{t + \alpha}, \quad \frac{dy}{dt} = x + \frac{y}{t + \alpha}.
+    \end{equation}
+    First we solve
+    \begin{align}
+        \frac{dx}{dt} &= \frac{x}{t + \alpha} \\
+        \int \frac{dx}{x} &= \int \frac{dt}{t + \alpha} \\
+        \ln \abs*{\frac{x}{t + \alpha}} &= C \\
+        \abs*{\frac{x}{t + \alpha}} &= e^C.
+    \end{align}
+    Given that \(t \geq 0, \, \alpha > 0\), if \(x \geq 0\), then
+    \begin{equation}
+        x = (t + \alpha) e^C.
+    \end{equation}
+    After some algebra, we can show that
+    \begin{equation}
+        y = \beta (t + \alpha) + e^C (t + \alpha)^2.
+    \end{equation}
+\end{example}
+\clearpage
+
+\section*{Lecture 4}
+\addcontentsline{toc}{section}{Lecture 4}
+\stepcounter{section}
+\setcounter{section}{4}
+\setcounter{equation}{0}
+
+\subsection{Eulerian \& Lagrangian Descriptions of Flows}
+
+There are two ways to describe continuum (two difference frames of reference):
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Lagrangian: following the flow.
+    \item Eulerian: watch the flow at a fixed position.
+\end{itemize}
+
+Recall the path lines (trajectories) solve the equation
+\begin{equation}
+    \frac{d\bm x}{dt} = \bm u(\bm x, t).
+\end{equation}
+\begin{center}
+    \begin{tikzpicture}[
+            >=Stealth,
+            vec/.style={->, thick},
+            dot/.style={fill=black, circle, inner sep=1.5pt}
+        ]
+        
+        % The pathline curve
+        \draw[thick] (0,0) .. controls (2,2) and (4,1) .. (6,1.5) .. controls (8,2) and (10,1) .. (12,1.2);
+        
+        % Point at t=0
+        \node[dot] (a) at (0,0) {};
+        \draw[vec] (0,0) -- (1,1.2);
+        \node[above] at (-1,1.8) {$\vec{a}$ at $t=0$};
+        \node[above] at (1.2,1.6) {$\vec{u}(\vec{a},0)$};
+        \node[above] at (1.2,1.1) {$\vec{u}_L(\vec{a},t_0)$};
+        \node[below] at (0,-0.5) {$\vec{a} = \vec{x}(\vec{a},0)$};
+        
+        % Point at t_1
+        \node[dot] (x1) at (6,1.5) {};
+        \draw[vec] (6,1.5) -- (7,2.2);
+        \node[above] at (7.5,2.7) {$\vec{u}(\vec{x}_1,t_1)$};
+        \node[above] at (7.5,2.2) {$\vec{u}_L(\vec{a},t_1)$};
+        \node[below] at (6,0.7) {$\vec{x}_1 = \vec{x}(\vec{a},t_1)$};
+        
+        % Point at t_2
+        \node[dot] (x2) at (12,1.2) {};
+        \node[above] at (12,2.3) {$\vec{u}(\vec{x}_2,t_2)$};
+        \node[above] at (12,1.8) {$\vec{u}_L(\vec{a},t_2)$};
+        \node[below] at (12,0.4) {$\vec{x}_2 = \vec{x}(\vec{a},t_2)$};
+        
+        % Pathline label
+        \node[right] at (12.5,1.5) {$\mathrm{pathline}$};
+    \end{tikzpicture}
+\end{center}
+\(\bm x(\bm a, t)\) is an example of a Lagrangian function.
+
+\begin{definition}[Velocity at Time \(t\) in Lagrangian Frame]
+    We define
+    \begin{equation}
+    \bm u_L(\bm a, t)
+    \end{equation}
+    to be the velocity at \(\bm x(\bm a, t)\) at time \(t\).
+\end{definition}
+
+Initially, we are at \(\bm a\). Note that the Lagrangian function is always a function of the initial position and time, we are assuming that the fluid parcel ``remembers" the initial position.
+
+\begin{definition}[Density at Time \(t\) in Lagrangian Frame]
+    We define
+    \begin{equation}
+    \rho_L(\bm a, t)
+    \end{equation}
+    to be density of the parcel originally at \(\bm a\) at time \(t\).
+\end{definition}
+
+When measuring a property of a fluid, we can \emph{easily} measure at a fixed position (Eulerian). For a Lagrangian frame, we need to move with the fluid. The Eulerian descriptions of a flow is with respect to a fixed position.
+
+\begin{definition}[Eulerian Velocity]
+    The Eulerian velocity at \(\bm x \) and time \(t\) is defined as
+    \begin{equation}
+    \bm u(\bm x, t).
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Eulerian Density]
+    The Eulerian density at \(\bm x \) and time \(t\) is defined as
+    \begin{equation}
+    \rho(\bm x, t).
+    \end{equation}
+\end{definition}
+
+\begin{insight}[Difference between Lagrangian and Eulerian view]
+    The Lagrangian view uses the initial position \(\bm{a}\) to label each individual particle. In an Eulerian frame, we only care about what is happening at position \(\bm{x}\), we don't need to know what a specific particle is doing. The \(\bm{x}\) is the independent variable. 
+
+    The confusion between Eulerian and Lagrangian frames often stems from the symbol $\bm{x}$ representing two fundamentally different mathematical objects depending on context.
+
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{In the Eulerian Frame ($\bm{x}$ is an Address):} \\
+        Here, $\bm{x}$ is an \textit{independent variable}. It represents a fixed coordinate in space (like a mile marker on a highway). It does not move.
+        \begin{equation} \frac{d}{dt}(\bm{x}_{\text{Eulerian}}) = 0 \end{equation}
+        Therefore, you cannot find velocity by differentiating this $\bm{x}$. The field $\bm{u}(\bm{x}, t)$ records the velocity of the fluid \textit{passing through} this fixed point, not the velocity of the point itself.
+
+        \item \textbf{In the Lagrangian Frame ($\bm{x}$ is a Trajectory):} \\
+        Here, $\bm{x}$ is a \textit{dependent variable}, explicitly defined by the mapping $\bm{x} = \boldsymbol{\Phi}(\bm{a}, t)$. It tracks the history of a specific particle $\bm{a}$.
+        \begin{equation} \frac{d}{dt}(\bm{x}_{\text{Lagrangian}}) = \frac{\partial \boldsymbol{\Phi}}{\partial t} = \bm{u}(\bm{x}, t) \end{equation}
+        This derivative gives the physical velocity of the particle.
+    \end{itemize}
+
+    \textbf{Key Takeaway:} We use the mapping $\boldsymbol{\Phi}$ to momentarily switch from the fixed Eulerian frame (where physics laws like $F=ma$ don't apply directly to space) to the Lagrangian frame (where we can track particles), apply the laws, and then translate the result back to the fixed grid.
+\end{insight}
+
+\subsubsection{Converting between Eulerian and Lagrangian}
+
+From Eulerian to Lagrangian:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Assume we know \(\bm u(\bm x, t)\). The pathlines satisfy
+    \begin{equation}
+    \frac{d\bm x}{dt} = \bm u (\bm x, t)
+    \end{equation}
+    and solving this we will obtain an equation \(\bm x(\bm a, t)\).
+    \item Substitute the equation \(\bm x(\bm a, t)\) into \(\bm u(\bm x, t)\) to obtain the Lagrangian velocity
+    \begin{equation}
+    \bm u_L(\bm a, t) = \bm u (\bm x(\bm a, t), t).
+    \end{equation}
+    \item Similarly for the Lagrangian density, we obtain
+    \begin{equation}
+    \rho_L(\bm a, t) = \rho (\bm x(\bm a, t), t).
+    \end{equation}
+\end{itemize}
+Another easier method to find the Lagrangian velocity is if we know \(\bm x(\bm a, t)\), then
+\begin{equation}
+\bm u_L = \frac{\partial \bm x(\bm a, t)}{\partial t}.
+\end{equation}
+From Lagrangian to Eulerian:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Given \(\bm x = \bm x(\bm a, t)\), if we can invert this \(\bm a = \bm a(\bm x, t)\) (implicit function theorem) and given a Lagrangian field \(\bm u_L(\bm a, t)\) and \(\rho_L(\bm a, t)\).
+    \item We substitute in to get the Lagrangian velocity
+    \begin{equation}
+    \bm u(\bm x, t) = \bm u_L(\bm a(\bm x, t), t)
+    \end{equation}
+    and the Lagrangian density
+    \begin{equation}
+    \rho(\bm x, t) = \rho_L(\bm a (\bm x, t), t).
+    \end{equation}
+\end{itemize}
+
+\subsection{Streamlines}
+
+\begin{definition}[Streamlines]
+\label{streamlines}
+    A streamline is a curve \(\bm x(s)\) that everywhere has the velocity \(\bm u(\bm x, t)\) as a tangent at a fixed time \(t\). The equation of a streamline is
+    \begin{equation}
+    \frac{d\bm x(s)}{ds} = \bm u(\bm x(s), t).
+    \end{equation}
+    \begin{important}[\(t\) as Parameter]
+        Note that the \(t\) here is a parameter, it's fixed.
+    \end{important}
+\end{definition}
+
+This is similar to pathlines where
+\begin{equation}
+\frac{d\bm x}{dt} = \bm u (\bm x(t), t).
+\end{equation}
+If \(\bm u\) is independent of time, then streamlines are pathlines. If \(\bm u\) depends on time, in general they will differ. Pathlines are useful to see where the fluid goes. Streamlines are useful for the upcoming lectures.
+
+\begin{example}
+    For the example from lecture 3, where \(\bm u = \bm x\), find \(\bm x(\bm a, t)\) and \(\bm a(\bm x, t)\).
+\end{example}
+
+\begin{example}
+    Find \(\bm u_L(\bm a, t)\) with method 1.
+\end{example}
+
+\begin{example}
+    Find \(\bm u_L(\bm a, t)\) with method 2.
+\end{example}
+
+\begin{example}
+    Given pathlines \(\bm x(t) = (a_1e^{-t^2}, a_2e^{t^2})\), sketch the pathlines, find \(\bm u_L(\bm a, t)\) and find \(\bm u(\bm x, t)\).
+\end{example}
+
+\begin{example}
+    Find the streamlines for
+    \begin{equation}
+    \bm u(\bm x, t) = \lp \frac{x}{t + \alpha}, x + \frac{y}{t + \alpha} \rp
+    \end{equation}
+    for \(t, \alpha, x \geq 0\).
+\end{example}
+\clearpage
+
+\section*{Lecture 5}
+\addcontentsline{toc}{section}{Lecture 5}
+\stepcounter{section}
+\setcounter{section}{5}
+\setcounter{equation}{0}
+
+From classical mechanics, if we have \(N\) particles, each with position \(\bm X_i(t)\), then the velocity is 
+\begin{equation}
+\frac{d \bm x_i}{dt}
+\end{equation}
+and the acceleration is
+\begin{equation}
+\frac{d^2 \bm x_i}{dt^2}.
+\end{equation}
+
+In a Lagrangian frame of reference, the position is denoted by
+\begin{equation}
+\bm X(\bm a, t)
+\end{equation}
+then the velocity is 
+\begin{equation}
+\bm u_L = \frac{\partial \bm x(\bm a, t)}{\partial t}
+\end{equation}
+and the acceleration is
+\begin{equation}
+\bm a_L = \frac{\partial^2 \bm x(\bm a, t)}{\partial t^2}.
+\end{equation}
+We can find the rate of change of a fluid property following in a Lagrangian frame (surfing frame) with
+\begin{equation}
+\frac{\partial \rho_L(\bm a, t)}{\partial t}.
+\end{equation}
+We now study how to find the rate of change of an Eulerian property following the flow (\(\rho(\bm x, t)\)).
+
+\subsection{Material Derivative}
+
+Consider a volume of fluid, suppose we have a trajectory following a fluid parcel, \(\bm x(\bm a, t)\), we determine how the fluid property \(f(\bm x, t)\) changes along the flow.
+\begin{center}
+\begin{tikzpicture}[scale=1, line cap=round, line join=round]
+  % Parameters
+  \def\R{2.2}      % sphere radius
+  \def\Re{2.2}    % equator x-radius (slightly smaller so it sits inside the outline)
+  \def\Ye{0.65}    % equator y-radius (perspective)
+
+  % Sphere outline
+  \draw[black, line width=1.0pt] (0,0) circle (\R);
+
+  % Equator: front (solid) + back (dashed, "x-ray")
+  \draw[black, line width=0.9pt]
+    (\Re,0) arc[start angle=0, end angle=-180, x radius=\Re, y radius=\Ye]; % front
+  \draw[black, line width=0.9pt, dashed]
+    (-\Re,0) arc[start angle=180, end angle=0, x radius=\Re, y radius=\Ye]; % back
+
+  % Red path on the sphere (clipped to the sphere)
+  \begin{scope}
+    \clip (0,0) circle (\R);
+
+    % Path curve
+    \draw[red, line width=1.2pt, smooth]
+      plot[domain=-1.9:1.9, samples=120]
+      (\x, {1.05 - 0.25*cos(180*\x/1.9)});
+
+    % A point on the path (at the trough)
+    \fill[red] (0, {1.05 - 0.25*cos(0)}) circle (1.4pt);
+
+    % Label
+    \node[red] at (0,1.55) {$\bm{x}(t)$};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+Recall from lecture 4
+\begin{equation}
+f_L(\bm a, t) = f(\bm x(\bm a, t), t).
+\end{equation}
+Or more explicitely,
+\begin{equation}
+f(x_1(\bm a, t), x_2(\bm a, t), x_3(\bm a, t), t).
+\end{equation}
+We already know that in the Lagrangian frame, the rate of change following the flow is
+\begin{equation}
+\frac{\partial f_L(\bm a, t)}{\partial t}.
+\end{equation}
+To find the Eulerian version, we apply \(\partial/\partial t\) of the above equations and use the chain rule
+\begin{align}
+    \frac{\partial f_L(\bm a, t)}{\partial t} &= \frac{\partial f}{\partial x_1} \frac{\partial x_1}{\partial t} + \frac{\partial f}{\partial x_2} \frac{\partial x_2}{\partial t} + \frac{\partial f}{\partial x_3} \frac{\partial x_3}{\partial t} + \frac{\partial f}{\partial t} \frac{\partial t}{\partial t} \\
+    &= \frac{\partial f}{\partial t} + \lp \frac{\partial x_1}{\partial t}, \frac{\partial x_2}{\partial t}, \frac{\partial x_3}{\partial t} \rp \cdot \bm \nabla f.
+\end{align}
+Since
+\begin{equation}
+\lp \frac{\partial x_1}{\partial t}, \frac{\partial x_2}{\partial t}, \frac{\partial x_3}{\partial t} \rp = \frac{\partial \bm x}{\partial t} = \bm u,
+\end{equation}
+we obtain the material derivative.
+
+The material derivative of an Eulerian property \(f(\bm x, t)\), is the change following the flow with the velocity, \(\bm u(\bm x, t)\).
+
+\begin{definition}[Material Derivative]
+    The material derivative is defined as
+    \begin{equation}
+    \frac{Df}{Dt} = \frac{\partial f_L}{\partial t}(\bm a, t) = \frac{\partial f}{\partial t} + \bm u \cdot \bm \nabla f.
+    \end{equation}
+    Note that \(f(\bm x, t)\) and \(\bm u(\bm x, t)\) are Eulerian fields.
+\end{definition}
+
+The material derivative have two parts
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\frac{\partial f}{\partial t}\) is the rate of change of \(f\) at a fixed position w.r.t. time.
+    \item The directional derivative is
+    \begin{equation}
+    \frac{\bm u}{\norm u} \cdot \bm \nabla f.
+    \end{equation}
+    This is non-zero if
+    \begin{equation}
+    \bm u \cdot \bm \nabla f \neq 0.
+    \end{equation}
+    The second term in the material derivative is the speed times the directional derivative.
+\end{itemize}
+
+\begin{example}
+    Find the material derivatives of the following:
+    \begin{enumerate}[nosep]
+        \item \(\rho = \rho_0 + \Delta \rho_t t \).
+        \item \(\rho = \rho_0 + \Delta \rho_x x \) with \(\bm u = (\pm 1, 0, 0)\).
+        \item \(\rho = \rho_0 + \Delta \rho_t t + \Delta \rho_x x \)  with \(\bm u = (\pm 1, 0, 0)\).
+        \item Find the acceleration of \(\bm u(\bm x, t) = (x, yt^2, z + t)\).
+    \end{enumerate}
+    Solutions:
+    \begin{enumerate}[nosep]
+        \item We solve
+        \begin{equation}
+        \frac{D \rho}{D t} = \frac{\partial \rho}{\partial t} + \bm u \cdot \bm \nabla \rho = \Delta \rho_t.
+        \end{equation}
+        \item We solve
+        \begin{equation}
+        \frac{D \rho}{D t} = \frac{\partial \rho}{\partial t} + \bm u \cdot \bm \nabla \rho = \pm \Delta \rho_x.        
+        \end{equation}
+        \item It's the superposition of the previous two parts
+        \begin{equation}
+        \pm \Delta \rho_x + \Delta \rho_t.
+        \end{equation}
+        \item The acceleration is
+        \begin{equation}
+        \frac{D\bm u}{D t} = \frac{\partial \bm u}{\partial t} + (\bm u \cdot \bm \nabla) \bm u,
+        \end{equation}
+        where the second term is non-linear. It yields chaos and turbulence. The second term in index notation is
+        \begin{equation}
+        \frac{\partial u_i}{\partial t} + u_j \frac{\partial}{\partial x_j} u_i.
+        \end{equation}
+        Compute each term
+        \begin{equation}
+        \frac{D \bm u}{D t} = \lp \frac{Du}{Dt}, \frac{Dv}{Dt}, \frac{Dw}{dt} \rp.
+        \end{equation}
+        Then
+        \begin{align}
+            \frac{Du}{Dt} &= \frac{\partial}{\partial t}x + x \frac{\partial}{\partial x}x + yt^2 \frac{\partial}{\partial y}x + (z + t)\frac{\partial}{\partial z} x = x \\
+            \frac{Dv}{Dt} &= \frac{\partial}{\partial t}yt^2 + x \frac{\partial}{\partial x}yt^2 + yt^2 \frac{\partial}{\partial y}yt^2 + (z + t)\frac{\partial}{\partial z} yt^2 = 2yt + yt^4 \\
+            \frac{Dw}{Dt} &= \frac{\partial}{\partial t} (z+t) + x \frac{\partial}{\partial x} (z+t) + yt^2 \frac{\partial}{\partial y} (z+t) + (z + t)\frac{\partial}{\partial z} (z+t) \\
+            &= 1 + z + t.
+        \end{align}
+        This is direct, we couldz also find the Lagrangian velocity first as we did in lecture 4.
+    \end{enumerate}
+\end{example}
+
+\subsection{Material Volumes}
+
+\begin{center}
+\begin{tikzpicture}[line cap=round,line join=round,>=Latex]
+
+% =========================
+% Left: material volume W(0)
+% =========================
+\begin{scope}[shift={(0,0)}]
+  \def\R{1.6}
+  \def\Re{1.6}  % equator x-radius
+  \def\Ye{0.45}  % equator y-radius (perspective)
+
+  % sphere outline
+  \draw[black, line width=0.9pt] (0,0) circle (\R);
+
+  % equator: back (dashed) on top arc, front (solid) on bottom arc
+  \draw[black, line width=0.8pt, dashed]
+    (\Re,0) arc[start angle=0, end angle=180, x radius=\Re, y radius=\Ye];
+  \draw[black, line width=0.8pt]
+    (-\Re,0) arc[start angle=180, end angle=360, x radius=\Re, y radius=\Ye];
+
+  % labels (red)
+  \node[red] at (-3.0,0.35) {$W(0)$};
+  \node[red, align=left] at (-3,-1) {material\\volume\\at $t=0$};
+
+  \node[red] at (0,-2.2) {$t=0$};
+
+  % a1, a2 (as in your sketch)
+  \node[red] at (0,0.95) {$\vec a_1$};
+  \node[red] at (0,-0.95) {$\vec a_2$};
+\end{scope}
+
+% Arrow indicating mapping / evolution
+\draw[black, line width=0.9pt, ->]
+  (2.0,0.4) .. controls (3.2,1.1) and (4.8,1.1) .. (6.0,0.4);
+
+% =========================
+% Right: deformed volume W(t1)
+% =========================
+\begin{scope}[shift={(8.2,0)}]
+  % Deformed "material volume" outline
+  \draw[black, line width=0.9pt, smooth cycle]
+    plot coordinates {
+      (-1.5,-0.1)
+      (-1.8,-0.9)
+      (-1.0,-1.6)
+      (-0.2,-1.2)
+      (0.0,-0.4)
+      (0.7,0.3)
+      (1.5,1.0)
+      (1.2,1.7)
+      (0.4,1.6)
+      (0.1,1.2)
+      (-0.2,0.7)
+      (-0.7,0.2)
+    };
+
+  % A "cap" at the top (like your small sphere cross-section)
+  \begin{scope}
+    % dashed equator inside the top cap (x-ray)
+    \draw[black, line width=0.8pt, dashed]
+      (0.92,0.5) arc[start angle=0, end angle=180, x radius=0.63, y radius=0.22];
+    \draw[black, line width=0.8pt]
+      (0.92,0.53) arc[start angle=0, end angle=-180, x radius=0.63, y radius=0.22];
+  \end{scope}
+
+  % labels (red)
+  \node[red] at (-0.2,2.0) {$W(t_1)$};
+  \node[red] at (0,-2.2) {$t=t_1$};
+
+  \node[red] at (-1,1) {$\vec{x}(\vec a_1,t_1)$};
+  \node[red] at (1.5,0) {$\vec{x}(\vec a_2,t_1)$};
+\end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\begin{definition}[Material Volume]
+    A material volume is a fixed collection of fluid parcels that can move with the flow. Note that it has all the same fluid parcels for all time.
+\end{definition}
+
+If we want to find the rate of change of \(f_L(\bm a, t)\), then we need to consider all \(\bm a \in W(0)\), where \(W(0)\) is the material volume at \(t= 0\).
+
+For an Eulerian field, \(f(\bm x, t)\), we need to find \(\bm x(\bm a, t)\), as the flow evolves. In some sense, the Lagrangian frame is easier because we follow along, whereas in Eulerian, the domain is changing.
+
+If we want to find the total of a property in a given material volume in an Eulerian frame we compute
+\begin{equation}
+I(t) = \iiint_{W(t)} f(\bm x, t) \, dV.
+\end{equation}
+The changes w.r.t. time are
+\begin{equation}
+\frac{dI}{dt} = \frac{d}{dt} \iiint_{W(t)} f(\bm x, t) \, dV.
+\end{equation}
+\begin{important}[The Issue with Bringing in \(d/dt\)]
+    If the volume is free to change w.r.t. time, we cannot bring the derivative in the integral i.e., the RHS is in general is not
+    \begin{equation}
+    \iiint_{W(t)} \frac{\partial f}{\partial t} \, dV
+    \end{equation}
+    since the volume can change.
+\end{important}
+However, using
+\begin{equation}
+\bm x(\bm a, t) \quad \text{and} \quad \bm a(\bm x, t),
+\end{equation}
+we can transform between Eulerian and Lagrangian frames (lecture 6). The idea is to change the integral from Eulerian to Lagrangian, assuming we have the mapping. It is useful because in a Lagrangian frame, the bounds of integration are fixed (the initial condition stays the same). For example
+\begin{equation}
+\frac{d}{dt} \iiint_{W(0)} f_L(\bm a, t) \, dV_a = \iiint_{W(0)} \frac{\partial f_L}{\partial t}(\bm a, t) \, dV_a.
+\end{equation}
+\clearpage
+
+\section*{Lecture 6}
+\addcontentsline{toc}{section}{Lecture 6}
+\stepcounter{section}
+\setcounter{section}{6}
+\setcounter{equation}{0}
+
+\subsection{Reynolds Transport Theorem}
+
+We define a mapping
+\begin{equation}
+\bm \Phi (\cdot, t) : \mathbb R^3 \to \mathbb R^3,
+\end{equation}
+where \(\bm \Phi(\bm a, t) = \bm x(\bm a, t)\).
+
+\begin{center}
+\begin{tikzpicture}[line cap=round,line join=round,>=Latex]
+
+% =========================
+% Left: material volume W(0)
+% =========================
+\begin{scope}[shift={(0,0)}]
+  \def\R{1.6}
+  \def\Re{1.6}  % equator x-radius
+  \def\Ye{0.45}  % equator y-radius (perspective)
+
+  % sphere outline
+  \draw[black, line width=0.9pt] (0,0) circle (\R);
+
+  % equator: back (dashed) on top arc, front (solid) on bottom arc
+  \draw[black, line width=0.8pt, dashed]
+    (\Re,0) arc[start angle=0, end angle=180, x radius=\Re, y radius=\Ye];
+  \draw[black, line width=0.8pt]
+    (-\Re,0) arc[start angle=180, end angle=360, x radius=\Re, y radius=\Ye];
+
+  % labels (red)
+  \node[red] at (-3.0,0.35) {$W(0)$};
+  \node[red, align=left] at (-3,-1) {material\\volume\\at $t=0$};
+
+  \node[red] at (0,-2.2) {$t=0$};
+
+  % a1, a2 (as in your sketch)
+  \node[red] at (0,0.95) {$\vec a_1$};
+  \node[red] at (0,-0.95) {$\vec a_2$};
+\end{scope}
+
+% Arrow indicating mapping / evolution
+\draw[black, line width=0.9pt, ->]
+  (2.0,0.4) .. controls (3.2,1.1) and (4.8,1.1) .. (6.0,0.4);
+
+% =========================
+% Right: deformed volume W(t1)
+% =========================
+\begin{scope}[shift={(8.2,0)}]
+  % Deformed "material volume" outline
+  \draw[black, line width=0.9pt, smooth cycle]
+    plot coordinates {
+      (-1.5,-0.1)
+      (-1.8,-0.9)
+      (-1.0,-1.6)
+      (-0.2,-1.2)
+      (0.0,-0.4)
+      (0.7,0.3)
+      (1.5,1.0)
+      (1.2,1.7)
+      (0.4,1.6)
+      (0.1,1.2)
+      (-0.2,0.7)
+      (-0.7,0.2)
+    };
+
+  % A "cap" at the top (like your small sphere cross-section)
+  \begin{scope}
+    % dashed equator inside the top cap (x-ray)
+    \draw[black, line width=0.8pt, dashed]
+      (0.92,0.5) arc[start angle=0, end angle=180, x radius=0.63, y radius=0.22];
+    \draw[black, line width=0.8pt]
+      (0.92,0.53) arc[start angle=0, end angle=-180, x radius=0.63, y radius=0.22];
+  \end{scope}
+
+  % labels (red)
+  \node[red] at (-0.2,2.0) {$W(t_1)$};
+  \node[red] at (0,-2.2) {$t=t_1$};
+
+  \node[red] at (-1,1) {$\vec{x}(\vec a_1,t_1)$};
+  \node[red] at (1.5,0) {$\vec{x}(\vec a_2,t_1)$};
+\end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+The mapping allows us to ``transform" the volume. Suppose that there also exists an inverse mapping \(\bm \Phi^{-1}\) between the two. There are several assumptions we are making:
+\begin{enumerate}[nosep]
+    \item \(\bm \Phi\) is invertible and one-to-one.
+    \item The mapping and its inverse are both \(C^2\) with respect to their arguments.
+    \item We assume \(W(0)\) is simply connected without any holes.
+\end{enumerate}
+
+Assumption 1 yields that every \(\bm x\) at \(t\) comes from a unique \(\bm a\) at \(t = 0\). If \(W(0)\) is a volume, then \(W(t) = \bm \Phi(W(0), t)\) is a material volume. \(W(0)\) does not need to be the volume, for instance, if \(W(0)\) is a surface, then \(W(t) = \bm \Phi(W(0), t)\) is a material surface; if \(W(0)\) is a curve, then \(W(t) = \bm \Phi(W(0), t)\) is a material curve.
+
+\emph{Question:} We are trying to evaluate
+\begin{equation}
+\label{question evaluation 3d}
+\frac{d}{dt} \iiint_{W(t)} f(\bm x, t) \, dV.
+\end{equation}
+
+\emph{Idea:} We will change variables such that the domain of integration is \(W(0)\).
+
+\subsubsection{Solving the Question in 1D}
+
+Consider the one-dimensional analogue to \cref{question evaluation 3d}:
+\begin{equation}
+\frac{d}{dt} \int_{\beta(t)}^{\alpha(t)} f(s, t) \, ds.
+\end{equation}
+Using the Leibniz' rule, we obtain
+\begin{equation}
+\int_{\beta(t)}^{\alpha(t)} \frac{\partial f}{\partial t} \, ds + \frac{d\alpha}{dt}f(\alpha(t), t) - \frac{d\beta}{dt}f(\beta(t), t).
+\end{equation}
+\begin{insight}[Leibniz's Rule]
+Leibniz's Rule (Differentiation under the Integral Sign) is used when you need to differentiate an integral whose limits are also functions of the variable you are differentiating by.
+\begin{equation}
+\frac{d}{dt} \int_{\beta(t)}^{\alpha(t)} f(x, t) dx = \int_{\beta(t)}^{\alpha(t)} \frac{\partial f}{\partial t} dx + f(\alpha(t), t)\frac{d\alpha}{dt} - f(\beta(t), t)\frac{d\beta}{dt}
+\end{equation}
+\begin{proof}
+    Let $G(t, \alpha, \beta) = \int_{\beta}^{\alpha} f(x, t) dx$. We want to find the total derivative $\frac{dG}{dt}$ where $\alpha$ and $\beta$ are functions of $t$. By the \textbf{Multivariable Chain Rule}:
+    \begin{equation} \frac{dG}{dt} = \frac{\partial G}{\partial t} \frac{dt}{dt} + \frac{\partial G}{\partial \alpha} \frac{d\alpha}{dt} + \frac{\partial G}{\partial \beta} \frac{d\beta}{dt} \end{equation}
+    \begin{enumerate}[nosep]
+        \item \textbf{The Partial w.r.t $t$:} Since the limits are treated as constants for a partial derivative, we can move the derivative inside:
+        \begin{equation} \frac{\partial G}{\partial t} = \frac{\partial}{\partial t} \int_{\beta}^{\alpha} f(x, t) dx = \int_{\beta}^{\alpha} \frac{\partial f}{\partial t} dx \end{equation}
+        \item \textbf{The Partial w.r.t $\alpha$:} By the \textbf{Fundamental Theorem of Calculus}, the derivative of an integral with respect to its upper limit is simply the integrand evaluated at that limit:
+        \begin{equation} \frac{\partial G}{\partial \alpha} = \frac{\partial}{\partial \alpha} \int_{\beta}^{\alpha} f(x, t) dx = f(\alpha, t) \end{equation}
+        \item \textbf{The Partial w.r.t $\beta$:} Similarly, for the lower limit (using the property $\int_{\beta}^{\alpha} = -\int_{\alpha}^{\beta}$):
+        \begin{equation} \frac{\partial G}{\partial \beta} = \frac{\partial}{\partial \beta} \int_{\beta}^{\alpha} f(x, t) dx = -f(\beta, t)\end{equation}
+    \end{enumerate}
+    Substituting these three parts back into the Chain Rule expression:
+    \begin{equation}
+        \frac{dG}{dt} = \int_{\beta(t)}^{\alpha(t)} \frac{\partial f}{\partial t} dx + f(\alpha(t), t)\alpha'(t) - f(\beta(t), t)\beta'(t),
+    \end{equation}
+    which completes the proof. \qedhere
+\end{proof}
+\end{insight}
+Using fundamental theorem of calculus, we obtain
+\begin{equation}
+\int_{\beta(t)}^{\alpha(t)} \frac{df}{dt} \, ds + \int_{\beta(t)}^{\alpha(t)}\frac{\partial}{\partial s}\lp f(s, t) \frac{ds}{dt} \rp \, ds.
+\end{equation}
+Putting them back together
+\begin{equation}
+\frac{d}{dt} \int_{\beta(t)}^{\alpha(t)} f(s, t) \, ds = \int_{\beta(t)}^{\alpha(t)} \lp \frac{\partial f}{\partial t} + \frac{\partial}{\partial s}\lp f(s, t) \frac{ds}{dt} \rp \rp \, ds.
+\end{equation}
+If we consider \(\frac{ds}{dt}\) to be the velocity, the three-dimensional version should be something similar to the divergence.
+
+\subsubsection{Solving the Question in 3D}
+
+We now change variables using
+\begin{equation}
+\bm \Phi(\bm a, t) = \bm x(t).
+\end{equation}
+Then
+\begin{equation}
+\iiint_{W(t)} f(\bm x, t) \, dV = \iiint_{W(0)} f(\bm \Phi(\bm a, t), t) \, J(\bm a, t) \, dV_a,
+\end{equation}
+where the volume element is $dV_a = da_1 da_2 da_3$ and the Jacobian is defined as
+\begin{equation}
+J(\bm a, t) = \det \frac{\partial \bm \Phi}{\partial \bm a} 
+= \det \frac{\partial (\Phi_1, \Phi_2, \Phi_3)}{\partial (a_1, a_2, a_3)}
+= \det
+\begin{vmatrix}
+    \partial \Phi_1 / \partial a_1 & \partial \Phi_1 / \partial a_2 & \partial \Phi_1 / \partial a_3 \\
+    \partial \Phi_2 / \partial a_1 & \partial \Phi_2 / \partial a_2 & \partial \Phi_2 / \partial a_3 \\
+    \partial \Phi_3 / \partial a_1 & \partial \Phi_3 / \partial a_2 & \partial \Phi_3 / \partial a_3
+\end{vmatrix}.
+\end{equation}
+
+\begin{note}[Jacobian]
+    To understand the Jacobian determinant $J$, consider a change of variables where a region $R$ in $(u, v)$ coordinates is mapped to a region $D$ in $(x, y)$ coordinates. The Jacobian $J = \det \frac{\partial(x,y)}{\partial(u,v)}$ acts as the local scaling factor between the two spaces. Applying this to an area integral:
+    \begin{equation} \iint_{D} 1 \, dx \, dy = \iint_{R} \left| \frac{\partial(x,y)}{\partial(u,v)} \right| \, du \, dv = \iint_{R} |J| \, du \, dv. \end{equation}
+    Physically, $|J|$ represents the ratio of the "real" area to the "map" area at a specific point.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item $|J| > 1$ (expansion) means the new coordinates stretch the area locally.
+        \item $|J| < 1$ (compression) means the new coordinates squish the area locally.
+        \item $J = 0$ (singularity) means the coordinate system collapses (loses a dimension).
+    \end{itemize}
+\end{note}
+
+\begin{note}[Calculation in $n$-Dimensions]
+    For a general coordinate transformation $\bm{T}: \mathbb{R}^n \to \mathbb{R}^n$ mapping inputs $(x_1, \dots, x_n)$ to outputs $(y_1, \dots, y_n)$, the Jacobian matrix $\bm{J}$ is the $n \times n$ matrix where the $(i,j)$-th entry is $\partial y_i / \partial x_j$:
+    \begin{equation} \bm{J} = \begin{bmatrix}
+    \frac{\partial y_1}{\partial x_1} & \frac{\partial y_1}{\partial x_2} & \cdots & \frac{\partial y_1}{\partial x_n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    \frac{\partial y_n}{\partial x_1} & \frac{\partial y_n}{\partial x_2} & \cdots & \frac{\partial y_n}{\partial x_n}
+    \end{bmatrix}. \end{equation}
+    To find the volume scaling factor, calculate the determinant of this matrix:
+    \begin{equation} dV' = \left| \det(\bm{J}) \right| \, dx_1 \cdots dx_n. \end{equation}
+\end{note}
+
+\begin{note}[Jacobian Matrix and Determinant]
+    The ``Jacobian" can refer to the matrix or its determinant.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item The Jacobian Matrix ($\bm{J}$): The fundamental linear map of partial derivatives $\frac{\partial(x,y)}{\partial(u,v)}$. It contains all vector information (rotation, shear, scaling).
+        \item The Jacobian Determinant ($J = \det \bm{J}$): The scalar value used in integration.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Why the Determinant?} Integrals sum up scalar quantities (volumes). Since the determinant measures the \textit{change in volume} of the linear map defined by $\bm{J}$, it appears as the scaling factor in the Change of Variables formula:
+    \begin{equation} dx \, dy = \left| \det \bm{J} \right| \, du \, dv \end{equation}
+\end{note}
+
+The second term (the integral over $W(0)$) is easier to compute because the initial conditions and domain are constant. To differentiate this integral, we need the following lemma regarding the Jacobian.
+
+\begin{lemma}
+    If the mapping $\bm \Phi$ is invertible and $C^2$, then
+    \begin{enumerate}[nosep]
+        \item $J > 0$ for all time.
+        \item $\frac{\partial J}{\partial t} = (\nabla \cdot \bm u) J$, where $\bm u = \frac{\partial \bm x}{\partial t}$ is the velocity.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}[Proof of 1]
+    At $t=0$, the mapping is the identity, so
+    \begin{equation}
+    J(0) = \det \frac{\partial \bm \Phi(\bm a, 0)}{\partial \bm a} = \det \frac{\partial \bm a}{\partial \bm a} = \det(I) = 1.
+    \end{equation}
+    Since we are assuming $\bm \Phi$ to be invertible, $J \neq 0$. Furthermore, since $J(\bm a, t)$ is continuous (as $\bm \Phi$ is $C^2$) and $J(\bm a, 0) > 0$, it follows that $J > 0$ for all time.
+\end{proof}
+
+\begin{proof}[Proof of 2]
+    Let us define the gradient with respect to Lagrangian coordinates as
+    \begin{equation}
+    \nabla_a = (\partial/\partial a_1, \partial/\partial a_2, \partial/\partial a_3).
+    \end{equation}
+    We can express the Jacobian as the determinant of column vectors:
+    \begin{equation}
+    J = \det [\nabla_a \Phi_1, \nabla_a \Phi_2, \nabla_a \Phi_3]^T.
+    \end{equation}
+    Using the product rule for determinants, we differentiate term by term:
+    \begin{align}
+    \frac{\partial J}{\partial t} &= \frac{\partial}{\partial t} \det [\nabla_a \Phi_1, \nabla_a \Phi_2, \nabla_a \Phi_3]^T \notag \\
+    &= \det \lb \frac{\partial}{\partial t} \nabla_a \Phi_1, \nabla_a \Phi_2, \nabla_a \Phi_3 \rb^T \quad \text{(I)} \notag \\
+    &+ \det \lb \nabla_a \Phi_1, \frac{\partial}{\partial t} \nabla_a \Phi_2, \nabla_a \Phi_3 \rb^T \quad \text{(II)} \notag \\
+    &+ \det \lb \nabla_a \Phi_1, \nabla_a \Phi_2, \frac{\partial}{\partial t} \nabla_a \Phi_3 \rb^T. \quad \text{(III)} 
+    \label{det expansion}
+    \end{align}
+    Consider an element in a column with a time derivative. Since operators commute for $C^2$ functions:
+    \begin{equation}
+    \frac{\partial}{\partial t} \frac{\partial \Phi_i}{\partial a_j} 
+    = \frac{\partial}{\partial a_j} \frac{\partial \Phi_i}{\partial t} 
+    = \frac{\partial}{\partial a_j} \frac{\partial x_i}{\partial t} 
+    = \frac{\partial}{\partial a_j} u_i(\bm \Phi(\bm a, t), t).
+    \end{equation}
+    Using the chain rule, we can relate this back to spatial derivatives:
+    \begin{equation}
+    \frac{\partial u_i}{\partial a_j} = \frac{\partial u_i}{\partial x_k} \frac{\partial \Phi_k}{\partial a_j}.
+    \end{equation}
+    This implies that the time derivative of the gradient vector is a linear combination of the gradients of the mapping:
+    \begin{equation}
+    \frac{\partial}{\partial t} \nabla_a \Phi_i 
+    = 
+    \begin{pmatrix} \dfrac{\partial u_i}{\partial x_k} \dfrac{\partial \Phi_k}{\partial a_1} \\[8pt]
+    \dfrac{\partial u_i}{\partial x_k} \dfrac{\partial \Phi_k}{\partial a_2} \\[8pt]
+    \dfrac{\partial u_i}{\partial x_k} \dfrac{\partial \Phi_k}{\partial a_3} 
+    \end{pmatrix}
+    = \frac{\partial u_i}{\partial x_k} \nabla_a \Phi_k.
+    \end{equation}
+    We substitute this back into \cref{det expansion}. For the first term (I) where $i=1$:
+    \begin{equation}
+    \det \lb \frac{\partial u_1}{\partial x_k} \nabla_a \Phi_k, \nabla_a \Phi_2, \nabla_a \Phi_3 \rb.
+    \end{equation}
+    The summation over $k$ includes terms involving $\nabla_a \Phi_2$ and $\nabla_a \Phi_3$. Since a determinant vanishes if columns are linearly dependent, only the $k=1$ term survives:
+    \begin{equation}
+    \det \lb \frac{\partial u_1}{\partial x_1} \nabla_a \Phi_1, \nabla_a \Phi_2, \nabla_a \Phi_3 \rb = \frac{\partial u_1}{\partial x_1} \det \lb \nabla_a \Phi_1, \nabla_a \Phi_2, \nabla_a \Phi_3 \rb = \frac{\partial u_1}{\partial x_1} J.
+    \end{equation}
+    Applying similar logic to terms (II) and (III), we obtain
+    \begin{align}
+        \frac{\partial J}{\partial t} &= \lp \frac{\partial u_1}{\partial x_1} + \frac{\partial u_2}{\partial x_2} + \frac{\partial u_3}{\partial x_3} \rp J \\
+        &= (\nabla \cdot \bm u) J,
+    \end{align}
+    which completes the proof. \qedhere
+\end{proof}
+
+\begin{theorem}[Reynolds Transport Theorem]
+    If $\bm \Phi$ is invertible and $C^2$, $\bm u$ is $C^1$, and $f(\bm x, t)$ is $C^1$, then
+    \begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} f(\bm x, t) \, dV = \iiint_{W(t)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm u \rp \, dV.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We begin by changing variables to the fixed reference domain $W(0)$:
+    \begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} f(\bm x, t) \, dV 
+    = \frac{d}{dt} \iiint_{W(0)} f(\bm x(\bm a, t), t) J(\bm a, t) \, dV_a.
+    \end{equation}
+    Since the domain $W(0)$ is fixed, we can move the time derivative inside the integral. Applying the product rule:
+    \begin{align}
+        &= \iiint_{W(0)} \lp \lp \frac{\partial f}{\partial t} + \frac{\partial f}{\partial x_i} \frac{\partial \Phi_i}{\partial t} \rp J + f \frac{\partial J}{\partial t} \rp \, dV_a \\
+        &= \iiint_{W(0)} \lp \lp \frac{\partial f}{\partial t} + \bm u \cdot \nabla f \rp J + f (\nabla \cdot \bm u) J \rp \, dV_a.
+    \end{align}
+    Recognizing the material derivative $\frac{Df}{Dt} = \frac{\partial f}{\partial t} + \bm u \cdot \nabla f$, we have
+    \begin{equation}
+    = \iiint_{W(0)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm u \rp J \, dV_a.
+    \end{equation}
+    Finally, we transform the integral back to the current configuration $W(t)$ (using $J dV_a = dV$):
+    \begin{equation}
+    = \iiint_{W(t)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm u \rp \, dV,
+    \end{equation}
+    which completes the proof. \qedhere
+\end{proof}
+
+The integrand in the Reynolds Transport Theorem can be rewritten. Note that
+\begin{equation}
+\frac{Df}{Dt} + f \nabla \cdot \bm u = \frac{\partial f}{\partial t} + (\bm u \cdot \nabla) f + f \nabla \cdot \bm u.
+\end{equation}
+Using tensor notation (or the product rule for divergence), we see that
+\begin{equation}
+\frac{\partial f}{\partial t} + u_i \frac{\partial f}{\partial x_i} + f \frac{\partial u_i}{\partial x_i} 
+= \frac{\partial f}{\partial t} + \frac{\partial}{\partial x_i} (u_i f).
+\end{equation}
+Thus,
+\begin{equation}
+\frac{Df}{Dt} + f \nabla \cdot \bm u = \frac{\partial f}{\partial t} + \nabla \cdot (f \bm u).
+\end{equation}
+Then, the Reynolds Transport Theorem becomes
+\begin{align}
+    \frac{d}{dt} \iiint_{W(t)} f \, dV 
+    &= \iiint_{W(t)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm u \rp \, dV \\
+    &= \iiint_{W(t)} \lp \frac{\partial f}{\partial t} + \nabla \cdot (f \bm u) \rp \, dV.
+\end{align}
+By applying Gauss' Theorem (Divergence Theorem) to the second term, we obtain the conservation form:
+\begin{equation}
+\iiint_{W(t)} \frac{\partial f}{\partial t} \, dV + \iint_{\partial W(t)} f \bm u \cdot \hat{\bm n} \, dS.
+\end{equation}
+
+\begin{note}[Significance of Reynolds Transport Theorem]
+    This theorem acts as a bridge between the Lagrangian and Eulerian descriptions. Physical laws (like Newton's Second Law or Conservation of Mass) apply to a specific system (a fixed collection of matter, $W(t)$), which corresponds to the left-hand side of the equation. However, in fluid mechanics, it is often easier to measure properties in a fixed region of space (a control volume). The right-hand side allows us to apply these fundamental physical laws to control volumes. By choosing specific quantities for $f$ (e.g., density $\rho$ or momentum $\rho \bm u$), we will use this theorem to derive the governing equations of fluid mechanics, such as the Continuity Equation and the Navier-Stokes Equations.
+\end{note}
+\clearpage
+
+\section*{Lecture 8}
+\addcontentsline{toc}{section}{Lecture 8}
+\stepcounter{section}
+\setcounter{section}{8}
+\setcounter{equation}{0}
+
+\subsection{Derivation of the Governing Equations}
+
+We can now use the Reynolds Transport Theorem to derive the fundamental governing equations of fluid mechanics. Recall that the theorem provides a bridge between the rate of change of a property in a material volume $W(t)$ and the Eulerian field representations:
+\begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} f(\bm{x}, t) \, dV = \iiint_{W(t)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm{u} \rp \, dV = \iiint_{W(t)} \lp \frac{\partial f}{\partial t} + \nabla \cdot (f \bm{u}) \rp \, dV.
+\end{equation}
+
+\subsection{Conservation of Mass}
+
+The physical principle of mass conservation states that, in the absence of sources or sinks, the total mass $M$ is conserved following the flow. We pick the property $f = \rho(\bm{x}, t)$, the Eulerian density. Since the mass of a material volume is $M = \iiint_{W(t)} \rho \, dV$, conservation implies:
+\begin{equation}
+    \frac{dM}{dt} = 0 \quad \text{or} \quad \frac{d}{dt} \iiint_{W(t)} \rho \, dV \stackrel{R.T.}{=} \iiint_{W(t)} \lp \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} \rp \, dV = 0.
+\end{equation}
+
+Since $W(t)$ is an arbitrary material volume, we apply the Dubois-Reymond lemma (the localization theorem), which states that if the integral over any arbitrary volume is zero, the integrand itself must be zero. This yields the first version of the continuity equation:
+\begin{equation}
+    \label{continuity v1}
+    \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} = 0.
+\end{equation}
+Using the identity $(\bm{u} \cdot \nabla)\rho + \rho(\nabla \cdot \bm{u}) = \nabla \cdot (\rho \bm{u})$, we can rewrite \cref{continuity v1} in its most general conservation form:
+\begin{equation}
+    \label{continuity v2}
+    \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \bm{u}) = 0.
+\end{equation}
+This is our first continuum equation, valid for describing gases, liquids, and plasmas.
+
+\begin{definition}[Continuity Equation]
+    The continuity equation takes the following forms:
+    \begin{gather}
+        \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} = 0 \\
+        \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \bm{u}) = 0.
+    \end{gather}
+\end{definition}
+
+\begin{note}[Physical Interpretation]
+    To understand the role of divergence, return to R.T.T. but pick $f=1$. Then $\iiint_{W(t)} 1 \, dV$ is the volume of the material volume at time $t$. Applying the theorem:
+    \begin{equation}
+        \frac{d}{dt} \iiint_{W(t)} 1 \, dV = \iiint_{W(t)} \lp \frac{D(1)}{Dt} + 1 \cdot \nabla \cdot \bm{u} \rp \, dV = \iiint_{W(t)} \nabla \cdot \bm{u} \, dV = \frac{dV}{dt}.
+    \end{equation}
+    If volume is conserved (as in many liquids), $dV/dt = 0$, implying $\nabla \cdot \bm{u} = 0$.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item $\nabla \cdot \bm{u} > 0$ (divergence) means the density $\rho$ decreases.
+        \item $\nabla \cdot \bm{u} < 0$ (convergence) means the density $\rho$ increases.
+    \end{itemize}
+\end{note}
+
+\begin{theorem}
+\label{special theorem}
+    If $\rho, f$, and $\bm{u}$ are $C^1$, then 
+    \begin{equation} \frac{d}{dt} \iiint_{W(t)} \rho f \, dV = \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV. \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Starting from the L.H.S.\ and applying the R.T.T.:
+    \begin{align}
+        \frac{d}{dt} \iiint_{W(t)} \rho f \, dV &= \iiint_{W(t)} \lp \frac{D}{Dt}(\rho f) + \rho f \nabla \cdot \bm{u} \rp \, dV \\
+        &= \iiint_{W(t)} \lp \rho \frac{Df}{Dt} + f \frac{D\rho}{Dt} + f \rho \nabla \cdot \bm{u} \rp \, dV \\
+        &= \iiint_{W(t)} \lp \rho \frac{Df}{Dt} + f \underbrace{\lp \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} \rp }_{= 0 \text{ by continuity}} \rp \, dV \\
+        &= \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV,
+    \end{align}
+    which completes the proof. \qedhere
+\end{proof}
+
+\subsection{Conservation of Linear Momentum}
+
+\begin{insight}[The ``Conservation" vs. ``Balance" Naming Quirk]
+    In classical mechanics, ``Conservation of Linear Momentum" usually refers to an isolated system where the net external force is zero, meaning the momentum doesn't change ($dP/dt = 0$).
+
+    In fluid mechanics, ``Conservation of Linear Momentum refers to the \textbf{Momentum Balance equation}, which is a direct application of Newton's Second Law.
+
+    Since we aren't looking at an isolated system but a specific ``blob" of fluid called a material volume, $W(t)$. The rest of the universe is interacting with it. Because there are external forces acting on our volume, the net force is not zero, meaning the momentum must change.
+\end{insight}
+
+For a point particle in classical mechanics, Newton's 2nd Law states:
+\begin{equation} \frac{d}{dt} \bm{p} = \bm{F}, \end{equation}
+where $\bm{F}$ is the sum of all the forces and $\bm{p}$ is the linear momentum, often written as $\bm{p} = m \bm{u}$ ($m$ is mass and $\bm{u}$ is velocity).
+
+The physical principle for a continuum is that the total force on an object is equal to the rate of change of the linear momentum. For a continuum with density $\rho$, total force $\bm{F}_{\text{total}}$, and material volume $W(t)$, we get:
+\begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} \rho \bm{u} \, dV = \bm{F}_{\text{total}}.
+\end{equation}
+This is Newton's 2nd law for a continuum, it is also our equation for conservation of linear momentum.
+
+There are 3 types of forces:
+\begin{enumerate}[nosep]
+    \item \textbf{Volume (body) forces}: These act on the whole volume. Examples include gravity and Lorentz force.
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=0.8]
+            \draw[thick] (0,0) circle (1.2);
+            \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+            \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+            \draw (0.2,0.5) rectangle (0.5,0.8);
+            \node[scale=0.7] at (-0.1,0.65) {$dV$};
+            \draw[->] (0.5,0.65) -- (1.5,0.65) node[right] {$d\bm{F} = \rho \bm{g} dV$};
+            \node at (-2,-0.8) {$W(t)$};
+        \end{tikzpicture}
+    \end{center}
+    If $\bm{g}$ is the acceleration due to gravity, the total gravitational force on $W(t)$ is:
+    \begin{equation} \bm{F}_g = \iiint_{W(t)} \rho \bm{g} \, dV = -\iiint_{W(t)} \rho \nabla \Pi \, dV, \end{equation}
+    since gravity is a conservative force, $\bm{g} = -\nabla \Pi$, where $\Pi$ is the gravitational potential ($\Pi = gz$ as an example).
+
+    \item \textbf{Surface forces}: Matter outside of $W(t)$ exerts a force on $W(t)$. This force acts on $\partial W(t)$ (on the surface), for example, pressure.
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=0.8]
+            \draw[thick] (0,0) circle (1.2);
+            \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+            \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+            \draw[rotate=45] (1.2,0) arc (0:360:0.2 and 0.1);
+            \draw[->] (1.0,0.8) -- (1.6,1.2) node[right] {$d\bm{F} = \bm{t} \, dS$};
+            \node[scale=0.8] at (0.2,0.7) {$dS$};
+            \node at (-2,-0.8) {$W(t)$};
+        \end{tikzpicture}
+    \end{center}
+    If $\bm{t}(\bm{x}, t, \hat{\bm{n}})$, where $\hat{\bm{n}}$ is defined as the outward unit normal vector,  is the stress vector. It has units of force/unit area. The total surface force is:
+    \begin{equation} \bm{F}_s = \oiint_{\partial W(t)} \bm{t}(\bm{x}, t, \hat{\bm{n}}) \, dS. \end{equation}
+
+    \item \textbf{Line (tensile) force}: These act on the interface between liquids and gases, for example, surface tension.
+    \begin{center}
+        \begin{tikzpicture}[scale=1, >=Stealth]
+            % Water surface (wavy line)
+            \draw[teal!60!black, thick, smooth] plot coordinates {(-3,0) (-1.5,0.2) (-0.8,0.8)};
+            \draw[teal!60!black, thick, smooth] plot coordinates {(0.8,0.8) (1.5,0.2) (3,0)};
+            
+            % Bubble (hump)
+            \draw[thick, smooth] (-0.8,0.8) .. controls (-0.5, 1.8) and (0.5, 1.8) .. (0.8, 0.8);
+            
+            % Interface Ring (reddish)
+            \draw[red!70!black, thick] (0,0.8) ellipse (0.8 and 0.2);
+            
+            % Labels
+            \node at (0, 2) {air};
+            \node[teal!60!black] at (0, -0.5) {water};
+        \end{tikzpicture}
+        \end{center}
+    This can occur between two liquids that do not mix.
+\end{enumerate}
+
+We include gravity (body force) \& a general surface force in our expression for Newton's law.
+\begin{equation}
+\frac{d}{dt} \iiint_{W(t)} \rho \bm{u} \, dV = \bm{F}_g + \bm{F}_s = - \iiint_{W(t)} \rho \nabla \Pi \, dV + \oiint_{\partial W(t)} \bm{t} \, dS
+\end{equation}
+Instead, consider
+\begin{equation}
+\label{momentum_component_form}
+\boxed{
+\frac{d}{dt} \iiint_{W(t)} \rho u_i \, dV = - \iiint_{W(t)} \rho \frac{\partial \Pi}{\partial x_i} \, dV + \oiint_{\partial W(t)} t_i \, dS.\,
+}
+\end{equation}
+
+Applying Reynolds Transport Theorem to the momentum balance (using the flux form $\nabla \cdot (\rho u_i \bm{u})$):
+\begin{equation}
+    \iiint_{W(t)} \lp \frac{\partial}{\partial t}(\rho u_i) + \nabla_j (\rho u_i u_j) + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Expanding the product rule for both the time derivative and the divergence term:
+\begin{equation}
+    \iiint_{W(t)} \lp \underbrace{\rho \frac{\partial u_i}{\partial t} + u_i \frac{\partial \rho}{\partial t}}_{\text{time deriv.}} + \underbrace{u_i \nabla_j (\rho u_j) + \rho u_j \nabla_j u_i}_{\text{flux deriv.}} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Rearranging terms to isolate the material derivative of velocity ($\frac{Du_i}{Dt}$) and the continuity equation:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \underbrace{\lp \frac{\partial u_i}{\partial t} + u_j \nabla_j u_i \rp}_{D u_i / Dt} + u_i \underbrace{\lp \frac{\partial \rho}{\partial t} + \nabla_j (\rho u_j) \rp}_{\text{continuity} = 0} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Thus, since the continuity term is zero, we arrive at the final form for the conservation of linear momentum:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \frac{Du_i}{Dt} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Alternatively, we apply the \cref{special theorem} derived earlier:
+\begin{equation} 
+\frac{d}{dt} \iiint_{W(t)} \rho f \, dV = \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV. 
+\end{equation}
+Setting $f = u_i$ and substituting this directly into \cref{momentum_component_form}, the time derivative term becomes:
+\begin{equation}
+\frac{d}{dt} \iiint_{W(t)} \rho u_i \, dV = \iiint_{W(t)} \rho \frac{Du_i}{Dt} \, dV.
+\end{equation}
+Thus, we immediately arrive at the final form for the conservation of linear momentum:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \frac{Du_i}{Dt} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+We will rewrite the R.H.S. in the next lecture.
+\clearpage
+
+\section*{Lecture 9}
+\addcontentsline{toc}{section}{Lecture 9}
+\stepcounter{section}
+\setcounter{section}{9}
+\setcounter{equation}{0}
+
+\subsection{Surface Forces and Pressure}
+
+Last time, using Newton's 2nd Law and including gravity (volume force) and surface forces, we obtained the integral form of the momentum equation:
+\begin{equation}
+\iiint_{W(t)} \rho \frac{D u_i}{Dt} \, dV = - \iiint_{W(t)} \rho \frac{\partial \Pi}{\partial x_i} \, dV + \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+
+Today, we focus on the surface force \& rewrite it as a triple integral over \(W(t)\).
+
+\begin{center}
+\begin{tikzpicture}[scale=1, line cap=round, line join=round]
+    % Sphere Outline
+    \draw[thick] (0,0) circle (1.2);
+    
+    % Equator (3D effect)
+    \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+    \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+    
+    % Label W(t) inside
+    \node at (-2,0.3) {\small $W(t)$};
+    
+    % Surface patch (small square on surface)
+    \begin{scope}[rotate=45]
+        \draw[fill=white] (0.8,-0.15) rectangle (1.1,0.15);
+        % Normal vector n-hat
+        \draw[->, thick] (0.95, 0) -- (1.8, 0) node[right] {$\hat{\bm n}$};
+    \end{scope}
+
+    % Labels to the right of the sphere
+    \node[align=left, anchor=west] at (2, 0.2) {$\partial W(t) = \text{boundary}$};
+    \node[align=left, anchor=west] at (2, -0.4) {$d\bm f = \bm t \, ds$};
+\end{tikzpicture}
+\end{center}
+
+On each subsurface, we have
+\begin{equation}
+d\bm f = \bm t \, ds
+\end{equation}
+where \(\bm t\) is the stress vector. Let's consider a state of equilibrium where there is no movement
+\begin{equation}
+\bm u = \vec{0}.
+\end{equation}
+
+\subsubsection{The Stress Vector in Equilibrium}
+
+Consider a state of equilibrium where there is no movement (\(\bm u = \vec{0}\)).
+Recall that fluids in equilibrium cannot resist shear forces (stresses). Since we have \(\bm u = \vec{0}\), in equilibrium, the surface force must be parallel to the normal vector \(\hat{\bm n}\). Then the stress tensor is
+\begin{equation}
+\bm t = - p(\bm x) \hat{\bm n},
+\end{equation}
+where we call \(p(\bm x)\) the pressure. The negative sign indicates that pressure acts \emph{inward} on the volume (compression).
+
+Our global expression for the surface force becomes
+\begin{equation}
+\bm F_s = \oiint_{\partial W(t)} - p \hat{\bm n} \, dS.
+\end{equation}
+
+\subsubsection{Derivation of Pressure Force}
+
+To rewrite this surface integral as a volume integral, we consider two approaches: a heuristic Taylor expansion and a formal proof using Gauss' Theorem.
+
+\begin{note}[Heuristic Derivation using Taylor Expansion]
+    Consider the pressure on a small material volume (a cube) with side lengths \(dx, dy, dz\) such that \(dV = dx \, dy \, dz \ll 1\).
+    
+    \begin{center}
+        \begin{tikzpicture}[
+        x={(-0.5cm,-0.4cm)}, y={(1cm,0cm)}, z={(0cm,1cm)}, % Define 3D axis orientation
+        scale=2,
+        >=Stealth
+        ]
+
+        % --- Definitions ---
+        \def\s{1.2} % Cube side length
+
+        % --- Axes ---
+        % Draw axes starting from the origin (back corner of the cube)
+        \draw[->] (0,0,0) -- (\s+0.8,0,0) node[below left] {$x$};
+        \draw[->] (0,0,0) -- (0,\s+0.8,0) node[right] {$y$};
+        \draw[->] (0,0,0) -- (0,0,\s+0.8) node[above] {$z$};
+
+        % --- Cube (Visible Lines Only) ---
+        % We removed the dashed lines from (0,0,0) because they overlap the axes.
+        
+        % Front Face (x=s)
+        \draw (\s,0,0) -- (\s,\s,0) -- (\s,\s,\s) -- (\s,0,\s) -- cycle;
+        
+        % Top Face (z=s)
+        \draw (0,0,\s) -- (\s,0,\s) -- (\s,\s,\s) -- (0,\s,\s) -- cycle;
+        
+        % Right Face (y=s)
+        \draw (0,\s,0) -- (\s,\s,0) -- (\s,\s,\s) -- (0,\s,\s) -- cycle;
+        
+        % Bottom Face edges (visible ones not on axes)
+        % (s,0,0) to (s,s,0) is part of Front Face
+        % (0,s,0) to (s,s,0) is part of Right Face
+        
+        % Left Face edges (visible ones not on axes)
+        % (0,0,s) to (0,s,s) is part of Top/Right boundary
+        
+        % --- Completing the "Wireframe" feel without the hidden back lines ---
+        % We need to make sure the cube looks "anchored". 
+        % The lines (s,0,0)--(s,s,0) and (0,s,0)--(s,s,0) define the bottom visible corner.
+        
+        % Pressure Vectors
+        % Top (pushing down)
+        \draw[->] (0.5*\s, 0.5*\s, \s + 0.6) -- (0.5*\s, 0.5*\s, \s);
+        \node[right] at (0.5*\s, 0.5*\s, \s + 0.6) {$p(z+dz)dxdy$};
+        
+        % Bottom (pushing up)
+        \draw[->] (0.5*\s, 0.5*\s, -0.6) -- (0.5*\s, 0.5*\s, 0);
+        \node[right] at (0.5*\s, 0.5*\s, -0.6) {$p(z)dxdy$};
+
+        \end{tikzpicture}
+    \end{center}
+
+    The units of \(\bm t\) are \([\bm t] = \text{N}/\text{m}^2\).
+    We will look at the balance of forces in the \(z\)-direction. For the difference in this force from the two faces, we Taylor expand about \(z\).
+    \begin{align}
+        dF_z &= p(x,y,z) \, dx dy - p(x,y,z+dz) \, dx dy \\
+        &= (p(x,y,z) - p(x,y,z+dz)) \, dx dy \\
+        &= (p(x,y,z) - [p(x,y,z) + dz \frac{\partial p}{\partial z}(x,y,z) + \dots]) \, dx dy \\
+        &= - \frac{\partial p}{\partial z}(x,y,z) \, dx dy dz \\
+        &= - \frac{\partial p}{\partial z} \, dV.
+    \end{align}
+    Similarly,
+    \begin{align}
+    dF_x &= - \frac{\partial p}{\partial x}(x,y,z) \, dx dy dz \\
+    dF_y &= - \frac{\partial p}{\partial y}(x,y,z) \, dx dy dz
+    \end{align}
+    Combining these into a vector equation:
+    \begin{equation}
+    d\bm F = (dF_x, dF_y, dF_z) = - \lp \frac{\partial p}{\partial x}, \frac{\partial p}{\partial y}, \frac{\partial p}{\partial z} \rp \, dV = - \nabla p \, dV.
+    \end{equation}
+    Integrating over the whole volume, the surface force can be written as:
+    \begin{equation}
+    \bm F_s = - \iiint_{W(t)} \nabla p \, dV.
+    \end{equation}
+\end{note}
+
+This very rough calculation suggests the following identity.
+
+\begin{theorem}[Gradient Theorem Corollary]
+    \label{pressure gradient identity}
+    \begin{equation}
+    \oiint_{\partial W(t)} p \, \hat{\bm n} \, dS = \iiint_{W(t)} \nabla p \, dV.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    The idea of the proof is to write the identity in component form using Gauss' Divergence Theorem.
+    Recall Gauss' Divergence Theorem states:
+    \begin{equation}
+    \iiint_W \nabla \cdot \bm U \, dV = \oiint_{\partial W} \bm U \cdot \hat{\bm n} \, dS.
+    \end{equation}
+    We want to show:
+    \begin{equation}
+    \oiint_{\partial W(t)} p (n_x, n_y, n_z) \, dS = \iiint_{W(t)} \lp \frac{\partial p}{\partial x}, \frac{\partial p}{\partial y}, \frac{\partial p}{\partial z} \rp \, dV.
+    \end{equation}
+    This corresponds to 3 scalar equations.
+    
+    \textbf{For the x-direction:} Pick the vector field \(\bm U = (p, 0, 0)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial x}\).
+    Applying Gauss' Theorem:
+    \begin{equation}
+    \iiint_{W(t)} \frac{\partial p}{\partial x} \, dV = \oiint_{\partial W(t)} (p, 0, 0) \cdot \hat{\bm n} \, dS = \oiint_{\partial W(t)} p n_x \, dS.
+    \end{equation}
+    \textbf{For the y-direction:} Pick \(\bm U = (0, p, 0)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial y}\).
+    \begin{equation}
+    \iiint_{W(t)} \frac{\partial p}{\partial y} \, dV = \oiint_{\partial W(t)} p n_y \, dS.
+    \end{equation}
+    \textbf{For the z-direction:} Pick \(\bm U = (0, 0, p)\). Then \(\nabla \cdot \bm U = \frac{\partial p}{\partial z}\).
+    \begin{equation}
+    \iiint_{W(t)} \frac{\partial p}{\partial z} \, dV = \oiint_{\partial W(t)} p n_z \, dS.
+    \end{equation}
+    Combining these 3 scalar equations into a vector equation yields the result.
+\end{proof}
+
+\subsection{Hydrostatics}
+
+Given this identity, we return to Newton's 2nd Law in a state of rest (\(\bm u = \vec{0}\)). The acceleration term is zero.
+\begin{align}
+    0 &= - \iiint_{W(t)} \rho \nabla \Pi \, dV - \oiint_{\partial W(t)} p \hat{\bm n} \, dS \\
+      &= \iiint_{W(t)} \lb - \rho \nabla \Pi - \nabla p \rb \, dV \\
+      &= - \iiint_{W(t)} \lb \rho \nabla \Pi + \nabla p \rb \, dV.
+\end{align}
+Since this holds for any arbitrary volume \(W(t)\), we apply the Dubois-Reymond Lemma (localization) to get:
+\begin{equation}
+\rho \nabla \Pi + \nabla p = 0.
+\end{equation}
+Assuming gravity acts in the vertical direction, \(\Pi = gz\) and \(\nabla \Pi = g \hat{\bm z}\).
+
+\begin{definition}[Hydrostatic Balance]
+    The hydrostatic balance equation is
+    \begin{equation}
+    \nabla p = - \rho \nabla \Pi = - \rho g \hat{\bm z},
+    \end{equation}
+    where \(\Pi = gz\). In component form:
+    \begin{equation}
+    \frac{\partial p}{\partial x} = 0, \quad \frac{\partial p}{\partial y} = 0, \quad \frac{\partial p}{\partial z} = - \rho g.
+    \end{equation}
+    This describes the perfect balance between the forces of gravity and pressure.
+\end{definition}
+
+\subsubsection{Hydrostatic Balance of the Ocean}
+
+Suppose we consider a simple ocean at rest (\(\bm u = \bm 0\)), and the density is constant \(\rho = \rho_0\) (incompressible).
+Since \(\frac{\partial p}{\partial x} = 0\) and \(\frac{\partial p}{\partial y} = 0\), pressure depends only on \(z\), i.e., \(p(z)\).
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth]
+    % Air/Ocean interface
+    \draw[thick] (0,0) -- (6,0) node[right] {$z=0$};
+    \node at (3, 0.4) {air};
+    \node at (3, -0.4) {ocean};
+
+    % Define the curve of the ocean bottom
+    \def\oceanbottom{
+        (0,-2.5) .. controls (1,-2.8) and (2,-1.5) .. (3,-2.2) .. controls (4,-3.0) and (5,-2.0) .. (6,-2.5)
+    }
+
+    % 1. Fill the ground with hatching (Pattern)
+    % We extend the path down to -3.5 to create a closed shape for filling
+    \fill[pattern=north east lines, pattern color=black!60] 
+        \oceanbottom -- (6,-3.5) -- (0,-3.5) -- cycle;
+
+    % 2. Draw the thick boundary line on top
+    \draw[thick, smooth] \oceanbottom node[right] {$z = -H(x,y)$};
+\end{tikzpicture}
+\end{center}
+
+The vertical equation is:
+\begin{equation}
+\frac{\partial p}{\partial z} = - g \rho_0.
+\end{equation}
+We integrate from depth \(z\) to the surface \(z=0\):
+\begin{align}
+    \int_z^0 \frac{dp}{dz} \, dz &= \int_z^0 - g \rho_0 \, dz \\
+    p(z)\Big|_z^0 &= -g \rho_0 z \Big|_z^0 \\
+    p(0) - p(z) &= 0 - (- g \rho_0 z) = g \rho_0 z \\
+    p(z) &= p(0) - \rho_0 g z.
+\end{align}
+If we denote the atmospheric pressure as \(P_{\text{atmosphere}} = p(0)\), then
+\begin{equation}
+p(z) = P_{\text{atmosphere}} - \rho_0 g z.
+\end{equation}
+
+\begin{note}
+    Since \(z\) is negative underwater, \(-\rho_0 g z\) is a positive term.
+    The pressure at \(z\) is equal to the pressure of the atmosphere plus the weight of the fluid column above per unit area:
+    \begin{equation}
+    \frac{\rho_0 g (-z) dA}{dA} = \frac{m g}{dA}.
+    \end{equation}
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=1.2]
+            % Axes
+            \draw[->, thick] (0,0) -- (4,0) node[right] {$p$};
+            \draw[->, thick] (0,0) -- (0,-3) node[below] {$z$};
+
+            % Label for z-axis direction
+            % (Implicitly z is depth here based on the graph direction)
+
+            % The Plot
+            % Starts at P_atmosphere on the x-axis and increases linearly as z goes down
+            \draw[thick] (1,0) -- (3.5,-2.5);
+
+            % Intercept Label
+            \draw (1,0.1) -- (1,-0.1); % tick mark
+            \node[above] at (1,0.1) {$P_{\text{atmosphere}}$};
+
+        \end{tikzpicture}
+    \end{center}
+\end{note}
+
+\begin{example}[Numerical Scale]
+    It is observed that \(P_{\text{atmosphere}} \approx 10^5 \, \text{N}/\text{m}^2\).
+    The depth of the ocean is \(\le 10 \, \text{km} = 10^4 \, \text{m}\).
+    The density of water is \(\rho_0 \approx 10^3 \, \text{kg}/\text{m}^3\) and \(g \approx 10 \, \text{m}/\text{s}^2\).
+    
+    At the top of the ocean: \(p \approx 10^5 \, \text{N}/\text{m}^2\).
+    
+    At the bottom of the ocean:
+    \begin{equation}
+    p \approx 10^5 \, \text{N}/\text{m}^2 + \lp 10^3 \frac{\text{kg}}{\text{m}^3} \rp \lp 10 \frac{\text{m}}{\text{s}^2} \rp \lp 10^4 \, \text{m} \rp \approx 10^8 \, \text{N}/\text{m}^2.
+    \end{equation}
+    The pressure at the bottom is 1000 times larger than at the surface.
+\end{example}
+
+\subsubsection{Hydrostatic Balance for the Atmosphere}
+
+The density of air changes a lot (it is compressible). To describe air, you need an equation of state. One choice is the Ideal Gas Law:
+\begin{equation}
+    p = \rho R T,
+\end{equation}
+where
+\begin{equation}
+    R \approx 287 \, \frac{\text{J}}{\text{kg}\cdot\text{K}}.
+\end{equation}
+The temperature is not constant, but if we assume it is for simplicity (say \(T = T_0 = \text{const}\)), we get simple equations.
+From the ideal gas law: \(\rho = \frac{p}{R T_0}\).
+Substitute this into the vertical hydrostatic equation:
+\begin{equation}
+    \frac{dp}{dz} = - g \rho = - \frac{g p}{R T_0}.
+\end{equation}
+This is a separable ODE:
+\begin{align}
+    \frac{dp}{p} &= - \frac{g}{R T_0} dz \\
+    \ln p &= - \frac{g z}{R T_0} + C.
+\end{align}
+Solving for \(p\):
+\begin{equation}
+    p(z) = p(0) e^{-z/H},
+\end{equation}
+where
+\begin{equation}
+    H \equiv \frac{R T_0}{g}.
+\end{equation}
+\(H\) is called the \textbf{Scale Height}. For \(T_0 \approx 20^\circ\text{C}\), \(H \approx 8.4 \, \text{km}\).
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+    % Axes
+    \draw[->] (0,0) -- (4,0) node[right] {$T$};
+    \draw[->] (0,0) -- (0,4) node[above] {$z$};
+    
+    % Ticks
+    \draw (0.1, 1) -- (-0.1, 1) node[left] {\small 0 km};
+    \draw (0.1, 2) -- (-0.1, 2) node[left] {\small 10 km};
+    \draw (0.1, 3.5) -- (-0.1, 3.5) node[left] {\small 50 km};
+    
+    % Temperature Profile (approximate)
+    \draw[thick] (3, 0.5) -- (1.5, 2) -- (3, 3.5);
+    \draw[dashed] (1.5, 0) -- (1.5, 2);
+    
+    % Labels
+    \node[below] at (1.5, 0) {\small -40$^\circ$C};
+    \node[below] at (3, 0) {\small 20$^\circ$C};
+\end{tikzpicture}
+\end{center}
+\clearpage
+
+\section*{Lecture 10}
+\addcontentsline{toc}{section}{Lecture 10}
+\stepcounter{section}
+\setcounter{section}{10}
+\setcounter{equation}{0}
+
+\subsection{Introduction}
+Today we will cover:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Cauchy's Fundamental Theorem for the Stress Vector.
+    \item Conservation of Linear Momentum.
+\end{itemize}
+
+Previously, we derived the hydrostatic balance equation, which describes a fluid with no motion ($\bm u = \bm 0$). In that specific case, we proposed that the stress vector was normal to the surface:
+\begin{equation}
+\bm t = -p(\bm x) \hat{\bm n}.
+\end{equation}
+Today, we generalize this result for moving fluids.
+
+\subsection{Cauchy's Fundamental Theorem for the Stress Vector}
+
+We begin with the integral form of Newton's Second Law for a continuum, as derived previously:
+\begin{equation}
+\label{integral momentum eq}
+\frac{d}{dt} \iiint_{W(t)} \rho \bm u \, dV = - \iiint_{W(t)} \rho \nabla \Pi \, dV + \oiint_{\partial W(t)} \bm t(\bm x, t, \hat{\bm n}) \, dS.
+\end{equation}
+Using the Reynolds Transport Theorem on the left-hand side, we can rewrite this as:
+\begin{equation}
+\iiint_{W(t)} \lb \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi \rb \, dV = \oiint_{\partial W(t)} \bm t(\bm x, t, \hat{\bm n}) \, dS.
+\end{equation}
+
+\begin{theorem}[Cauchy's Fundamental Theorem for Stress]
+    The stress vector
+    \begin{equation}
+        \bm t(\bm x, t, \hat{\bm n})
+    \end{equation} is a linear function of the normal vector $\hat{\bm n}$. This means that
+    \begin{equation}
+    t_j = \tau_{ij} n_i \quad \text{or} \quad \bm t = \hat{\bm n} \cdot \bm \tau,
+    \end{equation}
+    for a second-order tensor $\tau_{ij}$ (or $\bm \tau$), which is called the \textbf{stress tensor}.
+\end{theorem}
+
+\subsubsection{Proof of Cauchy's Theorem}
+
+Consider a material volume that is a small tetrahedron. Three faces are aligned with the coordinate axes with areas $A_1, A_2, A_3$ and outward normals $-\hat{\bm e}_1, -\hat{\bm e}_2, -\hat{\bm e}_3$. The fourth face $F$ is tilted with area $A$ and outward normal $\hat{\bm n}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, line join=round, line cap=round, >=Stealth]
+    % Coordinates
+    \coordinate (O) at (0,0,0);
+    \coordinate (X1) at (2.5,0,0); % x2 axis roughly
+    \coordinate (X2) at (0,2.5,0); % x3 axis roughly
+    \coordinate (X3) at (0,0,2.5); % x1 axis roughly
+    
+    % Tetrahedron vertices
+    \coordinate (A) at (1.8,0,0);
+    \coordinate (B) at (0,1.8,0);
+    \coordinate (C) at (0,0,1.8);
+    
+    % Axes lines (behind)
+    \draw[->, dashed] (O) -- (X3) node[below left] {$x_1$};
+    \draw[->, dashed] (O) -- (X1) node[right] {$x_2$};
+    \draw[->, dashed] (O) -- (X2) node[above] {$x_3$};
+
+    % Tetrahedron Faces
+    % Back/Bottom faces (dashed logic handled by fill order usually, but here explicit lines)
+    
+    % The tilted face (Surface F)
+    \filldraw[fill=blue!5, draw=black, thick, fill opacity=0.4] (A) -- (B) -- (C) -- cycle;
+    
+    % Normal vector n
+    \coordinate (Centroid) at (0.6,0.6,0.6);
+    \draw[->, thick, red] (Centroid) -- ($(Centroid)+(0.3,0.3,0.3)$) node[above right] {$\hat{\bm n}$};
+
+    % Axis faces labels
+    \node[align=center, scale=0.8] at (1.7,1.2,0) {Face $F_1$\\Area $A_1$\\Normal $-\hat{\bm e}_1$};
+    \node[align=center, scale=0.8] at (1.1,-0.8,0.4) {Face $F_3$\\Area $A_3$\\Normal $-\hat{\bm e}_3$};
+    \node[align=center, scale=0.8] at (-0.8,0.8,1.2) {Face $F_2$\\Area $A_2$\\Normal $-\hat{\bm e}_2$};
+    
+    % Coordinates labels
+    \node[scale=0.7, below] at (A) {$(l,0,0)$};
+    \node[scale=0.7, left] at (B) {$(0,l,0)$};
+    \node[scale=0.7, below right] at (C) {$(0,0,l)$};
+
+\end{tikzpicture}
+\end{center}
+\subsubsection{Proof}
+
+Consider a material volume that is a tetrahedron. Three faces are aligned with the coordinate axes, $F_1, F_2, F_3$, and the 4th is tilted, $F$, with outward normal $\hat{\bm n}$ and area $A$.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $F_1$: Area $A_1$, normal $-\hat{\bm x}_1$.
+    \item $F_2$: Area $A_2$, normal $-\hat{\bm x}_2$.
+    \item $F_3$: Area $A_3$, normal $-\hat{\bm x}_3$.
+\end{itemize}
+
+From geometry, we have the following properties:
+\begin{enumerate}[nosep]
+    \item The volume of the tetrahedron is $\frac{l^3}{6\sqrt{2}}$.
+    \item The surface area of face $F$ is $A \cong \frac{\sqrt{3}}{4}l^2$ (others are roughly proportional to $\frac{1}{2}l^2$).
+    \item The projected area of $A$ in the direction of $\hat{\bm n}_p$ is $A_p = |\hat{\bm n} \cdot \hat{\bm n}_p| A$. If we take $\hat{\bm n}_p$ to be $\hat{\bm x}_j$, then $A_j = |\hat{\bm n} \cdot \hat{\bm x}_j| A$.
+\end{enumerate}
+
+Given $\hat{\bm n} = (n_1, n_2, n_3)$ and $|\hat{\bm n} \cdot \hat{\bm x}_j| = n_j$, we have:
+\begin{equation}
+A_j = n_j \frac{\sqrt{3}}{4}l^2.
+\end{equation}
+
+Using the Reynolds Transport Theorem, we can rewrite Newton's 2nd law as:
+\begin{equation}
+\iiint_{W(t)} \lb \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi \rb \, dV = \oiint_{\partial W(t)} \bm t(\bm x, t, \hat{\bm n}) \, dS.
+\end{equation}
+We divide the equation by $l^2$ and take the limit as $l \to 0$:
+\begin{equation}
+\lim_{l \to 0} \frac{\iiint_{W(t)} [\rho \frac{D\bm u}{Dt} + \rho \nabla \Pi] \, dV}{l^2} = \lim_{l \to 0} \frac{\oiint_{\partial W(t)} \bm t(\bm x, t, \hat{\bm n}) \, dS}{l^2} = 0.
+\end{equation}
+Using the Mean Value Theorem, the Left Hand Side (LHS) scales as:
+\begin{equation}
+\text{LHS} = \lim_{l \to 0} \frac{M l^3}{l^2} = 0.
+\end{equation}
+We can express the Right Hand Side (RHS) in terms of the 4 faces:
+\begin{equation}
+0 = \lim_{l \to 0} \frac{1}{l^2} \lb \sum_{j=1}^3 \iint_{F_j} \bm t(\bm x, t, -\hat{\bm x}_j) \, dA + \iint_{F} \bm t(\bm x, t, \hat{\bm n}) \, dA \rb.
+\end{equation}
+Each term in the sum can be written in component form (using $k$ for the index). By the Mean Value Theorem:
+\begin{equation}
+\frac{1}{l^2} \iint_{F_j} t_k(\bm x, t, -\hat{\bm x}_j) \, dA \approx \frac{1}{l^2} t_k(\bm x_j, t, -\hat{\bm x}_j) n_j \frac{\sqrt{3}}{4}l^2 \quad (\text{where } \bm x_j \in A_j).
+\end{equation}
+The last integral becomes:
+\begin{equation}
+\frac{1}{l^2} \iint_{F} t_k(\bm x, t, \hat{\bm n}) \, dA = \frac{1}{l^2} t_k(\bm x_0, t, \hat{\bm n}) \frac{\sqrt{3}}{4}l^2 \quad (\text{where } \bm x_0 \in A).
+\end{equation}
+Substituting these into our equation:
+\begin{equation}
+\lim_{l \to 0} \lb \sum_{j=1}^3 t_k(\bm x_j, t, -\hat{\bm x}_j) n_j \frac{\sqrt{3}}{4} + t_k(\bm x_0, t, \hat{\bm n}) \frac{\sqrt{3}}{4} \rb = 0.
+\end{equation}
+As $l \to 0$, $\bm x_j, \bm x_0 \to \bm x$. Canceling the constants ($\frac{\sqrt{3}}{4}$):
+\begin{equation}
+\sum_{j=1}^3 t_k(\bm x, t, -\hat{\bm x}_j) n_j + t_k(\bm x, t, \hat{\bm n}) = 0.
+\end{equation}
+We define the stress on the coordinate planes. If we define $\tau_{jk}(\bm x, t) \equiv t_k(\bm x, t, \hat{\bm x}_j)$, then using Newton's 3rd Law ($t_k(\dots, -\hat{\bm x}_j) = -t_k(\dots, \hat{\bm x}_j)$), we obtain:
+\begin{equation}
+t_k(\bm x, t, \hat{\bm n}) = \sum_{j=1}^3 t_k(\bm x, t, \hat{\bm x}_j) n_j.
+\end{equation}
+This shows $\bm t$ is a linear function of $\hat{\bm n}$.
+
+\begin{definition}
+    The relationship is given by:
+    \begin{equation}
+    t_k = \tau_{jk} n_j \quad \text{or} \quad \bm t = \hat{\bm n} \cdot \underline{\underline{\tau}}.
+    \end{equation}
+    Here, $\tau_{jk}$ forms the components of the stress tensor $\underline{\underline{\tau}}$:
+    \begin{equation}
+    \underline{\underline{\tau}} = 
+    \begin{pmatrix}
+    \tau_{11} & \tau_{12} & \tau_{13} \\
+    \tau_{21} & \tau_{22} & \tau_{23} \\
+    \tau_{31} & \tau_{32} & \tau_{33}
+    \end{pmatrix}.
+    \end{equation}
+    $\tau_{jk}$ is the $k$-th component of the force per unit area acting on a surface with unit outward normal $\hat{\bm x}_j$.
+\end{definition}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, scale=1.5, x={(1cm,0cm)}, y={(0cm,1cm)}, z={(-0.6cm,-0.4cm)}]
+  % Axes
+  \coordinate (O) at (0,0,0);
+  \draw[->] (O) -- (3,0,0) node[right] {$x_2$};
+  \draw[->] (O) -- (0,3,0) node[above] {$x_3$};
+  \draw[->] (O) -- (0,0,4) node[below left] {$x_1$};
+
+  % Cube Parameters
+  \def\s{1.5} % size of cube
+  \coordinate (Shift) at (1,1,1); % Bottom-Left-Back corner position
+  
+  % Vertices
+  \coordinate (V1) at (1,1,1); % Back-Left-Bottom
+  \coordinate (V2) at (1+\s,1,1); % Right-Bottom-Back
+  \coordinate (V3) at (1+\s,1+\s,1); % Right-Top-Back
+  \coordinate (V4) at (1,1+\s,1); % Left-Top-Back
+  \coordinate (V5) at (1,1,1+\s); % Left-Bottom-Front
+  \coordinate (V6) at (1+\s,1,1+\s); % Right-Bottom-Front
+  \coordinate (V7) at (1+\s,1+\s,1+\s); % Right-Top-Front
+  \coordinate (V8) at (1,1+\s,1+\s); % Left-Top-Front
+
+  % Draw Visible Faces
+  % Front Face (Normal x1)
+  \draw[black] (V5) -- (V6) -- (V7) -- (V8) -- cycle;
+  % Right Face (Normal x2)
+  \draw[black] (V6) -- (V2) -- (V3) -- (V7);
+  % Top Face (Normal x3)
+  \draw[black] (V8) -- (V7) -- (V3) -- (V4) -- cycle;
+
+  % Stress Vectors
+  
+  % Top Face Center (Normal x3)
+  \coordinate (TC) at (0.7+0.5*\s, 1.5+\s, 1+0.5*\s);
+  \draw[->, red!80!black, thick] (TC) -- ++(0, 0.7, 0) node[above] {$\tau_{33}$};
+  \draw[->, red!80!black, thick] (TC) -- ++(0.7, 0, 0) node[right] {$\tau_{32}$};
+  \draw[->, red!80!black, thick] (TC) -- ++(0, 0, 1.0) node[below left] {$\tau_{31}$};
+
+  % Right Face Center (Normal x2)
+  \coordinate (RC) at (1.8+\s, 1+0.5*\s, 1+0.5*\s);
+  \draw[->, red!80!black, thick] (RC) -- ++(0.7, 0, 0) node[right] {$\tau_{22}$};
+  \draw[->, red!80!black, thick] (RC) -- ++(0, 0.7, 0) node[above] {$\tau_{23}$};
+  \draw[->, red!80!black, thick] (RC) -- ++(0, 0, 1.0) node[left] {$\tau_{21}$};
+
+  % Front Face Center (Normal x1)
+  \coordinate (FC) at (-1+0.5*\s, 1+0.5*\s, 1+\s);
+  \draw[->, red!80!black, thick] (FC) -- ++(0, 0, 1.0) node[below left] {$\tau_{11}$};
+  \draw[->, red!80!black, thick] (FC) -- ++(0.7, 0, 0) node[right] {$\tau_{12}$};
+  \draw[->, red!80!black, thick] (FC) -- ++(0, 0.7, 0) node[above] {$\tau_{13}$};
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Conservation of Linear Momentum}
+
+We return to Newton's 2nd Law:
+\begin{equation}
+\iiint_{W(t)} \lb \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi \rb \, dV = \oiint_{\partial W(t)} \bm t(\bm x, t, \hat{\bm n}) \, dS.
+\end{equation}
+Cauchy's theorem tells us $\bm t = \hat{\bm n} \cdot \underline{\underline{\tau}}$ or $t_k = n_j \tau_{jk}$. Thus:
+\begin{equation}
+\oiint_{\partial W(t)} \bm t \, dS = \oiint_{\partial W(t)} \hat{\bm n} \cdot \underline{\underline{\tau}} \, dS.
+\end{equation}
+In indicial notation:
+\begin{equation}
+\iiint_{W(t)} \lb \rho \frac{Du_i}{Dt} + \rho \frac{\partial \Pi}{\partial x_i} \rb \, dV = \oiint_{\partial W(t)} n_j \tau_{ji} \, dS.
+\end{equation}
+Gauss' Divergence Theorem states
+\begin{equation}
+\iiint_W \frac{\partial U_j}{\partial x_j} dV = \oiint_{\partial W} U_j n_j dS.
+\end{equation}
+Applying this for each index $i$:
+\begin{equation}
+\oiint_{\partial W(t)} n_j \tau_{ji} \, dS = \iiint_{W(t)} \frac{\partial \tau_{ji}}{\partial x_j} \, dV.
+\end{equation}
+Hence, combining all terms under one volume integral:
+\begin{equation}
+\iiint_{W(t)} \lb \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi - \nabla \cdot \underline{\underline{\tau}} \rb \, dV = 0.
+\end{equation}
+Using our lemma (localization theorem), since the volume is arbitrary, the integrand must be zero:
+\begin{equation}
+\rho \frac{D\bm u}{Dt} = - \rho \nabla \Pi + \nabla \cdot \underline{\underline{\tau}} \quad \text{or} \quad \rho \frac{Du_i}{Dt} = -\rho \frac{\partial \Pi}{\partial x_i} + \frac{\partial \tau_{ji}}{\partial x_j}.
+\end{equation}
+This is the \textbf{Conservation of Linear Momentum}.
+
+\begin{theorem}[Conservation of Linear Momentum]
+    Mathematically, conservation of linear momentum is stated as:
+    \begin{equation}
+    -\rho \frac{\partial \Pi}{\partial x_i} + \frac{\partial \tau_{ji}}{\partial x_j}.
+    \end{equation}
+\end{theorem}
+
+\subsubsection{The Closure Problem}
+
+Recall the Conservation of Mass equation:
+\begin{equation}
+\boxed{\frac{D\rho}{Dt} + \rho \nabla \cdot \bm u = 0.}
+\end{equation}
+This gives us a total of 4 equations.
+However, if we count the variables:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $\rho$ (1 component)
+    \item $u_1, u_2, u_3$ (3 components)
+    \item $\underline{\underline{\tau}}$ (9 components)
+\end{itemize}
+This is not a closed system. We must specify a form for the stress tensor.
+
+For the case of no motion, we had $\bm t = -p \hat{\bm n}$. Since $\bm t = \hat{\bm n} \cdot \underline{\underline{\tau}}$, this implies:
+\begin{equation}
+\underline{\underline{\tau}} = -p \underline{\underline{I}} \quad \text{or} \quad \underline{\underline{\tau}} = -p 
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix}.
+\end{equation}
+\clearpage
+
+\section*{Lecture 11}
+\addcontentsline{toc}{section}{Lecture 11}
+\stepcounter{section}
+\setcounter{section}{11}
+\setcounter{equation}{0}
+
+\subsection{Symmetry of the Stress Tensor}
+
+\subsubsection{Introduction}
+
+Recall that using the principles of conservation of mass and linear momentum, we obtained the following equations:
+\begin{align}
+    \frac{D\rho}{Dt} + \rho \nabla \cdot \bm u &= 0 \label{mass_cons_recap} \\
+    \rho \frac{D\bm u}{Dt} &= -\rho \nabla \Pi + \nabla \cdot \bm \tau. \label{mom_cons_recap}
+\end{align}
+There are 4 equations (1 for mass, 3 for momentum) but many more unknowns (density $\rho$, velocity $\bm u$, and the 9 components of the stress tensor $\bm \tau$).
+Today, we reduce the number of unknowns by showing that the stress tensor is symmetric.
+
+\subsubsection{Conservation of Angular Momentum}
+
+Newton's 2nd law yielded the equation stating that linear momentum is conserved:
+\begin{equation}
+\frac{d}{dt} \iiint_{W(t)} \rho \bm u \, dV = \bm F_{\text{total}}.
+\end{equation}
+This is the analogue of $\frac{d}{dt}(m\bm v) = \bm F$ in classical mechanics. In classical mechanics, we also have an equation for the conservation of angular momentum:
+\begin{equation}
+\frac{d}{dt} (\bm x \times m \bm v) = \bm x \times \bm F,
+\end{equation}
+which relates the rate of change of angular momentum to the torque.
+
+In continuum mechanics, we can obtain a new equation for angular momentum conservation.
+\begin{definition}[Conservation of Angular Momentum]
+    The conservation of angular momentum for a material volume $W(t)$ is given by:
+    \begin{equation}
+    \label{ang_mom_cons}
+    \frac{d}{dt} \iiint_{W(t)} \rho (\bm x \times \bm u) \, dV = \iiint_{W(t)} \rho (\bm x \times \bm g) \, dV + \oiint_{\partial W(t)} \bm x \times \bm t \, dS.
+    \end{equation}
+    The first term on the RHS represents the torque due to body forces (gravity), and the second term represents the torque due to surface forces.
+\end{definition}
+
+\begin{theorem}[Symmetry of the Stress Tensor]
+    The principle of Conservation of Angular Momentum implies that the stress tensor is symmetric:
+    \begin{equation}
+    \bm \tau = \bm \tau^T \quad \text{or} \quad \tau_{ij} = \tau_{ji}.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We apply the Reynolds Transport Theorem to the Left Hand Side (LHS) of \cref{ang_mom_cons}:
+    \begin{align}
+        \text{LHS} &= \frac{d}{dt} \iiint_{W(t)} \rho (\bm x \times \bm u) \, dV \\
+        &= \iiint_{W(t)} \rho \frac{D}{Dt} (\bm x \times \bm u) \, dV \\
+        &= \iiint_{W(t)} \rho \lb \frac{D\bm x}{Dt} \times \bm u + \bm x \times \frac{D\bm u}{Dt} \rb \, dV.
+    \end{align}
+    Note that $\frac{D\bm x}{Dt} = \bm u$, so the first term in the bracket is $\bm u \times \bm u = \bm 0$. Thus,
+    \begin{equation}
+        \label{LHS_simplified}
+        \text{LHS} = \iiint_{W(t)} \rho \lp \bm x \times \frac{D\bm u}{Dt} \rp \, dV.
+    \end{equation}
+    Now consider the Right Hand Side (RHS). We defined $\bm g = -\nabla \Pi$, so the body force term is $-\iiint \bm x \times (\rho \nabla \Pi) dV$. The surface term requires more manipulation:
+    \begin{equation}
+    \text{Surface Term} = \oiint_{\partial W(t)} \bm x \times \bm t \, dS.
+    \end{equation}
+    In index notation, the cross product is $(\bm x \times \bm t)_i = \epsilon_{ijk} x_j t_k$. Recall Cauchy's formula $t_k = n_l \tau_{lk}$ (where $l$ is the dummy index for the normal contraction). Substituting this:
+    \begin{equation}
+    \oiint_{\partial W(t)} \epsilon_{ijk} x_j (n_l \tau_{lk}) \, dS = \oiint_{\partial W(t)} n_l (\epsilon_{ijk} x_j \tau_{lk}) \, dS.
+    \end{equation}
+    This form allows us to use Gauss' Divergence Theorem:
+    \begin{equation}
+    = \iiint_{W(t)} \frac{\partial}{\partial x_l} (\epsilon_{ijk} x_j \tau_{lk}) \, dV.
+    \end{equation}
+    Expanding the derivative using the product rule:
+    \begin{equation}
+    \frac{\partial}{\partial x_l} (\epsilon_{ijk} x_j \tau_{lk}) = \epsilon_{ijk} \frac{\partial x_j}{\partial x_l} \tau_{lk} + \epsilon_{ijk} x_j \frac{\partial \tau_{lk}}{\partial x_l}.
+    \end{equation}
+    Since $\frac{\partial x_j}{\partial x_l} = \delta_{jl}$, the first term becomes $\epsilon_{ijk} \delta_{jl} \tau_{lk} = \epsilon_{ijk} \tau_{jk}$. Thus, the integral becomes:
+    \begin{equation}
+    \iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV + \iiint_{W(t)} \epsilon_{ijk} x_j \frac{\partial \tau_{lk}}{\partial x_l} \, dV.
+    \end{equation}
+    Converting back to vector notation, this is:
+    \begin{equation}
+        \label{RHS_expanded}
+        \iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV + \iiint_{W(t)} \bm x \times (\nabla \cdot \bm \tau) \, dV.
+    \end{equation}
+    We now equate the simplified LHS (\cref{LHS_simplified}) and the expanded RHS.
+    From the Conservation of Linear Momentum, we know:
+    \begin{equation}
+    \nabla \cdot \bm \tau = \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi.
+    \end{equation}
+    Substitute this into the second integral of \cref{RHS_expanded}:
+    \begin{align}
+        \text{RHS} &= \iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV + \iiint_{W(t)} \bm x \times \lp \rho \frac{D\bm u}{Dt} + \rho \nabla \Pi \rp \, dV \\
+        &= \iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV + \iiint_{W(t)} \rho \lp \bm x \times \frac{D\bm u}{Dt} \rp \, dV + \iiint_{W(t)} \bm x \times (\rho \nabla \Pi) \, dV.
+    \end{align}
+    Putting all pieces together in the angular momentum equation:
+    \begin{equation}
+    \underbrace{\iiint_{W(t)} \rho \lp \bm x \times \frac{D\bm u}{Dt} \rp \, dV}_{\text{LHS}} = \underbrace{-\iiint_{W(t)} \bm x \times (\rho \nabla \Pi) \, dV}_{\text{Body Torque}} + \underbrace{\iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV + \dots}_{\text{Surface Torque}}.
+    \end{equation}
+    The term $\iiint \rho (\bm x \times \frac{D\bm u}{Dt})$ cancels on both sides. The term involving $\nabla \Pi$ also cancels (note the sign change in the momentum substitution vs body force definition). We are left with:
+    \begin{equation}
+    \iiint_{W(t)} \epsilon_{ijk} \tau_{jk} \, dV = 0.
+    \end{equation}
+    By the localization lemma (since $W(t)$ is arbitrary), the integrand must be zero:
+    \begin{equation}
+    \epsilon_{ijk} \tau_{jk} = 0.
+    \end{equation}
+    The term $\epsilon_{ijk} \tau_{jk}$ represents the contraction between an antisymmetric tensor ($\epsilon$) and the tensor $\tau$. For this contraction to be zero everywhere, the antisymmetric part of $\tau$ must be zero.
+    Hence, $\tau_{jk} = \tau_{kj}$. The stress tensor is symmetric.
+\end{proof}
+
+\subsection{Geometric Interpretation}
+
+To visualize why the stress tensor must be symmetric, we can consider the torque on a small fluid element.
+
+\begin{example}[Torque on a Cube]
+    \label{ex:torque_cube}
+    \textbf{Geometric Idea:} Consider a small cubic fluid parcel centered at the origin $(0,0,0)$ with side lengths $\Delta x_1, \Delta x_2, \Delta x_3$. We analyze the rotation about the $x_1$-axis.
+    
+    \begin{center}
+    \begin{tikzpicture}[scale=1.5, >=Stealth, line cap=round, line join=round]
+        % Define cube points
+        \coordinate (O) at (0,0,0);
+        \def\dx{1.5}
+        \def\dy{1.5}
+        \def\dz{1.5}
+        
+        % Back hidden lines
+        \draw[dashed, gray] (0,\dy,0) -- (0,0,0) -- (\dx,0,0);
+        \draw[dashed, gray] (0,0,0) -- (0,0,\dz);
+        
+        % Cube Frame
+        \draw[thick] (\dx,0,0) -- (\dx,\dy,0) -- (0,\dy,0) -- (0,\dy,\dz) -- (0,0,\dz) -- (\dx,0,\dz) -- cycle;
+        \draw[thick] (\dx,0,0) -- (\dx,0,\dz);
+        \draw[thick] (\dx,\dy,0) -- (\dx,\dy,\dz);
+        \draw[thick] (0,\dy,\dz) -- (\dx,\dy,\dz) -- (\dx,0,\dz);
+        
+        % Axes (local to center or nearby)
+        \draw[->, thick] (-0.5, 0.5, 0.5) -- (-0.1, 0.5, 0.5) node[right] {$x_2$};
+        \draw[->, thick] (-0.5, 0.5, 0.5) -- (-0.5, 0.9, 0.5) node[above] {$x_3$};
+        \draw[->, thick] (-0.5, 0.5, 0.5) -- (-0.5, 0.5, 1.2) node[below left] {$x_1$};
+        
+        % Face Labels (Circled numbers style)
+        \node[blue] at (0.5*\dx, 0.1, 0.5*\dz) {\small \textcircled{1}}; % Bottom
+        \node[blue] at (\dx, 0.5*\dy, 0.5*\dz) [right] {\small \textcircled{2}}; % Right
+        \node[blue] at (0.5*\dx, \dy, 0.5*\dz) [below] {\small \textcircled{3}}; % Top
+        \node[blue] at (0, 0.5*\dy, 0.5*\dz) [left] {\small \textcircled{4}}; % Left
+        
+        % Stress Vectors (Red)
+        % Top Face (3)
+        \draw[->, red, thick] (0.5*\dx, \dy, 0.5*\dz) -- (0.5*\dx, \dy+0.6, 0.5*\dz) node[above] {$\tau_{33}$};
+        \draw[->, red, thick] (0.5*\dx, \dy, 0.5*\dz) -- (0.5*\dx+0.6, \dy, 0.5*\dz) node[right] {$\tau_{32}$};
+        
+        % Right Face (2)
+        \draw[->, red, thick] (\dx, 0.5*\dy, 0.5*\dz) -- (\dx+0.6, 0.5*\dy, 0.5*\dz) node[right] {$\tau_{22}$};
+        \draw[->, red, thick] (\dx, 0.5*\dy, 0.5*\dz) -- (\dx, 0.5*\dy+0.6, 0.5*\dz) node[above] {$\tau_{23}$};
+        
+    \end{tikzpicture}
+    \end{center}
+    
+    The torque due to the surface forces in general can be written as:
+    \begin{equation}
+    \oiint_{\partial W(t)} \bm x \times \bm t \, dS.
+    \end{equation}
+    Using linear algebra, we expand the cross product $\bm x \times \bm t$:
+    \begin{equation}
+    \bm x \times \bm t = 
+    \begin{vmatrix}
+    \hat{\bm e}_1 & \hat{\bm e}_2 & \hat{\bm e}_3 \\
+    x_1 & x_2 & x_3 \\
+    t_1 & t_2 & t_3
+    \end{vmatrix}
+    = 
+    \begin{bmatrix}
+    x_2 t_3 - x_3 t_2 \\
+    x_3 t_1 - x_1 t_3 \\
+    x_1 t_2 - x_2 t_1
+    \end{bmatrix}.
+    \end{equation}
+    Because we are studying rotation in the $x_1$ direction, we consider the first component only:
+    \begin{equation}
+        \label{torque_x1_integral}
+        \oiint_{\partial W(t)} (x_2 t_3 - x_3 t_2) \, dS.
+    \end{equation}
+    Consider a state of rest without gravity. We require that the contribution from the surface force is 0. If the torques did not balance, we would have infinite angular acceleration (motion), which is a contradiction.
+    
+    The integral in \cref{torque_x1_integral} can be decomposed into the sum of integrals over the four relevant faces: \textcircled{1} Bottom, \textcircled{2} Right, \textcircled{3} Top, and \textcircled{4} Left. (The front and back faces do not contribute to the moment about the $x_1$ axis).
+    
+    \begin{equation}
+    \oiint = \iint_{\text{\textcircled{1} Bottom}} + \iint_{\text{\textcircled{2} Right}} + \iint_{\text{\textcircled{3} Top}} + \iint_{\text{\textcircled{4} Left}}.
+    \end{equation}
+    
+    We evaluate the stress vector $\bm t$ on each surface using the relation $t_i = n_j \tau_{ji}$. Specifically for the components we need:
+    \begin{equation}
+    t_2 = n_j \tau_{j2} \quad \text{and} \quad t_3 = n_j \tau_{j3}.
+    \end{equation}
+    
+    \textbf{1. Substitution of Normals and Stresses:}
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Bottom (\textcircled{1}):} $\hat{\bm n} = -\hat{\bm e}_3$. Thus $t_2 = -\tau_{32}$ and $t_3 = -\tau_{33}$.
+        \begin{equation}
+        \iint_{\text{Bottom}} [x_2(-\tau_{33}) - x_3(-\tau_{32})] \, dx_1 dx_2.
+        \end{equation}
+        \item \textbf{Right (\textcircled{2}):} $\hat{\bm n} = +\hat{\bm e}_2$. Thus $t_2 = \tau_{22}$ and $t_3 = \tau_{23}$.
+        \begin{equation}
+        \iint_{\text{Right}} [x_2(\tau_{23}) - x_3(\tau_{22})] \, dx_1 dx_3.
+        \end{equation}
+        \item \textbf{Top (\textcircled{3}):} $\hat{\bm n} = +\hat{\bm e}_3$. Thus $t_2 = \tau_{32}$ and $t_3 = \tau_{33}$.
+        \begin{equation}
+        \iint_{\text{Top}} [x_2(\tau_{33}) - x_3(\tau_{32})] \, dx_1 dx_2.
+        \end{equation}
+        \item \textbf{Left (\textcircled{4}):} $\hat{\bm n} = -\hat{\bm e}_2$. Thus $t_2 = -\tau_{22}$ and $t_3 = -\tau_{23}$.
+        \begin{equation}
+        \iint_{\text{Left}} [x_2(-\tau_{23}) - x_3(-\tau_{22})] \, dx_1 dx_3.
+        \end{equation}
+    \end{itemize}
+    
+    \textbf{2. Approximation:}
+    If our surfaces are small, then the components of $\bm \tau$ are nearly constant on each face. We can approximate the coordinates $x_2$ and $x_3$ (the moment arms) based on the position of the face relative to the center:
+    \begin{align*}
+        x_3 \text{ on Bottom} &\approx -\frac{1}{2}\Delta x_3, & x_3 \text{ on Top} &\approx +\frac{1}{2}\Delta x_3, \\
+        x_2 \text{ on Right} &\approx +\frac{1}{2}\Delta x_2, & x_2 \text{ on Left} &\approx -\frac{1}{2}\Delta x_2.
+    \end{align*}
+    
+    \textbf{3. Summation:}
+    Substituting these approximations into the integrals (and noting that $\iint dx_i dx_j = \Delta x_i \Delta x_j$), we sum the terms. The normal stress terms involving $\tau_{33}$ and $\tau_{22}$ cancel out due to symmetry (or because their moment arm $x$ is 0 on average over the face, or they act through the axis). We focus on the shear terms:
+    \begin{align}
+        \text{Bottom Term:} & \quad - \lb -\frac{1}{2}\Delta x_3 \rb (-\tau_{32}) \Delta x_1 \Delta x_2 = -\frac{1}{2} \tau_{32} \Delta x_1 \Delta x_2 \Delta x_3 \\
+        \text{Right Term:} & \quad + \lb +\frac{1}{2}\Delta x_2 \rb (\tau_{23}) \Delta x_1 \Delta x_3 = +\frac{1}{2} \tau_{23} \Delta x_1 \Delta x_2 \Delta x_3 \\
+        \text{Top Term:} & \quad - \lb +\frac{1}{2}\Delta x_3 \rb (\tau_{32}) \Delta x_1 \Delta x_2 = -\frac{1}{2} \tau_{32} \Delta x_1 \Delta x_2 \Delta x_3 \\
+        \text{Left Term:} & \quad + \lb -\frac{1}{2}\Delta x_2 \rb (-\tau_{23}) \Delta x_1 \Delta x_3 = +\frac{1}{2} \tau_{23} \Delta x_1 \Delta x_2 \Delta x_3
+    \end{align}
+    Summing these four contributions:
+    \begin{equation}
+    \sum = \lp \tau_{23} - \tau_{32} \rp \Delta x_1 \Delta x_2 \Delta x_3.
+    \end{equation}
+    Since the total torque must be zero for equilibrium:
+    \begin{equation}
+    (\tau_{23} - \tau_{32}) \Delta V = 0 \implies \tau_{23} = \tau_{32}.
+    \end{equation}
+    A similar argument applies to the other off-diagonal entries, confirming the symmetry of the stress tensor.
+\end{example}
+\clearpage
+
+\section*{Lecture 12}
+\addcontentsline{toc}{section}{Lecture 12}
+\stepcounter{section}
+\setcounter{section}{12}
+\setcounter{equation}{0}
+
+\subsection{Introduction to Elasticity Theory}
+
+Today we begin our discussion on solid mechanics. The motivation for this section is to find a constitutive relation for the stress tensor \(\underline{\underline{\tau}}\) for solids.
+Recall the conservation of linear momentum equation:
+\begin{equation}
+\rho \frac{D\bm u}{Dt} = -\rho \nabla \Pi + \nabla \cdot \underline{\underline{\tau}}.
+\end{equation}
+To close this system for solids, we need to describe how the material deforms and how that deformation relates to stress.
+
+\begin{definition}[Types of Solids]
+    Solids can generally be categorized into three types based on their deformation behavior:
+    \begin{enumerate}[nosep]
+        \item \textbf{Elastic:} Deformations are reversible; the material "bounces back" to its original shape (e.g., rubber, steel).
+        \item \textbf{Plastic:} Deformations are permanent; the material stays deformed (e.g., clay).
+        \item \textbf{Viscoelastic:} The material exhibits both elastic and viscous characteristics (e.g., cornstarch, memory foam).
+    \end{enumerate}
+\end{definition}
+
+\subsection{Strain Tensors}
+
+We study elastic solids. Before we can state a suitable form for the stress tensor \(\underline{\underline{\tau}}\), we need to study deformations. These are described by \textbf{strain tensors}.
+
+Consider a material volume before and after deformation. We define two coordinate systems:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Lagrangian (Material) Coordinates:} \(\bm a\) denotes the initial position of a particle.
+    \item \textbf{Eulerian (Spatial) Coordinates:} \(\bm x\) denotes the final position of the particle.
+\end{itemize}
+
+Let \(P\) and \(Q\) be two neighboring points in the material. Initially, the segment \(PQ\) has a distance \(dS_0\). In the deformed state, the points move to \(P'\) and \(Q'\), separated by a distance \(dS\). Using index notation, the squared distances are:
+\begin{equation}
+dS_0^2 = da_i da_i \quad \text{and} \quad dS^2 = dx_k dx_k.
+\end{equation}
+To measure the deformation, we examine the difference between the squares of the distances:
+\begin{equation}
+    \label{straindiff}
+    dS^2 - dS_0^2 = dx_k dx_k - da_i da_i.
+\end{equation}
+
+This involves \(x\)'s and \(a\)'s, hence Eulerian and Lagrangian. Next, we find an expression that is purely Lagrangian, then purely Eulerian.
+
+\subsubsection{Lagrangian Strain Tensor}
+To find an expression that is purely Lagrangian (in terms of \(\bm a\)), we consider the mapping \(\bm x = \bm x(\bm a)\). If \(|d\bm a|\) is small, we can Taylor expand the position of \(Q'\) relative to \(P'\):
+\begin{equation}
+x_k(\bm a + d\bm a) \approx x_k(\bm a) + \frac{\partial x_k}{\partial a_j} da_j.
+\end{equation}
+Thus, the differential vector is
+\begin{equation}dx_k = \frac{\partial x_k}{\partial a_j} da_j.\end{equation}
+Substituting this into \cref{straindiff}:
+\begin{align}
+    dS^2 - dS_0^2 &= \lp \frac{\partial x_k}{\partial a_j} da_j \rp \lp \frac{\partial x_k}{\partial a_l} da_l \rp - \delta_{jl} da_j da_l \\
+    &= \lp \frac{\partial x_k}{\partial a_j} \frac{\partial x_k}{\partial a_l} - \delta_{jl} \rp da_j da_l.
+\end{align}
+Because \(j\) and \(l\) are dummy indices, we can symmetrize and rename them to obtain the definition of the strain tensor.
+
+\begin{definition}[Green-St. Venant Strain Tensor]
+    The Green-St. Venant strain tensor \(E_{jk}\) (Lagrangian) is defined such that \(dS^2 - dS_0^2 \approx 2 E_{jk} da_j da_k\):
+    \begin{equation}
+    E_{jk} \equiv \frac{1}{2} \lp \frac{\partial x_i}{\partial a_j} \frac{\partial x_i}{\partial a_k} - \delta_{jk} \rp.
+    \end{equation}
+\end{definition}
+
+\subsubsection{Eulerian Strain Tensor}
+Conversely, to find an expression that is purely Eulerian (in terms of \(\bm x\)), we consider the inverse mapping \(\bm a = \bm a(\bm x)\).
+We Taylor expand the initial position:
+\begin{equation}
+a_i(\bm x + d\bm x) \approx a_i(\bm x) + \frac{\partial a_i}{\partial x_j} dx_j.
+\end{equation}
+Thus,
+\begin{equation}da_i = \frac{\partial a_i}{\partial x_j} dx_j.\end{equation}
+Substituting this into \cref{straindiff}:
+\begin{align}
+    dS^2 - dS_0^2 &= \delta_{jk} dx_j dx_k - \lp \frac{\partial a_i}{\partial x_j} dx_j \rp \lp \frac{\partial a_i}{\partial x_k} dx_k \rp \\
+    &= \lp \delta_{jk} - \frac{\partial a_i}{\partial x_j} \frac{\partial a_i}{\partial x_k} \rp dx_j dx_k.
+\end{align}
+
+\begin{definition}[Almansi-Hamel Strain Tensor]
+    The Almansi-Hamel strain tensor \(e_{jk}\) (Eulerian) is defined such that \(dS^2 - dS_0^2 \approx 2 e_{jk} dx_j dx_k\):
+    \begin{equation}
+    e_{jk} \equiv \frac{1}{2} \lp \delta_{jk} - \frac{\partial a_i}{\partial x_j} \frac{\partial a_i}{\partial x_k} \rp.
+    \end{equation}
+\end{definition}
+
+To summarize:
+\begin{equation}
+dS^2 - dS_0^2 \approx 2 E_{jk} da_j da_k \approx 2 e_{jk} dx_j dx_k.
+\end{equation}
+
+
+\subsection{Strain in Terms of Displacements}
+
+Sometimes, it is useful to express this in terms of the displacements.
+\begin{equation}
+\boxed{q_i = x_i - a_i}
+\end{equation}
+Next, we rewrite $E_{jk}$ and $e_{jk}$ in terms of the displacements.
+
+\textbf{For $E_{jk}$:}
+Since $x_i = q_i + a_i$, we have $\frac{\partial x_i}{\partial a_j} = \frac{\partial}{\partial a_j}(q_i + a_i) = \frac{\partial q_i}{\partial a_j} + \delta_{ij}$.
+Then the term in the tensor becomes:
+\begin{align}
+    \frac{\partial x_i}{\partial a_j} \frac{\partial x_i}{\partial a_k} &= \lp \frac{\partial q_i}{\partial a_j} + \delta_{ij} \rp \lp \frac{\partial q_i}{\partial a_k} + \delta_{ik} \rp \\
+    &= \frac{\partial q_i}{\partial a_j} \frac{\partial q_i}{\partial a_k} + \frac{\partial q_i}{\partial a_j} \delta_{ik} + \delta_{ij} \frac{\partial q_i}{\partial a_k} + \delta_{ij} \delta_{ik} \\
+    &= \frac{\partial q_i}{\partial a_j} \frac{\partial q_i}{\partial a_k} + \frac{\partial q_k}{\partial a_j} + \frac{\partial q_j}{\partial a_k} + \delta_{jk}.
+\end{align}
+Substituting this back into the definition of $E_{jk}$ (where the $\delta_{jk}$ cancels out):
+\begin{equation}
+\boxed{E_{jk} = \frac{1}{2} \lb \frac{\partial q_j}{\partial a_k} + \frac{\partial q_k}{\partial a_j} + \frac{\partial q_i}{\partial a_j} \frac{\partial q_i}{\partial a_k} \rb \quad (\text{Lagrangian})}
+\end{equation}
+
+\textbf{Similarly for $e_{jk}$:}
+Using $\frac{\partial a_i}{\partial x_j} = \frac{\partial}{\partial x_j}(x_i - q_i) = \delta_{ij} - \frac{\partial q_i}{\partial x_j}$.
+Then,
+\begin{align*}
+    \frac{\partial a_i}{\partial x_j} \frac{\partial a_i}{\partial x_k} &= \lp \delta_{ij} - \frac{\partial q_i}{\partial x_j} \rp \lp \delta_{ik} - \frac{\partial q_i}{\partial x_k} \rp \\
+    &= \delta_{jk} - \frac{\partial q_j}{\partial x_k} - \frac{\partial q_k}{\partial x_j} + \frac{\partial q_i}{\partial x_j} \frac{\partial q_i}{\partial x_k}.
+\end{align*}
+Substituting into the definition for $e_{jk}$:
+\begin{equation}
+\boxed{e_{jk} = \frac{1}{2} \lb \frac{\partial q_j}{\partial x_k} + \frac{\partial q_k}{\partial x_j} - \frac{\partial q_i}{\partial x_j} \frac{\partial q_i}{\partial x_k} \rb \quad (\text{Eulerian})}
+\end{equation}
+
+\subsection{Linear Elasticity Theory}
+
+As we can see, both \(E_{jk}\) and \(e_{jk}\) are nonlinear functions of the displacement gradients.
+To simplify the theory, we assume \textbf{small deformations} (or small displacements).
+This implies that the displacement gradients are small: \(\abs{\frac{\partial q_i}{\partial a_j}} \ll 1\).
+
+Consider the relationship between derivatives in the two frames using the chain rule:
+\begin{equation}
+\frac{\partial q_j}{\partial a_k} = \frac{\partial q_j}{\partial x_l} \frac{\partial x_l}{\partial a_k} = \frac{\partial q_j}{\partial x_l} \lp \delta_{lk} + \frac{\partial q_l}{\partial a_k} \rp = \frac{\partial q_j}{\partial x_k} + \frac{\partial q_j}{\partial x_l} \frac{\partial q_l}{\partial a_k}.
+\end{equation}
+Similarly,
+\begin{equation}
+\frac{\partial q_k}{\partial a_j} = \frac{\partial q_k}{\partial x_j} + \frac{\partial q_k}{\partial x_l} \frac{\partial q_l}{\partial a_j}.
+\end{equation}
+We can substitute these expansions into the full expression for \(E_{jk}\). The result is a series of linear and higher-order terms:
+\begin{equation}
+E_{jk} = \frac{1}{2} \lb \underline{\frac{\partial q_j}{\partial x_k}} + \frac{\partial q_j}{\partial x_l} \frac{\partial q_l}{\partial a_k} + \underline{\frac{\partial q_k}{\partial x_j}} + \frac{\partial q_k}{\partial x_l} \frac{\partial q_l}{\partial a_j} + \lp \frac{\partial q_i}{\partial x_k} + \dots \rp \lp \frac{\partial q_i}{\partial x_j} + \dots \rp \rb.
+\end{equation}
+If we assume small displacements, we proceed by \textbf{ignoring quadratics and higher-order terms} in \(q\). This effectively removes the nonlinear products of derivatives.
+
+\begin{definition}[Infinitesimal Strain Tensor]
+In this limit, the Lagrangian and Eulerian strains converge to the same linear form:
+\begin{equation}
+\boxed{E_{jk} \approx e_{jk} \approx \frac{1}{2} \lp \frac{\partial q_j}{\partial x_k} + \frac{\partial q_k}{\partial x_j} \rp}
+\end{equation}
+These are the strain tensors we consider for linear elastic solids.
+\end{definition}
+
+\begin{note}
+If we compute the derivative with respect to time, we obtain the strain rate tensor used in fluid mechanics:
+\begin{equation}
+\frac{d E_{jk}}{dt} \approx \frac{d e_{jk}}{dt} \approx \frac{1}{2} \lp \frac{\partial u_j}{\partial x_k} + \frac{\partial u_k}{\partial x_j} \rp \quad (\text{fluids}).
+\end{equation}
+\end{note}
+
+\end{document}
+
+% ---------- EXTRA COMMANDS ----------
+% LIST
+[nosep, leftmargin=*]
+[nosep, label=\tiny$\bullet$]
+
+% ENUMERATE LABEL TO ABC
+[label(breaking lable in cref)=(\alph*)]
+
+% INSERT MEDIA
+\includegraphics[width=\linewidth]{}
+
+% MINI PAGE 
+\begin{minipage}[t]{\linewidth}
+    \begin{center}
+    \adjustbox{valign=t}{
+    \includegraphics[width=0.5\linewidth]{q6b.jpeg}
+    }
+    \end{center}
+\end{minipage}

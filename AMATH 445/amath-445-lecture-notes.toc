@@ -1,0 +1,37 @@
+\contentsline {section}{Lecture 1}{1}{section*.2}%
+\contentsline {subsection}{\numberline {1.1}What is Machine Learning}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Factors Driving Popularity of ML}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Mechanics of ML}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Data}{2}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Data Splitting}{2}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Label Availability}{2}{subsubsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.5}Types of Error}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Training Dynamics}{3}{subsection.1.6}%
+\contentsline {subsubsection}{\numberline {1.6.1}Underfitting}{4}{subsubsection.1.6.1}%
+\contentsline {subsubsection}{\numberline {1.6.2}Overfitting}{4}{subsubsection.1.6.2}%
+\contentsline {section}{Lecture 2}{5}{section*.3}%
+\contentsline {subsection}{\numberline {2.1}Categories of Machine Learning}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Supervised Learning}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Unsupervised Learning}{5}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Reinforcement Learning}{6}{subsubsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.4}Semi-supervised and Self-supervised Learning}{7}{subsubsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.5}Integrating Mechanistic Models with ML}{7}{subsubsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.2}Supervised Learning and Classification}{7}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}The Problem Statement of Classification}{7}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}A Probabilistic View of Classification}{7}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Linear Discriminant Analysis (LDA)}{8}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Logistic Regression}{9}{subsubsection.2.2.4}%
+\contentsline {section}{Lecture 3}{12}{section*.4}%
+\contentsline {subsection}{\numberline {3.1}Review And Summary of Lecture 2}{12}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Bayes Decision Rule}{12}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Linear Discriminant Analysis (LDA)}{12}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Logistic Regression}{12}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Log-Likelihood and Loss Function}{13}{subsubsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.2}Gradient Descent}{13}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}General Update Rule}{13}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Gradient Descent for Logistic Regression}{14}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Example: Ising Model}{14}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Example: Prediction of Immunotherapy Response}{15}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Log-Odds of Response Approach}{16}{subsubsection.3.4.1}%
+\contentsline {section}{Lecture 4}{17}{section*.5}%
+\contentsline {subsection}{\numberline {4.1}Support Vector Machines}{17}{subsection.4.1}%

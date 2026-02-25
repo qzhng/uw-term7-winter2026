@@ -1,0 +1,36 @@
+\contentsline {section}{Lecture 1}{1}{section*.2}%
+\contentsline {subsection}{\numberline {1.1}What Is Quantum Physics}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Discovery of Quantum Physics}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Review of Waves}{1}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Ultraviolet Catastrophe and Quantization of Light}{2}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}Wave-Particle Duality of Light}{3}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}Generalization of Quantum Physics from Light to Matter}{4}{subsubsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.3}Classical Mechanics and Stability of Atoms}{4}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}Bohr's Atom Model}{4}{subsubsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}Orbiting Electron and Magnetism}{5}{subsubsection.1.3.2}%
+\contentsline {subsubsection}{\numberline {1.3.3}Electrons Are Quantum Objects}{8}{subsubsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.4}Difference Between Classical Physics and Quantum Physics}{9}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}The Measurement Problem}{10}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}The Next ``Big" Thing}{10}{subsection.1.6}%
+\contentsline {section}{Lecture 2}{11}{section*.3}%
+\contentsline {subsection}{\numberline {2.1}Stern-Gerlach Experiment}{11}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Setup of The Experiment}{11}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Results of The Experiment}{12}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Spin-1/2 Particles}{12}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}The Quantum State Vector}{12}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Dirac Notation}{12}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Postulate 1}{13}{subsubsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}S-G Experiment Revisited}{13}{subsection.2.3}%
+\contentsline {section}{Lecture 3}{16}{section*.4}%
+\contentsline {subsection}{\numberline {3.1}S-G Experiment Revisited Continued}{16}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Young's Double Slit Experiment}{17}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}The Experimental Setup}{18}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Classical Prediction vs. Quantum Reality}{18}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}Interference: The Quantum Reality}{19}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.4}Calculations of The Interference Pattern}{20}{subsubsection.3.2.4}%
+\contentsline {subsubsection}{\numberline {3.2.5}Geometric Approximation}{22}{subsubsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.3}Single-Particle Interference}{23}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Superposition of Paths}{23}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Adding Probabilities: Classical vs. Quantum}{23}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}The Effect of Measurement (Collapse)}{24}{subsubsection.3.3.3}%
+\contentsline {section}{Lecture 4}{26}{section*.5}%

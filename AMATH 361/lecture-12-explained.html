@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMATH 361 — Lecture 12 Explained</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+  body {
+    font-family: 'Georgia', serif;
+    max-width: 780px;
+    margin: 40px auto;
+    padding: 0 24px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    background: #fdfdfd;
+  }
+  h1 { font-size: 1.7em; border-bottom: 2px solid #333; padding-bottom: 8px; }
+  h2 { font-size: 1.3em; margin-top: 2em; color: #2c3e50; }
+  h3 { font-size: 1.1em; margin-top: 1.5em; color: #34495e; }
+  .highlight {
+    background: #eef6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .key-result {
+    background: #f0fdf4;
+    border-left: 4px solid #22c55e;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .note {
+    background: #fefce8;
+    border-left: 4px solid #eab308;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .big-picture {
+    background: #faf5ff;
+    border-left: 4px solid #a855f7;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  p { margin: 0.8em 0; }
+</style>
+</head>
+<body>
+
+<h1>AMATH 361 — Lecture 12: Introduction to Elasticity Theory</h1>
+
+<h2>1. What's the Goal?</h2>
+
+<p>In previous lectures, you derived the conservation of linear momentum for a continuum:</p>
+
+$$\rho \frac{D\mathbf{u}}{Dt} = -\rho\,\nabla\Pi + \nabla \cdot \underline{\underline{\tau}}$$
+
+<p>This equation has more unknowns than equations — you need a <strong>constitutive relation</strong> to describe the stress tensor $\underline{\underline{\tau}}$. For fluids, you used a Newtonian viscosity model. Now, for <strong>solids</strong>, you need something analogous. That "something" turns out to be <strong>strain</strong> — a measure of how much the material has deformed.</p>
+
+<h2>2. Types of Solids</h2>
+
+<p>Before diving into the math, the lecture classifies solids by how they deform:</p>
+
+<div class="highlight">
+<p><strong>Elastic:</strong> Deformations are reversible — the material bounces back (e.g. rubber, steel).</p>
+<p><strong>Plastic:</strong> Deformations are permanent (e.g. clay).</p>
+<p><strong>Viscoelastic:</strong> A mix of both elastic and viscous behavior (e.g. memory foam).</p>
+</div>
+
+<p>The rest of the lecture (and the theory we develop) focuses entirely on <strong>elastic</strong> solids.</p>
+
+<h2>3. Measuring Deformation: Strain Tensors</h2>
+
+<h3>The Setup</h3>
+
+<p>Take two neighboring points $P$ and $Q$ in the material. Before deformation, they're separated by distance $dS_0$. After deformation, they move to $P'$ and $Q'$, separated by $dS$. We work in two coordinate systems:</p>
+
+<div class="highlight">
+<p><strong>Lagrangian (Material) coordinates $\mathbf{a}$:</strong> where particles <em>started</em>.</p>
+<p><strong>Eulerian (Spatial) coordinates $\mathbf{x}$:</strong> where particles <em>end up</em>.</p>
+</div>
+
+<p>The squared distances are:</p>
+
+$$dS_0^2 = da_i\,da_i, \qquad dS^2 = dx_k\,dx_k$$
+
+<p>We measure deformation by the difference:</p>
+
+$$dS^2 - dS_0^2 = dx_k\,dx_k - da_i\,da_i \tag{$\star$}$$
+
+<p>This expression mixes both coordinate systems. The next step is to rewrite it purely in one frame or the other.</p>
+
+<h3>3a. Lagrangian Strain Tensor (Green–St. Venant)</h3>
+
+<p>To express $(\star)$ purely in terms of $\mathbf{a}$, use the mapping $\mathbf{x} = \mathbf{x}(\mathbf{a})$ and Taylor expand:</p>
+
+$$dx_k = \frac{\partial x_k}{\partial a_j}\,da_j$$
+
+<p>Substitute into $(\star)$:</p>
+
+$$dS^2 - dS_0^2 = \left(\frac{\partial x_k}{\partial a_j}\frac{\partial x_k}{\partial a_l} - \delta_{jl}\right) da_j\,da_l$$
+
+<div class="key-result">
+<p><strong>Green–St. Venant strain tensor</strong> (Lagrangian):</p>
+$$E_{jk} = \frac{1}{2}\left(\frac{\partial x_i}{\partial a_j}\frac{\partial x_i}{\partial a_k} - \delta_{jk}\right)$$
+<p>so that $\;dS^2 - dS_0^2 = 2\,E_{jk}\,da_j\,da_k$.</p>
+</div>
+
+<h3>3b. Eulerian Strain Tensor (Almansi–Hamel)</h3>
+
+<p>To express $(\star)$ purely in terms of $\mathbf{x}$, use the inverse mapping $\mathbf{a} = \mathbf{a}(\mathbf{x})$:</p>
+
+$$da_i = \frac{\partial a_i}{\partial x_j}\,dx_j$$
+
+<p>Substitute into $(\star)$:</p>
+
+$$dS^2 - dS_0^2 = \left(\delta_{jk} - \frac{\partial a_i}{\partial x_j}\frac{\partial a_i}{\partial x_k}\right) dx_j\,dx_k$$
+
+<div class="key-result">
+<p><strong>Almansi–Hamel strain tensor</strong> (Eulerian):</p>
+$$e_{jk} = \frac{1}{2}\left(\delta_{jk} - \frac{\partial a_i}{\partial x_j}\frac{\partial a_i}{\partial x_k}\right)$$
+<p>so that $\;dS^2 - dS_0^2 = 2\,e_{jk}\,dx_j\,dx_k$.</p>
+</div>
+
+<p><strong>Summary so far:</strong></p>
+
+$$dS^2 - dS_0^2 = 2\,E_{jk}\,da_j\,da_k = 2\,e_{jk}\,dx_j\,dx_k$$
+
+<h2>4. Strain in Terms of Displacement</h2>
+
+<p>Define the <strong>displacement</strong>:</p>
+
+$$\boxed{q_i = x_i - a_i}$$
+
+<p>This is just "final position minus initial position" — how far each particle moved.</p>
+
+<h3>Lagrangian version</h3>
+
+<p>Since $x_i = q_i + a_i$, we get $\dfrac{\partial x_i}{\partial a_j} = \dfrac{\partial q_i}{\partial a_j} + \delta_{ij}$. Expanding the product and substituting:</p>
+
+<div class="key-result">
+$$E_{jk} = \frac{1}{2}\left[\frac{\partial q_j}{\partial a_k} + \frac{\partial q_k}{\partial a_j} + \frac{\partial q_i}{\partial a_j}\frac{\partial q_i}{\partial a_k}\right]$$
+</div>
+
+<h3>Eulerian version</h3>
+
+<p>Since $a_i = x_i - q_i$, we get $\dfrac{\partial a_i}{\partial x_j} = \delta_{ij} - \dfrac{\partial q_i}{\partial x_j}$. Similarly:</p>
+
+<div class="key-result">
+$$e_{jk} = \frac{1}{2}\left[\frac{\partial q_j}{\partial x_k} + \frac{\partial q_k}{\partial x_j} - \frac{\partial q_i}{\partial x_j}\frac{\partial q_i}{\partial x_k}\right]$$
+</div>
+
+<p>Notice both are <strong>nonlinear</strong> — those quadratic terms (products of displacement gradients) make things complicated.</p>
+
+<h2>5. The Punchline: Linearization</h2>
+
+<p>Here's where everything simplifies. Assume <strong>small deformations</strong>:</p>
+
+$$\left|\frac{\partial q_i}{\partial a_j}\right| \ll 1$$
+
+<p>When the displacement gradients are small, all those quadratic terms become negligible. Moreover, the Lagrangian and Eulerian derivatives become interchangeable to leading order (since the chain rule connecting them only adds higher-order corrections). Both strain tensors collapse to the <strong>same</strong> linear expression:</p>
+
+<div class="key-result" style="border-left-color: #a855f7; background: #faf5ff;">
+<p><strong>Infinitesimal Strain Tensor:</strong></p>
+$$\boxed{E_{jk} \approx e_{jk} \approx \frac{1}{2}\left(\frac{\partial q_j}{\partial x_k} + \frac{\partial q_k}{\partial x_j}\right)}$$
+<p>This is the strain tensor for <strong>linear elasticity</strong>. It's symmetric, linear in displacements, and doesn't distinguish between the reference and deformed configurations.</p>
+</div>
+
+<h2>6. Connection to Fluid Mechanics</h2>
+
+<div class="note">
+<p>If you take the <strong>time derivative</strong> of the infinitesimal strain tensor, you recover the <strong>strain rate tensor</strong> from fluid mechanics:</p>
+$$\frac{dE_{jk}}{dt} \approx \frac{de_{jk}}{dt} \approx \frac{1}{2}\left(\frac{\partial u_j}{\partial x_k} + \frac{\partial u_k}{\partial x_j}\right)$$
+<p>So strain is to solids what strain <em>rate</em> is to fluids.</p>
+</div>
+
+<h2>7. Big Picture</h2>
+
+<div class="big-picture">
+<p>This lecture sets up the <strong>kinematics</strong> of solid mechanics — you now have a rigorous way to measure deformation via the strain tensor. The next step (in future lectures) will be to connect strain to stress via a <strong>constitutive law</strong> (Hooke's law for linear elastic solids), which finally closes the system of equations and lets you solve real problems.</p>
+</div>
+
+</body>
+</html>

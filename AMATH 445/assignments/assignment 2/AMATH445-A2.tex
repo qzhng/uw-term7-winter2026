@@ -1,0 +1,1313 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{AMATH445-A2}
+    \date{}
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} the following block was taken from tutorial 2}
+
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{mpl}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{pandas}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{pd}
+
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{torch}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{collections}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{OrderedDict}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{io}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{interpolate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{griddata}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{mpl\PYZus{}toolkits}\PY{n+nn}{.}\PY{n+nn}{axes\PYZus{}grid1}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{make\PYZus{}axes\PYZus{}locatable}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{gridspec}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{gridspec}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{warnings}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{integrate}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{odeint}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{style}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{nn}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{KFold}
+
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{67}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} CUDA support}
+\PY{k}{if} \PY{n}{torch}\PY{o}{.}\PY{n}{cuda}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+    \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cuda}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{else}\PY{p}{:}
+    \PY{n}{device} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{device}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cpu}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb+bp}{cls} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}pickle}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A2Q1\PYZus{}data.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{X\PYZus{}train\PYZus{}cls} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n+nb+bp}{cls}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{X\PYZus{}train}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+\PY{n}{X\PYZus{}test\PYZus{}cls}  \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n+nb+bp}{cls}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{X\PYZus{}test}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+\PY{n}{y\PYZus{}train\PYZus{}cls} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n+nb+bp}{cls}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}train}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{y\PYZus{}test\PYZus{}cls}  \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n+nb+bp}{cls}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}test}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+
+\PY{n}{reg} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}pickle}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A2Q1\PYZus{}data\PYZus{}regression.pkl}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{X\PYZus{}train\PYZus{}reg} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{reg}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{X\PYZus{}train}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+\PY{n}{X\PYZus{}test\PYZus{}reg}  \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{reg}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{X\PYZus{}test}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+\PY{n}{y\PYZus{}train\PYZus{}reg} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{reg}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}train}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{y\PYZus{}test\PYZus{}reg}  \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{reg}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{y\PYZus{}test}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \subsubsection{Q1.1}\label{q1.1}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs}\PY{p}{:} \PY{n}{torch}\PY{o}{.}\PY{n}{Tensor}\PY{p}{,} \PY{n}{y\PYZus{}true}\PY{p}{:} \PY{n}{torch}\PY{o}{.}\PY{n}{Tensor}\PY{p}{,} \PY{n}{threshold}\PY{p}{:} \PY{n+nb}{float} \PY{o}{=} \PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{:}
+    \PY{n}{preds} \PY{o}{=} \PY{p}{(}\PY{n}{probs} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{threshold}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}
+
+    \PY{n}{tp} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{preds} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+    \PY{n}{tn} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{preds} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+    \PY{n}{fp} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{preds} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+    \PY{n}{fn} \PY{o}{=} \PY{p}{(}\PY{p}{(}\PY{n}{preds} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{y\PYZus{}true} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+
+    \PY{n}{n} \PY{o}{=} \PY{n}{y\PYZus{}true}\PY{o}{.}\PY{n}{numel}\PY{p}{(}\PY{p}{)}
+    \PY{n}{acc} \PY{o}{=} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{tn}\PY{p}{)} \PY{o}{/} \PY{n}{n} \PY{k}{if} \PY{n}{n} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{n+nb}{float}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{nan}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{prec} \PY{o}{=} \PY{n}{tp} \PY{o}{/} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fp}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fp}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mf}{0.0}
+    \PY{n}{rec} \PY{o}{=} \PY{n}{tp} \PY{o}{/} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fn}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fn}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{l+m+mf}{0.0}
+
+    \PY{k}{return} \PY{n}{acc}\PY{p}{,} \PY{n}{prec}\PY{p}{,} \PY{n}{rec}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{y\PYZus{}pred}\PY{p}{:} \PY{n}{torch}\PY{o}{.}\PY{n}{Tensor}\PY{p}{,} \PY{n}{y\PYZus{}true}\PY{p}{:} \PY{n}{torch}\PY{o}{.}\PY{n}{Tensor}\PY{p}{)} \PY{o}{\PYZhy{}}\PY{o}{\PYZgt{}} \PY{n+nb}{float}\PY{p}{:}
+    \PY{k}{return} \PY{n}{torch}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{(}\PY{n}{y\PYZus{}pred} \PY{o}{\PYZhy{}} \PY{n}{y\PYZus{}true}\PY{p}{)} \PY{o}{*}\PY{o}{*} \PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{DNN}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{min\PYZus{}val}\PY{p}{,} \PY{n}{max\PYZus{}val}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{DNN}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{layers}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{min\PYZus{}val}\PY{p}{,} \PY{n}{requires\PYZus{}grad}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}val} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{max\PYZus{}val}\PY{p}{,} \PY{n}{requires\PYZus{}grad}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{activation} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Tanh}
+
+        \PY{n}{layer\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{layer\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{i}\PY{p}{,} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{layers}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{layers}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+            \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{activation\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{i}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{activation}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{layer\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{layers} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Sequential}\PY{p}{(}\PY{n}{OrderedDict}\PY{p}{(}\PY{n}{layer\PYZus{}list}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+        \PY{n}{res} \PY{o}{=} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}val} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val} \PY{o}{+} \PY{l+m+mf}{1e\PYZhy{}12}\PY{p}{)} \PY{c+c1}{\PYZsh{} added 1e\PYZhy{}12 cuz i kept getting error div 0}
+        \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{layers}\PY{p}{(}\PY{n}{res}\PY{p}{)}
+
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{DefaultClassifierNN}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y\PYZus{}train}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Sigmoid}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{BCELoss}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{forward\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n}{logits} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+        \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid}\PY{p}{(}\PY{n}{logits}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{probs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{forward\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{probs}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train}\PY{p}{)}
+
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{forward\PYZus{}probs}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{DefaultRegressorNN}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y\PYZus{}train}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{MSELoss}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{pred} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{pred}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train}\PY{p}{)}
+
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{report\PYZus{}classifier\PYZus{}q11}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{,} \PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{========== CLASSIFICATION REPORT (Q1.1) ==========}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{n\PYZus{}splits}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{cv\PYZus{}acc}\PY{p}{,} \PY{n}{cv\PYZus{}prec}\PY{p}{,} \PY{n}{cv\PYZus{}rec} \PY{o}{=} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}
+        \PY{n}{X\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}
+
+        \PY{n}{model} \PY{o}{=} \PY{n}{DefaultClassifierNN}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr}\PY{p}{,} \PY{n}{layers}\PY{p}{)}
+        \PY{n}{model}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+        \PY{n}{probs\PYZus{}va} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}va}\PY{p}{)}
+        \PY{n}{acc}\PY{p}{,} \PY{n}{prec}\PY{p}{,} \PY{n}{rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va}\PY{p}{)}
+        \PY{n}{cv\PYZus{}acc}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{acc}\PY{p}{)}\PY{p}{;} \PY{n}{cv\PYZus{}prec}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{prec}\PY{p}{)}\PY{p}{;} \PY{n}{cv\PYZus{}rec}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rec}\PY{p}{)}
+
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Acc =}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{cv\PYZus{}acc}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{cv\PYZus{}prec}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Rec =}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{cv\PYZus{}rec}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{full\PYZus{}model} \PY{o}{=} \PY{n}{DefaultClassifierNN}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{)}
+    \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+    \PY{n}{probs\PYZus{}train} \PY{o}{=} \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}
+    \PY{n}{probs\PYZus{}test}  \PY{o}{=} \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+    \PY{n}{train\PYZus{}acc}\PY{p}{,} \PY{n}{train\PYZus{}prec}\PY{p}{,} \PY{n}{train\PYZus{}rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}
+    \PY{n}{test\PYZus{}acc}\PY{p}{,}  \PY{n}{test\PYZus{}prec}\PY{p}{,}  \PY{n}{test\PYZus{}rec}  \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}test}\PY{p}{,}  \PY{n}{y\PYZus{}test}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS FULL] Train: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS FULL] Test : Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{,  Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{,  Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{report\PYZus{}regressor\PYZus{}q11}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{,} \PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{========== REGRESSION REPORT (Q1.1) ==========}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{n\PYZus{}splits}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{cv\PYZus{}mse} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}
+        \PY{n}{X\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}
+
+        \PY{n}{model} \PY{o}{=} \PY{n}{DefaultRegressorNN}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr}\PY{p}{,} \PY{n}{layers}\PY{p}{)}
+        \PY{n}{model}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+        \PY{n}{pred\PYZus{}va} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}va}\PY{p}{)}
+        \PY{n}{mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{pred\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va}\PY{p}{)}
+        \PY{n}{cv\PYZus{}mse}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mse}\PY{p}{)}
+
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG CV] Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: Val MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG CV] Mean Val MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{cv\PYZus{}mse}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{full\PYZus{}model} \PY{o}{=} \PY{n}{DefaultRegressorNN}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{)}
+    \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+    \PY{n}{pred\PYZus{}train} \PY{o}{=} \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}
+    \PY{n}{pred\PYZus{}test}  \PY{o}{=} \PY{n}{full\PYZus{}model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+    \PY{n}{train\PYZus{}mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{pred\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}
+    \PY{n}{test\PYZus{}mse}  \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{pred\PYZus{}test}\PY{p}{,}  \PY{n}{y\PYZus{}test}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG FULL] Train MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG FULL] Test  MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+
+
+\PY{n}{cls\PYZus{}layers} \PY{o}{=} \PY{p}{[}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+m+mi}{32}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{reg\PYZus{}layers} \PY{o}{=} \PY{p}{[}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{,} \PY{l+m+mi}{32}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{n}{EPOCHS} \PY{o}{=} \PY{l+m+mi}{500}
+\PY{n}{KFOLDS} \PY{o}{=} \PY{l+m+mi}{5}
+
+\PY{n}{report\PYZus{}classifier\PYZus{}q11}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{X\PYZus{}test\PYZus{}cls}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}cls}\PY{p}{,} \PY{n}{cls\PYZus{}layers}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{,} \PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{KFOLDS}\PY{p}{)}
+\PY{n}{report\PYZus{}regressor\PYZus{}q11}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{X\PYZus{}test\PYZus{}reg}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}reg}\PY{p}{,} \PY{n}{reg\PYZus{}layers}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{,} \PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{KFOLDS}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+========== CLASSIFICATION REPORT (Q1.1) ==========
+[CLS CV] Fold 1: Acc=0.6333, Prec=0.3333, Rec=0.2222
+[CLS CV] Fold 2: Acc=0.6333, Prec=0.3333, Rec=0.1579
+[CLS CV] Fold 3: Acc=0.5667, Prec=0.3000, Rec=0.1364
+[CLS CV] Fold 4: Acc=0.5833, Prec=0.4000, Rec=0.2727
+[CLS CV] Fold 5: Acc=0.6000, Prec=0.2778, Rec=0.3125
+[CLS CV] Mean Acc =0.6033
+[CLS CV] Mean Prec=0.3289
+[CLS CV] Mean Rec =0.2203
+[CLS FULL] Train: Acc=0.7667, Prec=0.7077, Rec=0.4742
+[CLS FULL] Test : Acc=0.5926,  Prec=0.3000,  Rec=0.1667
+
+========== REGRESSION REPORT (Q1.1) ==========
+[REG CV] Fold 1: Val MSE=3516.556152
+[REG CV] Fold 2: Val MSE=3480.597412
+[REG CV] Fold 3: Val MSE=3555.481201
+[REG CV] Fold 4: Val MSE=3467.681885
+[REG CV] Fold 5: Val MSE=3655.291748
+[REG CV] Mean Val MSE=3535.121680
+[REG FULL] Train MSE=3520.006592
+[REG FULL] Test  MSE=3748.254395
+    \end{Verbatim}
+\clearpage
+
+    \subsubsection{Q1.2}\label{q1.2}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{DNN}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{min\PYZus{}val}\PY{p}{,} \PY{n}{max\PYZus{}val}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb}{super}\PY{p}{(}\PY{n}{DNN}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{layers}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{min\PYZus{}val}\PY{p}{,} \PY{n}{requires\PYZus{}grad}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}val} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{tensor}\PY{p}{(}\PY{n}{max\PYZus{}val}\PY{p}{,} \PY{n}{requires\PYZus{}grad}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{k}{def}\PY{+w}{ }\PY{n+nf}{act\PYZus{}for\PYZus{}hidden}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{:}
+            \PY{k}{if} \PY{n}{activation\PYZus{}mode} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                \PY{k}{return} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Tanh}\PY{p}{(}\PY{p}{)}
+            \PY{k}{if} \PY{n}{activation\PYZus{}mode} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                \PY{k}{return} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{ReLU}\PY{p}{(}\PY{p}{)}
+            \PY{k}{if} \PY{n}{activation\PYZus{}mode} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mixed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+                \PY{k}{return} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{ReLU}\PY{p}{(}\PY{p}{)} \PY{k}{if} \PY{p}{(}\PY{n}{i} \PY{o}{\PYZpc{}} \PY{l+m+mi}{2} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{)} \PY{k}{else} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Tanh}\PY{p}{(}\PY{p}{)}
+
+        \PY{n}{layer\PYZus{}list} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+            \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{layer\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{i}\PY{p}{,} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{layers}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{layers}\PY{p}{[}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+            \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{activation\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{i}\PY{p}{,} \PY{n}{act\PYZus{}for\PYZus{}hidden}\PY{p}{(}\PY{n}{i}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{layer\PYZus{}list}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{layer\PYZus{}}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{depth} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{layers}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{layers} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Sequential}\PY{p}{(}\PY{n}{OrderedDict}\PY{p}{(}\PY{n}{layer\PYZus{}list}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+        \PY{n}{res} \PY{o}{=} \PY{p}{(}\PY{n}{x} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{max\PYZus{}val} \PY{o}{\PYZhy{}} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{min\PYZus{}val} \PY{o}{+} \PY{l+m+mf}{1e\PYZhy{}12}\PY{p}{)}
+        \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{layers}\PY{p}{(}\PY{n}{res}\PY{p}{)}
+
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{ClassifierNN}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y\PYZus{}train}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation\PYZus{}mode}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Sigmoid}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{BCELoss}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{forward\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n}{logits} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+        \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid}\PY{p}{(}\PY{n}{logits}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{probs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{forward\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{probs}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{forward\PYZus{}probs}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{RegressorNN}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train} \PY{o}{=} \PY{n}{y\PYZus{}train}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{dim}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation\PYZus{}mode}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{Adam}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{MSELoss}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{pred} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X\PYZus{}train}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{pred}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y\PYZus{}train}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{optimizer\PYZus{}Adam}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evaluate\PYZus{}classifier\PYZus{}cv}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Classification | activation=}\PY{l+s+si}{\PYZob{}}\PY{n}{activation\PYZus{}mode}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{k}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{accs}\PY{p}{,} \PY{n}{precs}\PY{p}{,} \PY{n}{recs} \PY{o}{=} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}
+        \PY{n}{X\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}
+
+        \PY{n}{m} \PY{o}{=} \PY{n}{ClassifierNN}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation\PYZus{}mode}\PY{p}{)}
+        \PY{n}{m}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+        \PY{n}{probs\PYZus{}va} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}va}\PY{p}{)}
+        \PY{n}{acc}\PY{p}{,} \PY{n}{prec}\PY{p}{,} \PY{n}{rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va}\PY{p}{)}
+
+        \PY{n}{accs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{acc}\PY{p}{)}\PY{p}{;} \PY{n}{precs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{prec}\PY{p}{)}\PY{p}{;} \PY{n}{recs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rec}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Acc =}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{accs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{precs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[CLS CV] Mean Rec =}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{recs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{k}{return} \PY{p}{\PYZob{}}
+        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}acc\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{accs}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}prec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{precs}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}rec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{recs}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{\PYZcb{}}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evaluate\PYZus{}regressor\PYZus{}cv}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Regression | activation=}\PY{l+s+si}{\PYZob{}}\PY{n}{activation\PYZus{}mode}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{k}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{mses} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}
+        \PY{n}{X\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}
+
+        \PY{n}{m} \PY{o}{=} \PY{n}{RegressorNN}\PY{p}{(}\PY{n}{X\PYZus{}tr}\PY{p}{,} \PY{n}{y\PYZus{}tr}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation\PYZus{}mode}\PY{p}{)}
+        \PY{n}{m}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{epochs}\PY{p}{)}
+
+        \PY{n}{pred\PYZus{}va} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}va}\PY{p}{)}
+        \PY{n}{mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{pred\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}va}\PY{p}{)}
+        \PY{n}{mses}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mse}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG CV] Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: Val MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{[REG CV] Mean Val MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{mses}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+    \PY{k}{return} \PY{p}{\PYZob{}}
+        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}mse\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n+nb}{float}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{mses}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{\PYZcb{}}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{========== ACTIVATION COMPARISON: CLASSIFICATION ==========}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{cls\PYZus{}summaries} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{k}{for} \PY{n}{act} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mixed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{:}
+    \PY{n}{cls\PYZus{}summaries}\PY{p}{[}\PY{n}{act}\PY{p}{]} \PY{o}{=} \PY{n}{evaluate\PYZus{}classifier\PYZus{}cv}\PY{p}{(}
+        \PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{cls\PYZus{}layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{act}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{n}{KFOLDS}
+    \PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{========== ACTIVATION COMPARISON: REGRESSION ==========}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{reg\PYZus{}summaries} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{k}{for} \PY{n}{act} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mixed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{:}
+    \PY{n}{reg\PYZus{}summaries}\PY{p}{[}\PY{n}{act}\PY{p}{]} \PY{o}{=} \PY{n}{evaluate\PYZus{}regressor\PYZus{}cv}\PY{p}{(}
+        \PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{reg\PYZus{}layers}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{act}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{n}{KFOLDS}
+    \PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+========== ACTIVATION COMPARISON: CLASSIFICATION ==========
+
+--- Classification | activation=relu ---
+[CLS CV] Fold 1: Acc=0.6000, Prec=0.3333, Rec=0.3333
+[CLS CV] Fold 2: Acc=0.5500, Prec=0.3000, Rec=0.3158
+[CLS CV] Fold 3: Acc=0.5500, Prec=0.3333, Rec=0.2273
+[CLS CV] Fold 4: Acc=0.6000, Prec=0.4286, Rec=0.2727
+[CLS CV] Fold 5: Acc=0.5667, Prec=0.2727, Rec=0.3750
+[CLS CV] Mean Acc =0.5733
+[CLS CV] Mean Prec=0.3336
+[CLS CV] Mean Rec =0.3048
+
+--- Classification | activation=tanh ---
+[CLS CV] Fold 1: Acc=0.6333, Prec=0.3571, Rec=0.2778
+[CLS CV] Fold 2: Acc=0.6167, Prec=0.3333, Rec=0.2105
+[CLS CV] Fold 3: Acc=0.5500, Prec=0.3529, Rec=0.2727
+[CLS CV] Fold 4: Acc=0.6000, Prec=0.4375, Rec=0.3182
+[CLS CV] Fold 5: Acc=0.6167, Prec=0.3158, Rec=0.3750
+[CLS CV] Mean Acc =0.6033
+[CLS CV] Mean Prec=0.3593
+[CLS CV] Mean Rec =0.2908
+
+--- Classification | activation=mixed ---
+[CLS CV] Fold 1: Acc=0.6500, Prec=0.4000, Rec=0.3333
+[CLS CV] Fold 2: Acc=0.5833, Prec=0.2857, Rec=0.2105
+[CLS CV] Fold 3: Acc=0.5333, Prec=0.3125, Rec=0.2273
+[CLS CV] Fold 4: Acc=0.5833, Prec=0.4118, Rec=0.3182
+[CLS CV] Fold 5: Acc=0.5333, Prec=0.2273, Rec=0.3125
+[CLS CV] Mean Acc =0.5767
+[CLS CV] Mean Prec=0.3275
+[CLS CV] Mean Rec =0.2804
+
+========== ACTIVATION COMPARISON: REGRESSION ==========
+
+--- Regression | activation=relu ---
+[REG CV] Fold 1: Val MSE=244.997757
+[REG CV] Fold 2: Val MSE=269.431824
+[REG CV] Fold 3: Val MSE=310.169586
+[REG CV] Fold 4: Val MSE=242.094406
+[REG CV] Fold 5: Val MSE=333.938660
+[REG CV] Mean Val MSE=280.126447
+
+--- Regression | activation=tanh ---
+[REG CV] Fold 1: Val MSE=3508.044678
+[REG CV] Fold 2: Val MSE=3532.947998
+[REG CV] Fold 3: Val MSE=3553.332275
+[REG CV] Fold 4: Val MSE=3446.643799
+[REG CV] Fold 5: Val MSE=3670.205811
+[REG CV] Mean Val MSE=3542.234912
+
+--- Regression | activation=mixed ---
+[REG CV] Fold 1: Val MSE=3490.563965
+[REG CV] Fold 2: Val MSE=3522.276611
+[REG CV] Fold 3: Val MSE=3561.730225
+[REG CV] Fold 4: Val MSE=3395.705322
+[REG CV] Fold 5: Val MSE=3621.698730
+[REG CV] Mean Val MSE=3518.394971
+    \end{Verbatim}
+
+    Based on the results, ReLU performs best for regression model because it
+has the lowest CV MSE.
+
+For classification model, tanh performs the best because it has the
+highest mean accuracy and precision.
+\clearpage
+
+    \subsubsection{Q1.3}\label{q1.3}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{lrs} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{]}
+\PY{n}{momentums} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{]}
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{ClassifierNN\PYZus{}SGD}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{lr}\PY{p}{,} \PY{n}{momentum}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X} \PY{o}{=} \PY{n}{X}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y} \PY{o}{=} \PY{n}{y}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Sigmoid}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{BCELoss}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{SGD}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{lr}\PY{p}{,} \PY{n}{momentum}\PY{o}{=}\PY{n}{momentum}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{probs} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{probs}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{loss}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict\PYZus{}probs}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{sigmoid}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}\PY{p}{)}
+
+\PY{k}{class}\PY{+w}{ }\PY{n+nc}{RegressorNN\PYZus{}SGD}\PY{p}{:}
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{layers}\PY{p}{,} \PY{n}{lr}\PY{p}{,} \PY{n}{momentum}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X} \PY{o}{=} \PY{n}{X}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y} \PY{o}{=} \PY{n}{y}
+
+        \PY{n}{Xmin} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+        \PY{n}{Xmax} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn} \PY{o}{=} \PY{n}{DNN}\PY{p}{(}\PY{n}{layers}\PY{p}{,} \PY{n}{Xmin}\PY{p}{,} \PY{n}{Xmax}\PY{p}{,} \PY{n}{activation\PYZus{}mode}\PY{o}{=}\PY{n}{activation}\PY{p}{)}\PY{o}{.}\PY{n}{to}\PY{p}{(}\PY{n}{device}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{MSELoss}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{optim}\PY{o}{.}\PY{n}{SGD}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{lr}\PY{p}{,} \PY{n}{momentum}\PY{o}{=}\PY{n}{momentum}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{train}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{epochs}\PY{o}{=}\PY{l+m+mi}{500}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{epochs}\PY{p}{)}\PY{p}{:}
+            \PY{n}{pred} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{X}\PY{p}{)}
+            \PY{n}{loss} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{criterion}\PY{p}{(}\PY{n}{pred}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{y}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+            \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{opt}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+            \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{loss\PYZus{}history}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{loss}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+    \PY{k}{def}\PY{+w}{ }\PY{n+nf}{predict}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{X}\PY{p}{)}\PY{p}{:}
+        \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+        \PY{k}{with} \PY{n}{torch}\PY{o}{.}\PY{n}{no\PYZus{}grad}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{dnn}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{=== CLASSIFICATION: LR \PYZam{} Momentum CV ===}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{cls\PYZus{}cv\PYZus{}results} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{fig\PYZus{}cls}\PY{p}{,} \PY{n}{axes\PYZus{}cls} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{fig\PYZus{}cls}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification Training Loss Curves (5\PYZhy{}Fold CV)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{idx}\PY{p}{,} \PY{p}{(}\PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax} \PY{o}{=} \PY{n}{axes\PYZus{}cls}\PY{p}{[}\PY{n}{idx} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{idx} \PY{o}{\PYZpc{}} \PY{l+m+mi}{2}\PY{p}{]}
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{KFOLDS}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{accs}\PY{p}{,} \PY{n}{precs}\PY{p}{,} \PY{n}{recs} \PY{o}{=} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{clf} \PY{o}{=} \PY{n}{ClassifierNN\PYZus{}SGD}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{cls\PYZus{}layers}\PY{p}{,} \PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{clf}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{clf}\PY{o}{.}\PY{n}{loss\PYZus{}history}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+        \PY{n}{probs\PYZus{}va} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{)}
+        \PY{n}{acc}\PY{p}{,} \PY{n}{prec}\PY{p}{,} \PY{n}{rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{)}
+        \PY{n}{accs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{acc}\PY{p}{)}\PY{p}{;} \PY{n}{precs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{prec}\PY{p}{)}\PY{p}{;} \PY{n}{recs}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{rec}\PY{p}{)}
+
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, momentum=}\PY{l+s+si}{\PYZob{}}\PY{n}{mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Epoch}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{BCE Loss}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{7}\PY{p}{)}
+
+    \PY{n}{cls\PYZus{}cv\PYZus{}results}\PY{p}{[}\PY{p}{(}\PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{)}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}
+        \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}acc\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{accs}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}prec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{precs}\PY{p}{)}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}rec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{recs}\PY{p}{)}
+    \PY{p}{\PYZcb{}}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, mom=}\PY{l+s+si}{\PYZob{}}\PY{n}{mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ | Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{accs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{precs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{recs}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{=== REGRESSION: LR \PYZam{} Momentum CV ===}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{reg\PYZus{}cv\PYZus{}results} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+\PY{n}{fig\PYZus{}reg}\PY{p}{,} \PY{n}{axes\PYZus{}reg} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{12}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+\PY{n}{fig\PYZus{}reg}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Regression Training Loss Curves (5\PYZhy{}Fold CV)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{idx}\PY{p}{,} \PY{p}{(}\PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.0}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.9}\PY{p}{)}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax} \PY{o}{=} \PY{n}{axes\PYZus{}reg}\PY{p}{[}\PY{n}{idx} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{[}\PY{n}{idx} \PY{o}{\PYZpc{}} \PY{l+m+mi}{2}\PY{p}{]}
+    \PY{n}{kf} \PY{o}{=} \PY{n}{KFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{n}{KFOLDS}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1234}\PY{p}{)}
+    \PY{n}{mses\PYZus{}cv} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+
+    \PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{p}{(}\PY{n}{tr\PYZus{}idx}\PY{p}{,} \PY{n}{va\PYZus{}idx}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{kf}\PY{o}{.}\PY{n}{split}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{)}\PY{p}{,} \PY{n}{start}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{:}
+        \PY{n}{regm} \PY{o}{=} \PY{n}{RegressorNN\PYZus{}SGD}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{[}\PY{n}{tr\PYZus{}idx}\PY{p}{]}\PY{p}{,} \PY{n}{reg\PYZus{}layers}\PY{p}{,} \PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{regm}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{regm}\PY{o}{.}\PY{n}{loss\PYZus{}history}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+        \PY{n}{pred\PYZus{}va} \PY{o}{=} \PY{n}{regm}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{)}
+        \PY{n}{mses\PYZus{}cv}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{pred\PYZus{}va}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{[}\PY{n}{va\PYZus{}idx}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, momentum=}\PY{l+s+si}{\PYZob{}}\PY{n}{mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Epoch}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MSE Loss}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{7}\PY{p}{)}
+
+    \PY{n}{reg\PYZus{}cv\PYZus{}results}\PY{p}{[}\PY{p}{(}\PY{n}{lr}\PY{p}{,} \PY{n}{mom}\PY{p}{)}\PY{p}{]} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}mse\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{mses\PYZus{}cv}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, mom=}\PY{l+s+si}{\PYZob{}}\PY{n}{mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ | MSE=}\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{mses\PYZus{}cv}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{best\PYZus{}cls\PYZus{}config} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{n}{cls\PYZus{}cv\PYZus{}results}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{k}\PY{p}{:} \PY{n}{cls\PYZus{}cv\PYZus{}results}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}prec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]} \PY{o}{+} \PY{n}{cls\PYZus{}cv\PYZus{}results}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}rec\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n}{best\PYZus{}reg\PYZus{}config} \PY{o}{=} \PY{n+nb}{min}\PY{p}{(}\PY{n}{reg\PYZus{}cv\PYZus{}results}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{k}\PY{p}{:} \PY{n}{reg\PYZus{}cv\PYZus{}results}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{p}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{cv\PYZus{}mse\PYZus{}mean}\PY{l+s+s2}{\PYZdq{}}\PY{p}{]}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Best classification config: lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cls\PYZus{}config}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, momentum=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cls\PYZus{}config}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Best regression config: lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}reg\PYZus{}config}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, momentum=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}reg\PYZus{}config}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+=== CLASSIFICATION: LR \& Momentum CV ===
+
+lr=0.1, mom=0.0 | Acc=0.6300, Prec=0.1189, Rec=0.0816
+lr=0.1, mom=0.9 | Acc=0.6000, Prec=0.4044, Rec=0.3443
+lr=0.01, mom=0.0 | Acc=0.6767, Prec=0.0000, Rec=0.0000
+lr=0.01, mom=0.9 | Acc=0.6433, Prec=0.2253, Rec=0.0892
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AMATH445-A2_files/AMATH445-A2_8_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+=== REGRESSION: LR \& Momentum CV ===
+
+lr=0.1, mom=0.0 | MSE=nan
+lr=0.1, mom=0.9 | MSE=nan
+lr=0.01, mom=0.0 | MSE=3545.0738
+lr=0.01, mom=0.9 | MSE=269.5792
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{AMATH445-A2_files/AMATH445-A2_8_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Best classification config: lr=0.1, momentum=0.9
+Best regression config: lr=0.1, momentum=0.0
+    \end{Verbatim}
+
+    For classification, lr=0.1 without momentum gives the smoothest
+convergence, adding momentum causes large spikes after epoch 300.
+
+Despite the instability, lr=0.1 with momentum=0.9 achieves the best CV
+precision and recall, so the oscillations help escape local minima.
+Lower learning rate (0.01) converges slowly and fails to learn
+meaningful predictions.
+
+For regression, all SGD configurations produce extreme initial loss
+spikes, showing SGD is poorly suited for this regression task compared
+to Adam used in q1.1.
+\clearpage
+
+    \subsubsection{Q1.4}\label{q1.4}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{========== Q1.4: BEST MODEL vs DEFAULT ==========}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Best Classification Model (full training + test) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{best\PYZus{}cls\PYZus{}lr}\PY{p}{,} \PY{n}{best\PYZus{}cls\PYZus{}mom} \PY{o}{=} \PY{n}{best\PYZus{}cls\PYZus{}config}
+\PY{n}{best\PYZus{}cls\PYZus{}act} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{tanh}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{n}{clf\PYZus{}best} \PY{o}{=} \PY{n}{ClassifierNN\PYZus{}SGD}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{cls\PYZus{}layers}\PY{p}{,} \PY{n}{best\PYZus{}cls\PYZus{}lr}\PY{p}{,} \PY{n}{best\PYZus{}cls\PYZus{}mom}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{n}{best\PYZus{}cls\PYZus{}act}\PY{p}{)}
+\PY{n}{clf\PYZus{}best}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+
+\PY{n}{probs\PYZus{}train} \PY{o}{=} \PY{n}{clf\PYZus{}best}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{)}
+\PY{n}{probs\PYZus{}test} \PY{o}{=} \PY{n}{clf\PYZus{}best}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}cls}\PY{p}{)}
+
+\PY{n}{tr\PYZus{}acc}\PY{p}{,} \PY{n}{tr\PYZus{}prec}\PY{p}{,} \PY{n}{tr\PYZus{}rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{)}
+\PY{n}{te\PYZus{}acc}\PY{p}{,} \PY{n}{te\PYZus{}prec}\PY{p}{,} \PY{n}{te\PYZus{}rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{probs\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}cls}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test : Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Best Regression Model (full training + test) \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{best\PYZus{}reg\PYZus{}lr}\PY{p}{,} \PY{n}{best\PYZus{}reg\PYZus{}mom} \PY{o}{=} \PY{n}{best\PYZus{}reg\PYZus{}config}
+\PY{n}{best\PYZus{}reg\PYZus{}act} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{relu}\PY{l+s+s2}{\PYZdq{}}
+
+\PY{n}{regm\PYZus{}best} \PY{o}{=} \PY{n}{RegressorNN\PYZus{}SGD}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{reg\PYZus{}layers}\PY{p}{,} \PY{n}{best\PYZus{}reg\PYZus{}lr}\PY{p}{,} \PY{n}{best\PYZus{}reg\PYZus{}mom}\PY{p}{,} \PY{n}{activation}\PY{o}{=}\PY{n}{best\PYZus{}reg\PYZus{}act}\PY{p}{)}
+\PY{n}{regm\PYZus{}best}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+
+\PY{n}{train\PYZus{}mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{regm\PYZus{}best}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{)}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{)}
+\PY{n}{test\PYZus{}mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{regm\PYZus{}best}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}reg}\PY{p}{)}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}reg}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test  MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{\PYZhy{}\PYZhy{}\PYZhy{} Comparison with Default \PYZhy{}\PYZhy{}\PYZhy{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{default\PYZus{}cls} \PY{o}{=} \PY{n}{DefaultClassifierNN}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{,} \PY{n}{cls\PYZus{}layers}\PY{p}{)}
+\PY{n}{default\PYZus{}cls}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+
+\PY{n}{def\PYZus{}probs\PYZus{}train} \PY{o}{=} \PY{n}{default\PYZus{}cls}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}cls}\PY{p}{)}
+\PY{n}{def\PYZus{}probs\PYZus{}test} \PY{o}{=} \PY{n}{default\PYZus{}cls}\PY{o}{.}\PY{n}{predict\PYZus{}probs}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}cls}\PY{p}{)}
+
+\PY{n}{def\PYZus{}tr\PYZus{}acc}\PY{p}{,} \PY{n}{def\PYZus{}tr\PYZus{}prec}\PY{p}{,} \PY{n}{def\PYZus{}tr\PYZus{}rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{def\PYZus{}probs\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}cls}\PY{p}{)}
+\PY{n}{def\PYZus{}te\PYZus{}acc}\PY{p}{,} \PY{n}{def\PYZus{}te\PYZus{}prec}\PY{p}{,} \PY{n}{def\PYZus{}te\PYZus{}rec} \PY{o}{=} \PY{n}{classification\PYZus{}metrics\PYZus{}from\PYZus{}probs}\PY{p}{(}\PY{n}{def\PYZus{}probs\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}cls}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DEFAULT Classification:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Train: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}tr\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}tr\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}tr\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Test : Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}te\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}te\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}te\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{BEST Classification (lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cls\PYZus{}lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, mom=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cls\PYZus{}mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, act=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cls\PYZus{}act}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Train: Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{tr\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Test : Acc=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}acc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Prec=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}prec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Rec=}\PY{l+s+si}{\PYZob{}}\PY{n}{te\PYZus{}rec}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{default\PYZus{}reg} \PY{o}{=} \PY{n}{DefaultRegressorNN}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{,} \PY{n}{reg\PYZus{}layers}\PY{p}{)}
+\PY{n}{default\PYZus{}reg}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{n}{adam\PYZus{}epochs}\PY{o}{=}\PY{n}{EPOCHS}\PY{p}{)}
+
+\PY{n}{def\PYZus{}train\PYZus{}mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{default\PYZus{}reg}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}reg}\PY{p}{)}\PY{p}{,} \PY{n}{y\PYZus{}train\PYZus{}reg}\PY{p}{)}
+\PY{n}{def\PYZus{}test\PYZus{}mse} \PY{o}{=} \PY{n}{mse\PYZus{}metric}\PY{p}{(}\PY{n}{default\PYZus{}reg}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}reg}\PY{p}{)}\PY{p}{,} \PY{n}{y\PYZus{}test\PYZus{}reg}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{DEFAULT Regression:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Train MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}train\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Test  MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{def\PYZus{}test\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{BEST Regression (lr=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}reg\PYZus{}lr}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, mom=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}reg\PYZus{}mom}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, act=}\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}reg\PYZus{}act}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Train MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{train\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Test  MSE: }\PY{l+s+si}{\PYZob{}}\PY{n}{test\PYZus{}mse}\PY{l+s+si}{:}\PY{l+s+s2}{.6f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+========== Q1.4: BEST MODEL vs DEFAULT ==========
+
+--- Best Classification Model (full training + test) ---
+Train: Acc=0.7433, Prec=0.6923, Rec=0.3711
+Test : Acc=0.6296, Prec=0.3750, Rec=0.1667
+
+--- Best Regression Model (full training + test) ---
+Train MSE: 269.433105
+Test  MSE: 226.076447
+
+--- Comparison with Default ---
+DEFAULT Classification:
+  Train: Acc=0.7733, Prec=0.7231, Rec=0.4845
+  Test : Acc=0.5926, Prec=0.3333, Rec=0.2222
+
+BEST Classification (lr=0.1, mom=0.9, act=tanh):
+  Train: Acc=0.7433, Prec=0.6923, Rec=0.3711
+  Test : Acc=0.6296, Prec=0.3750, Rec=0.1667
+
+DEFAULT Regression:
+  Train MSE: 3501.667480
+  Test  MSE: 3729.150391
+
+BEST Regression (lr=0.1, mom=0.0, act=relu):
+  Train MSE: 269.433105
+  Test  MSE: 226.076447
+    \end{Verbatim}
+
+    The best regression model (SGD, lr=0.1, ReLU) outperforms the default,
+with test MSE of 226.08 vs 3729.15.
+
+The best classification model (SGD, lr=0.1, momentum=0.9, Tanh) performs
+comparably to the default Adam model, with slightly higher test accuracy
+(63\% vs 59.3\%) and precision (33.3\% vs 30.0\%).
+
+Overall, tuning hyperparameters significantly improves regression but
+not for classification.
+\clearpage
+
+    \subsubsection{Q3}\label{q3}
+
+\subparagraph{(1a)}\label{a}
+
+By the chain rule
+\[\delta_j^{(L)} = \frac{\partial c}{\partial z_j^{(L)}} = \frac{\partial c}{\partial a_j^{(L)}} \frac{\partial a_j^{(L)}}{\partial z_j^{(L)}}\]
+Using the activation definition \(a_j^{(L)} = g_L(z_j^{(L)})\)
+\[\frac{\partial a_j^{(L)}}{\partial z_j^{(L)}} = g_L'(z_j^{(L)})\]
+Substitute back
+\[\delta_j^{(L)} = \frac{\partial c}{\partial a_j^{(L)}} g_L'(z_j^{(L)}).\]
+
+\subparagraph{(1b)}\label{b}
+
+By multivariable chain rule
+\[\delta_j^{(\ell)} = \frac{\partial c}{\partial z_j^{(\ell)}} = \sum_k \frac{\partial c}{\partial z_k^{(\ell+1)}} \frac{\partial z_k^{(\ell+1)}}{\partial z_j^{(\ell)}}\]
+Substitute the definition of the error term for the next layer
+(\(\delta_k^{(\ell+1)} = \frac{\partial c}{\partial z_k^{(\ell+1)}}\))
+\[\delta_j^{(\ell)} = \sum_k \delta_k^{(\ell+1)} \frac{\partial z_k^{(\ell+1)}}{\partial z_j^{(\ell)}}\]
+Also
+\[\frac{\partial z_k^{(\ell+1)}}{\partial z_j^{(\ell)}} = \frac{\partial z_k^{(\ell+1)}}{\partial a_j^{(\ell)}} \frac{\partial a_j^{(\ell)}}{\partial z_j^{(\ell)}}\]
+From the forward pass
+\(z_k^{(\ell+1)} = \sum_j W_{kj}^{(\ell+1)} a_j^{(\ell)} + b_k^{(\ell+1)}\),
+we get
+\(\frac{\partial z_k^{(\ell+1)}}{\partial a_j^{(\ell)}} = W_{kj}^{(\ell+1)}\).
+And as shown before,
+\(\frac{\partial a_j^{(\ell)}}{\partial z_j^{(\ell)}} = g_\ell'(z_j^{(\ell)})\).
+Substitute back
+\[\delta_j^{(\ell)} = \sum_k \delta_k^{(\ell+1)} W_{kj}^{(\ell+1)} g_\ell'(z_j^{(\ell)})\]
+Since \(g_\ell'(z_j^{(\ell)})\) does not depend on the summation index
+\(k\)
+\[\delta_j^{(\ell)} = \left(\sum_k \delta_k^{(\ell+1)} W_{kj}^{(\ell+1)}\right) g_\ell'(z_j^{(\ell)})\]
+
+\subparagraph{(2a)}\label{a-1}
+
+By the chain rule
+\[\frac{\partial c}{\partial W_{ij}^{(\ell)}} = \frac{\partial c}{\partial z_j^{(\ell)}} \frac{\partial z_j^{(\ell)}}{\partial W_{ij}^{(\ell)}}\]
+Substitute the definition
+\(\delta_j^{(\ell)} = \frac{\partial c}{\partial z_j^{(\ell)}}\)
+\[\frac{\partial c}{\partial W_{ij}^{(\ell)}} = \delta_j^{(\ell)} \frac{\partial z_j^{(\ell)}}{\partial W_{ij}^{(\ell)}}\]
+Using
+\(z_j^{(\ell)} = \sum_i W_{ij}^{(\ell)} a_i^{(\ell-1)} + b_j^{(\ell)}\)
+to find the derivative with respect to the specific weight
+\[\frac{\partial z_j^{(\ell)}}{\partial W_{ij}^{(\ell)}} = a_i^{(\ell-1)}\]
+Substitute
+\[\frac{\partial c}{\partial W_{ij}^{(\ell)}} = \delta_j^{(\ell)} a_i^{(\ell-1)} = a_i^{(\ell-1)} \delta_j^{(\ell)}.\]
+
+\subparagraph{(2b)}\label{b-1}
+
+By the chain rule
+\[\frac{\partial c}{\partial b_j^{(\ell)}} = \frac{\partial c}{\partial z_j^{(\ell)}} \frac{\partial z_j^{(\ell)}}{\partial b_j^{(\ell)}}\]
+Substitute the error term definition
+\[\frac{\partial c}{\partial b_j^{(\ell)}} = \delta_j^{(\ell)} \frac{\partial z_j^{(\ell)}}{\partial b_j^{(\ell)}}\]
+Take the derivative of the forward pass equation with respect to
+\(b_j^{(\ell)}\)
+\[\frac{\partial z_j^{(\ell)}}{\partial b_j^{(\ell)}} = 1\] Substitute
+this back
+\[\frac{\partial c}{\partial b_j^{(\ell)}} = \delta_j^{(\ell)} \cdot 1 = \delta_j^{(\ell)}.\]
+\clearpage
+
+\subsubsection{Q4}\label{q4}
+
+\subparagraph{(1)}\label{section}
+
+Isolate the part of the cost function related to a single cluster \(r\)
+\[J_r = \sum_{{\bf x}_i \in \mathcal{C}_r} ||{\bf x}_i - \boldsymbol{\mu}_r||^2\]
+\[\frac{\partial J_r}{\partial \boldsymbol{\mu}_r} = \sum_{{\bf x}_i \in \mathcal{C}_r} \frac{\partial}{\partial \boldsymbol{\mu}_r} ||{\bf x}_i - \boldsymbol{\mu}_r||^2\]
+\[\frac{\partial J_r}{\partial \boldsymbol{\mu}_r} = \sum_{{\bf x}_i \in \mathcal{C}_r} -2({\bf x}_i - \boldsymbol{\mu}_r)\]
+Set the gradient to zero
+\[-2 \sum_{{\bf x}_i \in \mathcal{C}_r} ({\bf x}_i - \boldsymbol{\mu}_r) = 0\]
+Divide by \(-2\) and distribute the sum
+\[\sum_{{\bf x}_i \in \mathcal{C}_r} {\bf x}_i - \sum_{{\bf x}_i \in \mathcal{C}_r} \boldsymbol{\mu}_r = 0\]
+Since the second term is summing the constant vector
+\(\boldsymbol{\mu}_r\) exactly \(|\mathcal{C}_r|\) times (where
+\(|\mathcal{C}_r|\) is the number of points in cluster \(r\)).
+Therefore,
+\(\sum_{{\bf x}_i \in \mathcal{C}_r} \boldsymbol{\mu}_r = |\mathcal{C}_r|\boldsymbol{\mu}_r\)
+\[\sum_{{\bf x}_i \in \mathcal{C}_r} {\bf x}_i - |\mathcal{C}_r|\boldsymbol{\mu}_r = 0\]
+\[|\mathcal{C}_r|\boldsymbol{\mu}_r = \sum_{{\bf x}_i \in \mathcal{C}_r} {\bf x}_i\]
+\[\boldsymbol{\mu}_r = \frac{1}{|\mathcal{C}_r|} \sum_{{\bf x}_i \in \mathcal{C}_r} {\bf x}_i.\]
+
+\subparagraph{(2)}\label{section-1}
+
+The \(k\)-means objective function is non-convex, and the algorithm only
+makes updates if they immediately reduce the error. Because it cannot
+accept a temporary increase in error to escape a shallow valley, it
+easily gets permanently trapped in suboptimal local minima.
+
+The initial placement of the centroids dictates which local valley the
+algorithm will ultimately fall into, meaning poor starting points
+guarantee poor final clusters.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

@@ -1,0 +1,359 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=0.8in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\section*{Lecture 8}
+\addcontentsline{toc}{section}{Lecture 8}
+\stepcounter{section}
+\setcounter{section}{8}
+\setcounter{equation}{0}
+
+\subsection{Derivation of the Governing Equations}
+
+We can now use the Reynolds Transport Theorem to derive the fundamental governing equations of fluid mechanics. Recall that the theorem provides a bridge between the rate of change of a property in a material volume $W(t)$ and the Eulerian field representations:
+\begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} f(\bm{x}, t) \, dV = \iiint_{W(t)} \lp \frac{Df}{Dt} + f \nabla \cdot \bm{u} \rp \, dV = \iiint_{W(t)} \lp \frac{\partial f}{\partial t} + \nabla \cdot (f \bm{u}) \rp \, dV.
+\end{equation}
+
+\subsection{Conservation of Mass}
+
+The physical principle of mass conservation states that, in the absence of sources or sinks, the total mass $M$ is conserved following the flow. We pick the property $f = \rho(\bm{x}, t)$, the Eulerian density. Since the mass of a material volume is $M = \iiint_{W(t)} \rho \, dV$, conservation implies:
+\begin{equation}
+    \frac{dM}{dt} = 0 \quad \text{or} \quad \frac{d}{dt} \iiint_{W(t)} \rho \, dV \stackrel{R.T.}{=} \iiint_{W(t)} \lp \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} \rp \, dV = 0.
+\end{equation}
+
+Since $W(t)$ is an arbitrary material volume, we apply the Dubois-Reymond lemma (the localization theorem), which states that if the integral over any arbitrary volume is zero, the integrand itself must be zero. This yields the first version of the continuity equation:
+\begin{equation}
+    \label{continuity v1}
+    \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} = 0.
+\end{equation}
+Using the identity $(\bm{u} \cdot \nabla)\rho + \rho(\nabla \cdot \bm{u}) = \nabla \cdot (\rho \bm{u})$, we can rewrite \cref{continuity v1} in its most general conservation form:
+\begin{equation}
+    \label{continuity v2}
+    \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \bm{u}) = 0.
+\end{equation}
+This is our first continuum equation, valid for describing gases, liquids, and plasmas. 
+
+\begin{note}[Physical Interpretation]
+    To understand the role of divergence, return to R.T.T. but pick $f=1$. Then $\iiint_{W(t)} 1 \, dV$ is the volume of the material volume at time $t$. Applying the theorem:
+    \[ \frac{d}{dt} \iiint_{W(t)} 1 \, dV = \iiint_{W(t)} \lp \frac{D(1)}{Dt} + 1 \cdot \nabla \cdot \bm{u} \rp \, dV = \iiint_{W(t)} \nabla \cdot \bm{u} \, dV = \frac{dV}{dt}. \]
+    If volume is conserved (as in many liquids), $dV/dt = 0$, implying $\nabla \cdot \bm{u} = 0$.
+    \begin{itemize}[nosep]
+        \item $\nabla \cdot \bm{u} > 0$ (divergence) means the density $\rho$ decreases.
+        \item $\nabla \cdot \bm{u} < 0$ (convergence) means the density $\rho$ increases.
+    \end{itemize}
+\end{note}
+
+\begin{theorem}
+\label{special theorem}
+    If $\rho, f$, and $\bm{u}$ are $C^1$, then 
+    \[ \frac{d}{dt} \iiint_{W(t)} \rho f \, dV = \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV. \]
+\end{theorem}
+
+\begin{proof}
+    Starting from the L.H.S.\ and applying the R.T.T.:
+    \begin{align*}
+        \frac{d}{dt} \iiint_{W(t)} \rho f \, dV &= \iiint_{W(t)} \lp \frac{D}{Dt}(\rho f) + \rho f \nabla \cdot \bm{u} \rp \, dV \\
+        &= \iiint_{W(t)} \lp \rho \frac{Df}{Dt} + f \frac{D\rho}{Dt} + f \rho \nabla \cdot \bm{u} \rp \, dV \\
+        &= \iiint_{W(t)} \lp \rho \frac{Df}{Dt} + f \underbrace{\lp \frac{D\rho}{Dt} + \rho \nabla \cdot \bm{u} \rp }_{= 0 \text{ by continuity}} \rp \, dV = \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV. \qedhere
+    \end{align*}
+\end{proof}
+
+\subsection{Conservation of Linear Momentum}
+
+For a point particle in classical mechanics, Newton's 2nd Law states:
+\[ \frac{d}{dt} \bm{p} = \bm{F}, \]
+where $\bm{F}$ is the sum of all the forces and $\bm{p}$ is the linear momentum, often written as $\bm{p} = m \bm{u}$ ($m$ is mass and $\bm{u}$ is velocity).
+
+The physical principle for a continuum is that the total force on an object is equal to the rate of change of the linear momentum. For a continuum with density $\rho$, total force $\bm{F}_{\text{total}}$, and material volume $W(t)$, we get:
+\begin{equation}
+    \frac{d}{dt} \iiint_{W(t)} \rho \bm{u} \, dV = \bm{F}_{\text{total}}.
+\end{equation}
+This is Newton's 2nd law for a continuum. There are 3 types of forces:
+
+\begin{enumerate}
+    \item \textbf{Volume (body) forces}: These act on the whole volume. Examples include gravity and Lorentz force.
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=0.8]
+            \draw[thick] (0,0) circle (1.2);
+            \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+            \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+            \draw (0.2,0.5) rectangle (0.5,0.8);
+            \node[scale=0.7] at (-0.1,0.65) {$dV$};
+            \draw[->] (0.5,0.65) -- (1.5,0.65) node[right] {$d\bm{F} = \rho \bm{g} dV$};
+            \node at (-2,-0.8) {$W(t)$};
+        \end{tikzpicture}
+    \end{center}
+    If $\bm{g}$ is the acceleration due to gravity, the total gravitational force on $W(t)$ is:
+    \[ \bm{F}_g = \iiint_{W(t)} \rho \bm{g} \, dV = -\iiint_{W(t)} \rho \nabla \Pi \, dV, \]
+    since gravity is a conservative force, $\bm{g} = -\nabla \Pi$, where $\Pi$ is the gravitational potential ($\Pi = gz$ as an example).
+
+    \item \textbf{Surface forces}: Matter outside of $W(t)$ exerts a force on $W(t)$. This force acts on $\partial W(t)$ (on the surface), for example, pressure.
+    \begin{center}
+        \begin{tikzpicture}[>=Stealth, scale=0.8]
+            \draw[thick] (0,0) circle (1.2);
+            \draw[dashed] (1.2,0) arc (0:180:1.2 and 0.4);
+            \draw (1.2,0) arc (0:-180:1.2 and 0.4);
+            \draw[rotate=45] (1.2,0) arc (0:360:0.2 and 0.1);
+            \draw[->] (1.0,0.8) -- (1.6,1.2) node[right] {$d\bm{F} = \bm{t} \, dS$};
+            \node[scale=0.8] at (0.2,0.7) {$dS$};
+            \node at (-2,-0.8) {$W(t)$};
+        \end{tikzpicture}
+    \end{center}
+    If $\bm{t}(\bm{x}, t, \hat{\bm{n}})$, where $\hat{\bm{n}}$ is defined as the outward unit normal vector,  is the stress vector. It has units of force/unit area. The total surface force is:
+    \[ \bm{F}_s = \oiint_{\partial W(t)} \bm{t}(\bm{x}, t, \hat{\bm{n}}) \, dS. \]
+
+    \item \textbf{Line (tensile) force}: These act on the interface between liquids and gases, for example, surface tension.
+    \begin{center}
+        \begin{tikzpicture}[scale=1, >=Stealth]
+            % Water surface (wavy line)
+            \draw[teal!60!black, thick, smooth] plot coordinates {(-3,0) (-1.5,0.2) (-0.8,0.8)};
+            \draw[teal!60!black, thick, smooth] plot coordinates {(0.8,0.8) (1.5,0.2) (3,0)};
+            
+            % Bubble (hump)
+            \draw[thick, smooth] (-0.8,0.8) .. controls (-0.5, 1.8) and (0.5, 1.8) .. (0.8, 0.8);
+            
+            % Interface Ring (reddish)
+            \draw[red!70!black, thick] (0,0.8) ellipse (0.8 and 0.2);
+            
+            % Labels
+            \node at (0, 2) {air};
+            \node[teal!60!black] at (0, -0.5) {water};
+        \end{tikzpicture}
+        \end{center}
+    This can occur between two liquids that do not mix.
+\end{enumerate}
+
+We include gravity (body force) \& a general surface force in our expression for Newton's law.
+\[
+\frac{d}{dt} \iiint_{W(t)} \rho \bm{u} \, dV = \bm{F}_g + \bm{F}_s = - \iiint_{W(t)} \rho \nabla \Pi \, dV + \oiint_{\partial W(t)} \bm{t} \, dS
+\]
+Instead, consider
+\begin{equation}
+\label{momentum_component_form}
+\boxed{
+\frac{d}{dt} \iiint_{W(t)} \rho u_i \, dV = - \iiint_{W(t)} \rho \frac{\partial \Pi}{\partial x_i} \, dV + \oiint_{\partial W(t)} t_i \, dS.\,
+}
+\end{equation}
+
+Applying Reynolds Transport Theorem to the momentum balance (using the flux form $\nabla \cdot (\rho u_i \bm{u})$):
+\begin{equation}
+    \iiint_{W(t)} \lp \frac{\partial}{\partial t}(\rho u_i) + \nabla_j (\rho u_i u_j) + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Expanding the product rule for both the time derivative and the divergence term:
+\begin{equation}
+    \iiint_{W(t)} \lp \underbrace{\rho \frac{\partial u_i}{\partial t} + u_i \frac{\partial \rho}{\partial t}}_{\text{time deriv.}} + \underbrace{u_i \nabla_j (\rho u_j) + \rho u_j \nabla_j u_i}_{\text{flux deriv.}} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Rearranging terms to isolate the material derivative of velocity ($\frac{Du_i}{Dt}$) and the continuity equation:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \underbrace{\lp \frac{\partial u_i}{\partial t} + u_j \nabla_j u_i \rp}_{D u_i / Dt} + u_i \underbrace{\lp \frac{\partial \rho}{\partial t} + \nabla_j (\rho u_j) \rp}_{\text{continuity} = 0} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Thus, since the continuity term is zero, we arrive at the final form for the conservation of linear momentum:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \frac{Du_i}{Dt} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+Alternatively, we apply the \cref{special theorem} derived earlier:
+\[ 
+\frac{d}{dt} \iiint_{W(t)} \rho f \, dV = \iiint_{W(t)} \rho \frac{Df}{Dt} \, dV. 
+\]
+Setting $f = u_i$ and substituting this directly into \cref{momentum_component_form}, the time derivative term becomes:
+\[
+\frac{d}{dt} \iiint_{W(t)} \rho u_i \, dV = \iiint_{W(t)} \rho \frac{Du_i}{Dt} \, dV.
+\]
+Thus, we immediately arrive at the final form for the conservation of linear momentum:
+\begin{equation}
+    \iiint_{W(t)} \lp \rho \frac{Du_i}{Dt} + \rho \frac{\partial \Pi}{\partial x_i} \rp \, dV = \oiint_{\partial W(t)} t_i \, dS.
+\end{equation}
+We will rewrite the R.H.S. in the next lecture.
+
+\end{document}

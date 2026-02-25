@@ -1,0 +1,3772 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\newtcolorbox{important}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+\newtcolorbox{insight}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=blue!5,
+  colframe=blue!75,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\pagenumbering{alph}
+\begin{titlepage}
+    \centering
+    \vspace*{5cm} % Pushes the title down the page
+    {\Large \textbf{AMATH 353}} \\[1em]
+    {\Large \textbf{Partial Differential Equations 1}} \\[1em]
+    {\Large \textbf{Lecture Notes}} \\[1em]
+    {\Large Winter 2026}
+\end{titlepage}
+\clearpage
+
+\pagenumbering{roman}
+\tableofcontents
+\numberwithin{equation}{section}
+\clearpage
+
+\pagenumbering{arabic}
+
+\section*{Lecture 1}
+\addcontentsline{toc}{section}{Lecture 1}
+\stepcounter{section}
+\setcounter{section}{1}
+\setcounter{equation}{0}
+
+\subsection{General Form of PDE}
+
+\begin{definition}
+    The general form of PDE used for this course will be
+    \begin{equation}
+    F\lp u(x, t), \frac{\partial u}{\partial x}, \frac{\partial u}{\partial t}, \frac{\partial^2 u}{\partial x^2}, \frac{\partial^2 u}{\partial x \partial t}, \frac{\partial^2 u}{\partial t^2}, \dots \rp = 0,
+    \end{equation}
+    where \(F\) is an algebraic function, a scalar.
+\end{definition}
+
+\subsection{Deriving PDE}
+
+ODEs arrive from classical mechanics, often to solve velocity as a function of time. For example for an \(N\)-particle system, we have a set of
+\begin{equation}
+\label{ODE solutions}
+    \bm u_i(t), \quad i = 1, 2, \dots, N
+\end{equation}
+which are the solutions to a system of ODEs. In a continuum, there's velocity at every point \(\bm u(x, t)\), for example, a string and the PDEs arise from the conservation law.
+
+\begin{definition}[Conservation Law of Mass I]
+\label{conservation law of mass 1}
+    There is no spontaneous generation of mass.
+\end{definition}
+
+\begin{note}[Change of Mass]
+\label{change of mass}
+    For many systems, the change of mass is a subregion that can be described by:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item source or sink
+        \item flux/flow in or out.
+    \end{itemize}
+    In other words, flux happens only at the boundary due to external influence while source or sink is internal reaction everywhere within the tube and requires summing or integration.
+\end{note}
+
+\subsubsection{One Dimensional Problem of a Fluid-Filled Tube}
+
+\vspace{1em}
+
+\begin{center}
+\begin{tikzpicture}[thick, scale=1.5]
+    % Define parameters for easy adjustment
+    \def\radius{0.3}
+    \def\length{5}
+    \def\posA{1.8}
+    \def\posB{3.2}
+
+    % Draw the main horizontal lines of the tube
+    \draw (0, \radius) -- (\length, \radius);
+    \draw (0, -\radius) -- (\length, -\radius);
+
+    % Draw the left and right elliptical ends
+    % (x_radius and y_radius)
+    \draw (0, 0) ellipse (0.15 and \radius);
+    \draw (\length, 0) ellipse (0.15 and \radius);
+
+    % Draw the vertical delimiters at a and b
+    % Extending slightly above and below the tube
+    \draw (\posA, -\radius - 0.15) -- (\posA, \radius + 0.15);
+    \draw (\posB, -\radius - 0.15) -- (\posB, \radius + 0.15);
+
+    % Add the labels
+    \node[below] at (\posA, -\radius - 0.15) {\large $a$};
+    \node[below] at (\posB, -\radius - 0.15) {\large $b$};
+    \node[above] at ({(\posA + \posB)/2}, \radius + 0.1) {\large $u(x,t)$};
+\end{tikzpicture}
+\end{center}
+We define \(u(x, t)\) as the mass density in \(\text{kg}/\text{m}^3\) with a constant cross section \(A\). The mass in \((a, b)\) is given by
+\begin{equation}
+\label{mass in a tube from a to b}
+    M = \int_a^b A\, u(x, t) \, dx \quad \text{in kg}.
+\end{equation}
+
+\(u(x, t)\) is a local property, it exists at every point and every time. \(M\) is a global property as it is integrated over a domain and applies to the entire region at once.
+
+The mass \(M\) in the interval \([a, b]\) can change because of the reasons mentioned in \cref{change of mass}.
+
+We define two new functions \(\phi(x, t)\) and \(f(x, t, u)\) to denote flux and sources.
+
+\begin{definition}[Flux]
+\label{flux or transport of fluid}
+    Define \(\phi(x, t)\) to determine mass passing through a unit area per unit time from left to right, where
+    \begin{equation}
+    [\phi] = \frac{\text{kg}}{\text{m}^2 \cdot \text{s}}.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Net Rate of Change of \(M\)]
+\label{net rate of change of mass}
+    The net rate of change of \(M\) is
+    \begin{equation}
+    \underbrace{A\phi(a, t)}_{\text{flow in}} - \underbrace{A\phi(b, t)}_{\text{flow out}}.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Source]
+\label{source}
+    Define \(f(x, t, u)\) to be the amount of mass created or destroyed unit volume per second, where
+    \begin{equation}
+    [f] = \frac{\text{kg}}{\text{m}^3 \cdot \text{s}}.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Net Rate of Change of \(M\) by Sources]
+\label{net rate of change of mass by sources}
+    The net rate of change of \(M\) by sources is
+    \begin{equation}
+    \int_a^b fA\, dx.
+    \end{equation}
+    This requires integration as it is happening everywhere in the interval as mentioned in \cref{change of mass}. This is also a global equation.
+\end{definition}
+
+\begin{definition}[Conservation Law of Mass II]
+\label{conservation law of mass 2}
+    The conservation law of mass can also be described by
+    \begin{align}
+    \text{net rate of change of mass in }[a, b] &= \text{net increase by transport} \notag \\
+    &+ \text{net increase by source}.
+    \end{align}
+    Mathematically,
+    \begin{equation}
+    \label{conservation law of mass 2 math}
+        \frac{d}{dt}\int_a^b uA \, dx = A\phi(a, t) - A\phi(b, t) + \int_a^b fA \, dx.
+    \end{equation}
+\end{definition}
+
+\Cref{conservation law of mass 2 math} can be rewritten with FTCI and FTCII. By FTCI,
+\begin{equation}
+    \frac{d}{dt}\int_a^b uA \, dx = \int_a^b \frac{\partial}{\partial t} uA \, dx.
+\end{equation}
+By FTCII,
+\begin{equation}
+A\phi(a, t) - A\phi(b, t) = -\int_a^b \frac{\partial}{\partial x} \phi A \, dx.
+\end{equation}
+Then \cref{conservation law of mass 2 math} is
+\begin{equation}
+\label{conservation law of mass 2 math with FTCI and FTCII}
+    \int_a^b \lp \frac{\partial u}{\partial t} + \frac{\partial \phi}{\partial x} - f \rp A \, dx = 0.
+\end{equation}
+
+\begin{lemma}[Fundamental Lemma of the Calculus of Variations]
+\label{fundamental lemma of the calculus of variations}
+    If \cref{conservation law of mass 2 math with FTCI and FTCII} is \(0\) and \([a, b]\) doesn't pinch, then
+    \begin{equation}
+    \lp \frac{\partial u}{\partial t} + \frac{\partial \phi}{\partial x} - f \rp A = g(x) = 0,
+    \end{equation}
+    assuming \(g(x)\) is continuous.
+\end{lemma}
+
+\begin{proof}
+    Assume \(g(x_0) \neq 0\) for \(x_0 \in (a, b)\). By continuity, \(g(x)\) is not zero in a neighborhood around \(x_0\). If we define \([a_0, b_0]\) to be within this neighborhood, then \(\int_{a_0}^{b_0}g(x) \, dx \neq 0\). Therefore, it must be that \(g(x) = 0\). \qedhere
+\end{proof}
+
+Using \cref{fundamental lemma of the calculus of variations}, we get our first PDE
+\begin{equation}
+\label{first pde}
+    \frac{\partial u}{\partial t} + \frac{\partial \phi}{\partial x} = f,
+\end{equation}
+or equivalently and more commonly
+\begin{equation}
+\label{first pde convention}
+    \frac{\partial u}{\partial t} = - \frac{\partial \phi}{\partial x} + f.
+\end{equation}
+This is a local equation (PDE). The PDE is not closed and we need to specify sources and flux.
+
+For \(\frac{\partial u}{\partial t} > 0\), we require the sum of the source and the negative flux gradient to be positive: \(f - \frac{\partial \phi}{\partial x} > 0\). For example,
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(f > 0\) and \(\phi\) is constant, then \(\frac{\partial u}{\partial t} > 0\).
+    \item \(f = 0\) and \(\frac{\partial \phi}{\partial x} < 0\), then \(\frac{\partial u}{\partial t} > 0\).
+\end{itemize}
+\clearpage
+
+\section*{Lecture 2}
+\addcontentsline{toc}{section}{Lecture 2}
+\stepcounter{section}
+\setcounter{section}{2}
+\setcounter{equation}{0}
+
+\subsection{Conservation Law in Higher Dimension}
+
+Based on the principle of conservation of mass, we derived the PDE in 1D:
+\begin{equation}
+\frac{\partial u}{\partial t} + \frac{\partial \phi}{\partial x} = f.
+\end{equation}
+
+Now we write the conservation law in higher dimension. Consider a volume of fluid with mass density \(u(\bm{x}, t)\), with \(\partial V\) as the boundary and outward unit normal \(\hat{n}\).
+
+We use the following quantities:
+\begin{itemize}[label=\tiny$\bullet$]
+    \item \(
+    u(\bm{x}, t)\ \text{is the mass density}, \quad
+    [u] = \dfrac{\text{kg}}{\text{m}^3}.
+    \)
+    \item \(
+    \bm{\phi}(\bm{x}, t, u)\ \text{is the flux}, \quad
+    [\phi] = \dfrac{\text{kg}}{\text{m}^2 \cdot \text{s}}.
+    \)
+    \item \(
+    f(\bm{x}, t)\ \text{is the source}, \quad
+    [f] = \dfrac{\text{kg}}{\text{m}^3 \cdot \text{s}}.
+    \)
+\end{itemize}
+
+The total mass is
+\begin{equation}
+\iiint_V u\, dV \quad (V\ \text{is fixed}),
+\end{equation}
+so the rate of change with respect to time is
+\begin{equation}
+\frac{d}{dt}\iiint_V u\, dV.
+\end{equation}
+The rate of change of mass with respect to \(t\) comes from:
+\begin{itemize}[label=\tiny$\bullet$]
+    \item source: \(\displaystyle \iiint_V f\, dV\),
+    \item flux: \(\displaystyle \iint_{\partial V} \bm{\phi}\cdot \hat{n}\, dS\) \ (\emph{dot product why? note that \(S\) is not always flat}).
+\end{itemize}
+Rewriting the conservation law as a global equation gives
+\begin{equation}
+\label{global conservation law 3D}
+\frac{d}{dt}\iiint_V u\, dV
+=
+-\iint_{\partial V} \bm{\phi}\cdot \hat{n}\, dS
++\iiint_V f\, dV.
+\end{equation}
+
+\subsubsection{Simplifying the Global Equation}
+
+To simplify, we use two standard facts.
+
+\begin{enumerate}[nosep]
+    \item Since \(V\) is fixed,
+    \begin{equation}
+    \frac{d}{dt}\iiint_V u\, dV = \iiint_V \frac{\partial u}{\partial t}\, dV.
+    \end{equation}
+    \item Gauss Divergence Theorem:
+    \begin{equation}
+    -\iint_{\partial V} \bm{\phi}\cdot \hat{n}\, dS
+    =
+    -\iiint_V \bm{\nabla}\cdot \bm{\phi}\, dV.
+    \end{equation}
+\end{enumerate}
+
+Combining into one integral,
+\begin{equation}
+\label{global integral form}
+\iiint_V \left[\frac{\partial u}{\partial t} + \bm{\nabla}\cdot \bm{\phi} - f\right] dV = 0
+\quad (\text{global}).
+\end{equation}
+We assume the integrand is continuous and use our lemma to show that
+\begin{equation}
+\label{local conservation law 3D}
+\frac{\partial u}{\partial t} + \bm{\nabla}\cdot \bm{\phi} = f
+\quad (\text{local PDE}),
+\end{equation}
+which is the 3D conservation law. In 1D this reduces to
+\begin{equation}
+\frac{\partial u}{\partial t} + \frac{\partial \phi}{\partial x} = f.
+\end{equation}
+
+\subsection{Constitutive Relation}
+
+For a given physical problem, we need the appropriate choice of \(\phi\). In 1D, the choice of \(\phi\) can be a function of
+\begin{equation}
+(x, t, u, \frac{\partial u}{\partial x}, \frac{\partial u}{\partial t}).
+\end{equation}
+This equation is the constitutive equation, and it defines the physics.
+
+\subsection{Diffusion Equation}
+
+Consider 1D. With no source, the flux is set by molecular motion; this is diffusion. Fick's law is
+\begin{equation}
+\phi = -D\frac{\partial u}{\partial x},
+\end{equation}
+where \(D\) is a constant and
+\begin{equation}
+[D] = \frac{\text{m}^2}{\text{s}}.
+\end{equation}
+Then the conservation law becomes
+\begin{equation}
+\frac{\partial u}{\partial t}
+=
+-\frac{\partial \phi}{\partial x}
+=
+-\frac{\partial}{\partial x}\left(-D\frac{\partial u}{\partial x}\right)
+=
+D\frac{\partial^2 u}{\partial x^2}
+\quad (\text{assuming }D\text{ is constant}),
+\end{equation}
+so the diffusion equation is
+\begin{equation}
+\label{diffusion equation 1D}
+\frac{\partial u}{\partial t} = D\frac{\partial^2 u}{\partial x^2}.
+\end{equation}
+\emph{Diffusion equation will include a new term if \(D\) is non-constant.}
+
+Locally:
+\begin{itemize}[label=\tiny$\bullet$]
+    \item \(u\) is concave up \(\implies \dfrac{\partial^2 u}{\partial x^2} > 0\) \(\implies\) \(u\) increases at the bottom.
+    \item \(u\) is concave down \(\implies \dfrac{\partial^2 u}{\partial x^2} < 0\) \(\implies\) \(u\) decreases at the top.
+\end{itemize}
+
+The equation gives \([D] = \dfrac{\text{m}^2}{\text{s}}\). Assuming there is a length scale \(L\), we get a time scale
+\begin{equation}
+T = \frac{L^2}{D}.
+\end{equation}
+
+\subsection{Reaction--Diffusion Equation}
+
+Assume Fick's law and allow for sources:
+\begin{equation}
+\frac{\partial u}{\partial t}
+=
+-\frac{\partial}{\partial x}\left(-D\frac{\partial u}{\partial x}\right) + f
+=
+D\frac{\partial^2 u}{\partial x^2} + f,
+\end{equation}
+so we are \emph{adding stuff to the PDE.}
+
+The choice of \(f\) depends on the physical system. One choice is the logistic equation:
+\begin{equation}
+f = ru\left(1-\frac{u}{K}\right),
+\end{equation}
+where \(r\) is the growth rate and \(K\) is the carrying capacity, and \(u\) is population density (originally for mass density). Then
+\begin{equation}
+\frac{\partial u}{\partial t}
+=
+D\frac{\partial^2 u}{\partial x^2}
++
+ru\left(1-\frac{u}{K}\right),
+\end{equation}
+which is Fisher's equation.
+
+\subsection{Advection / Transport}
+
+A different physical system gives a different choice of \(\phi\). If we neglect molecular diffusion and reaction, pick
+\begin{equation}
+\phi = cu,
+\end{equation}
+where \(c\) is constant and \([c] = \text{m}/\text{s}\) to match \([\phi]\). Plugging in \(f=0\), \(\phi=cu\) in the 1D conservation law:
+\begin{equation}
+\frac{\partial u}{\partial t}
+=
+-\frac{\partial \phi}{\partial x} + f
+=
+-\frac{\partial}{\partial x}(cu) + 0
+=
+-c\frac{\partial u}{\partial x},
+\end{equation}
+or
+\begin{equation}
+\label{advection equation 1D}
+\frac{\partial u}{\partial t} + c\frac{\partial u}{\partial x} = 0.
+\end{equation}
+This is the advection/transport equation.
+
+\begin{insight}[Choosing \(\phi\)]
+    There is no right or wrong choice of equations, it all depends on the model. How \(\phi\) is defined is based entirely on the physics of the problem.
+\end{insight}
+
+\subsection{Burgers' Equation}
+
+Burgers' equation is diffusion with non-linear advection. Take
+\begin{equation}
+\phi = -D\frac{\partial u}{\partial x} + \frac{u^2}{2}.
+\end{equation}
+Sub into the conservation law:
+\begin{equation}
+\frac{\partial u}{\partial t}
+=
+-\frac{\partial \phi}{\partial x} + f
+=
+-\frac{\partial}{\partial x}\left(-D\frac{\partial u}{\partial x} + \frac{u^2}{2}\right) + f
+=
+D\frac{\partial^2 u}{\partial x^2} - u\frac{du}{dx} + f,
+\end{equation}
+so equivalently
+\begin{equation}
+\label{burgers with source}
+\frac{\partial u}{\partial t} + u\frac{du}{dx} = D\frac{\partial^2 u}{\partial x^2} + f.
+\end{equation}
+Note that the \(u\frac{du}{dx}\) term is non-linear in \(u\). \emph{Dimension is wrong, could add a constant.}
+
+Diffusion is of second order, advection is of first order.
+
+\subsection{Diffusion in 3D}
+
+The conservation law is
+\begin{equation}
+\frac{\partial u}{\partial t} + \bm{\nabla}\cdot \bm{\phi} = f.
+\end{equation}
+In 1D, Fick's law is \(\phi = -D\dfrac{\partial u}{\partial x}\). In 3D, Fick's law is
+\begin{equation}
+\bm{\phi} = -D\bm{\nabla}u.
+\end{equation}
+Then sub in:
+\begin{equation}
+\frac{\partial u}{\partial t} + \bm{\nabla}\cdot(-D\bm{\nabla}u) = f.
+\end{equation}
+Define the Laplacian
+\begin{equation}
+\bm{\nabla}^2 = \bm{\nabla}\cdot \bm{\nabla}.
+\end{equation}
+Assuming \(D\) is constant,
+\begin{equation}
+\label{reaction diffusion 3D}
+\frac{\partial u}{\partial t} = D\bm{\nabla}^2 u + f.
+\end{equation}
+This is reaction--diffusion in 3D. (\emph{We will solve for \(f=0\) later in the course.})
+
+\subsection{Advection--Reaction--Diffusion}
+
+If
+\begin{equation}
+\bm{\phi} = -D\bm{\nabla}u + \bm{c}\,u,
+\end{equation}
+then we can find the PDE from \(\dfrac{\partial u}{\partial t} + \bm{\nabla}\cdot \bm{\phi} = f\):
+\begin{equation}
+\frac{\partial u}{\partial t} + \bm{\nabla}\cdot(-D\bm{\nabla}u + \bm{c}\,u) = f,
+\end{equation}
+so
+\begin{equation}
+\frac{\partial u}{\partial t} - D\bm{\nabla}^2 u + \bm{\nabla}\cdot(\bm{c}\,u) = f,
+\end{equation}
+and equivalently
+\begin{equation}
+\frac{\partial u}{\partial t} + \bm{\nabla}\cdot(\bm{c}\,u) = f + D\bm{\nabla}^2 u,
+\end{equation}
+with advection in \(\bm{\nabla}\cdot(\bm{c}\,u)\), reaction in \(f\), and diffusion in \(D\bm{\nabla}^2 u\).
+\clearpage
+
+\section*{Lecture 3}
+\addcontentsline{toc}{section}{Lecture 3}
+\stepcounter{section}
+\setcounter{section}{3}
+\setcounter{equation}{0}
+
+\subsection{Wave Equation}
+
+\subsubsection{Newton's Second Law}
+
+Newton's second law states that if \(\bm p\) is the momentum of a particle and \(F\) are the forces acting on the particle, then 
+\begin{equation}
+\frac{d\bm p}{dt} = F.
+\end{equation}
+If \(\bm p = m \bm v\), then
+\begin{equation}
+m \frac{d\bm v}{dt} = \bm F \quad \text{or} \quad m\bm a = \bm F.
+\end{equation}
+
+\subsubsection{Set Up of The Problem}
+
+Suppose we have the following:
+
+\begin{center}
+    \begin{tikzpicture}
+        % Define length
+        \def\L{6}
+        \def\A{1.5} % Amplitude
+    
+        % Wall patterns
+        \tikzstyle{wall}=[fill=white, pattern=north east lines, draw=black]
+    
+        % Draw Walls (Left and Right)
+        \fill [pattern=north east lines] (-0.5, -1) rectangle (0, 1);
+        \draw (0, -1) -- (0, 1);
+        
+        \fill [pattern=north east lines] (\L, -1) rectangle (\L+0.5, 1);
+        \draw (\L, -1) -- (\L, 1);
+    
+        % Equilibrium line
+        \draw[dashed, gray] (0,0) -- (\L,0);
+    
+        % The String (Sine wave)
+        \draw[thick] plot[domain=0:\L, samples=100] (\x, {\A*sin(180*\x/\L)});
+    
+        % x-direction arrow
+        \draw[->, thick] (0, 1.2) -- (1, 1.2) node[right] {$x$};
+    
+        % u(x,t) measurement
+        \draw[<->] (\L/2, 0) -- (\L/2, \A) node[midway, right] {$u(x,t)$};
+    \end{tikzpicture}
+\end{center}
+where \(u(x, t)\) is the vertical displacement and \(\rho(x, t)\) is the mass density with \([\rho] = \si{\kilogram \per \meter \cubed} \).
+
+\begin{insight}[Deriving the PDE]
+    The idea is to use Newton's second law to find an equation that describes the motion of a small part of the string, then we use this to find a PDE (wave equation). Note that this PDE is not derived from the conservation law as we have seen before.
+\end{insight}
+
+We assume the following
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item The string has small displacement.
+    \item The motion is purely vertical.
+    \item The only forces are tension and gravity (there is potential energy).
+\end{itemize}
+
+We use \(T\) for tension where
+\begin{equation}
+T = \frac{F}{A}, \quad [T] = \si{\N \per \meter \squared}.
+\end{equation}
+
+\subsubsection{Consider A Point on the String}
+
+Consider the following setup.
+
+\begin{center}
+    \begin{tikzpicture}[>=Stealth, scale=0.8]
+    
+        % Coordinates
+        \coordinate (O) at (0,0);
+        \coordinate (L) at (-2, -0.5);
+        \coordinate (R) at (2, 1.2);
+        \coordinate (M) at (0, 0.2); % Midpoint marker
+    
+        % Draw the string segment (a smooth curve)
+        \draw[thick] (-2.5, -0.7) to[out=10, in=200] (M) to[out=20, in=210] (2.5, 1.8);
+    
+        % Define points for the forces
+        \coordinate (P1) at (-1.5, -0.42);
+        \coordinate (P2) at (1.5, 1.1);
+    
+        % Horizontal reference lines for angles
+        \draw[dashed, gray] (P1) -- ++(-1.5, 0);
+        \draw[dashed, gray] (P2) -- ++(1.5, 0);
+    
+        % Tension Force Vectors
+        \draw[blue, thick, ->] (P1) -- ++(-1, -0.4) node[left, black] {$T(x - \frac{\Delta x}{2}, t)$};
+        \draw[blue, thick, ->] (P2) -- ++(1, 0.6) node[right, black] {$T(x + \frac{\Delta x}{2}, t)$};
+    
+        % Gravity Vector
+        \draw[red, thick, ->] (M) -- ++(0, -0.5) node[below] {gravity};
+    
+        % Angle Labels
+        \draw (P1) ++(-0.5, 0) arc (180:202:0.5);
+        \node at (-2.3, 0.2) {$\theta(x - \frac{\Delta x}{2}, t)$};
+    
+        \draw (P2) ++(0.5, 0) arc (0:31:0.5);
+        \node at (2.3, 0.5) {$\theta(x + \frac{\Delta x}{2}, t)$};
+    
+        % Dimension/Width Markers
+        \draw[|-|] (-1.5, -1.2) -- (1.5, -1.2) node[midway, fill=white] {$\Delta x$};
+        
+        % X-axis markers
+        \draw[dotted] (P1) -- (-1.5, -1.2) node[below] {$x - \frac{\Delta x}{2}$};
+        \draw[dotted] (P2) -- (1.5, -1.2) node[below] {$x + \frac{\Delta x}{2}$};
+    
+    \end{tikzpicture}
+\end{center}
+
+We apply Newton's second law to the small interview \((x + \frac{\Delta x}{2}, x - \frac{\Delta x}{2})\). Since density is time independent, the mass of the sub interval is
+\begin{equation}
+M \approx \rho(x)A\Delta x.
+\end{equation}
+The acceleration is
+\begin{equation}
+a = \frac{\partial^2 u}{\partial t^2},
+\end{equation}
+since we are talking about vertical acceleration only.
+
+The vertical forces can be found with trigonometry. The tension force on the right is given by
+\begin{equation}
+\text{Tension} \cdot \text{Area} = \text{Force}.
+\end{equation}
+or
+\begin{equation}
+T\lp x + \frac{\Delta x}{2}, t \rp \sin{\theta \lp x + \frac{\Delta x}{2}, t \rp} A,
+\end{equation}
+this is the upward tension. Similarly, the downward tension is given by
+\begin{equation}
+T\lp x - \frac{\Delta x}{2}, t \rp \sin{\theta \lp x - \frac{\Delta x}{2}, t \rp} A.
+\end{equation}
+The gravitational force is given by
+\begin{equation}
+\rho(x) A g \Delta x.
+\end{equation}
+
+\subsubsection{Newton's Second Law and Deriving PDE}
+
+Substituting everything in Newton's Second Law, we obtain
+\begin{align}
+    \rho(x)A\Delta x \frac{\partial^2 u}{\partial t^2} &= T\lp x + \frac{\Delta x}{2}, t \rp \sin{\theta \lp x + \frac{\Delta x}{2}, t \rp} A \notag \\ 
+    &- T\lp x - \frac{\Delta x}{2}, t \rp \sin{\theta \lp x - \frac{\Delta x}{2}, t \rp} A \notag \\ 
+    &- \rho A \Delta x g.
+\end{align}
+Divide by \(A\Delta x\) and take the limit as \(\Delta x \to 0\)
+\begin{equation}
+\label{limit of newton second law}
+\rho \frac{\partial^2 u}{\partial t^2} = \lim_{\Delta x \to 0} \frac{T\lp x + \frac{\Delta x}{2}, t \rp \sin{\theta \lp x + \frac{\Delta x}{2}, t \rp} - T\lp x - \frac{\Delta x}{2}, t \rp \sin{\theta \lp x - \frac{\Delta x}{2}, t \rp}}{\Delta x} - \rho g.
+\end{equation}
+Recall that
+\begin{equation}
+\frac{df}{dx} = \lim_{\Delta x \to 0} \frac{f(x + \frac{\Delta x}{2}) - f(x - \frac{\Delta x}{2})}{\Delta x}.
+\end{equation}
+So \cref{limit of newton second law} becomes
+\begin{equation}
+    \rho \frac{\partial^2 u}{\partial t^2} = \frac{\partial}{\partial x} \lp T(x, t) \sin{\theta(x, t)} \rp - \rho g.
+\end{equation}
+We need to express \(\theta\) in terms of \(u\). The drawing shows that if \(\delta\) is small:
+\begin{equation}
+\tan{\theta} = \frac{\sin\theta}{\cos \theta} \approx \frac{\partial u}{\partial x}.
+\end{equation}
+\begin{center}
+    \begin{minipage}{0.52\textwidth}
+    \centering
+    \begin{tikzpicture}
+        % Draw the curve
+        \draw [thick] (0,0) to[out=20, in=240] (4,3);
+    
+        % Define the point of tangency
+        \coordinate (P) at (2.7, 1.4);
+    
+        % Draw the horizontal reference line
+        \draw [dashed, gray] (P) -- ++(2,0);
+    
+        % Draw the tangent vector T
+        \draw [-{Stealth[scale=1.2]}, blue, thick] (P) -- ++(40:2)
+            node[right, black] {$T$};
+    
+        % Draw the angle arc and label theta
+        \draw (P) ++(0.8,0) arc [start angle=0, end angle=40, radius=0.8];
+        \node at ([shift={(20:1.1)}]P) {$\theta$};
+    \end{tikzpicture}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+    \centering
+    \begin{tikzpicture}[>=stealth]
+        \coordinate (A) at (0,0);
+        \coordinate (B) at (3,0);
+        \coordinate (C) at (3,2);
+    
+        \draw[thick] (A) -- (B)
+            node[midway, below=5pt] {$1$};
+    
+        \draw[thick] (B) -- (C)
+            node[midway, right=5pt] {$\displaystyle \frac{\partial u}{\partial x}$};
+    
+        \draw[thick] (A) -- (C)
+            node[midway, above, xshift=-12pt, yshift=6pt]
+            {$\sqrt{1 + \left( \frac{\partial u}{\partial x} \right)^2}$};
+    
+        \draw (2.8,0) -- (2.8,0.2) -- (3,0.2);
+
+    \end{tikzpicture}
+    \end{minipage}
+\end{center}
+Substitute this into the PDE, we obtain a non-linear PDE
+\begin{equation}
+\label{non-linear pde}
+    \rho \frac{\partial^2 u}{\partial t^2} = \frac{\partial}{\partial x} \lp \frac{T \frac{\partial u}{\partial x}}{\sqrt{1 + \lp \frac{\partial u}{\partial x} \rp^2}} \rp - \rho g
+\end{equation}
+
+We assumed that the displacement of the string is small, we further assume that \(\frac{\partial u}{\partial x} \ll 1\). Then \cref{non-linear pde} becomes
+\begin{equation}
+\rho \frac{\partial^2u}{\partial t^2} = \frac{\partial}{\partial x}\lp \frac{\partial u}{\partial x} T \rp - \rho g.
+\end{equation}
+If we further assume that \(T\) is constant and neglecting gravity
+\begin{align}
+    \rho \frac{\partial^2 u}{\partial t^2} &= T \frac{\partial^2 u}{\partial x} - \rho g \\
+    \frac{\partial^2 u}{\partial t^2} &= \frac{T}{\rho} \frac{\partial^2 u}{\partial x^2}.
+\end{align}
+Let \(c^2 = \frac{T}{\rho}\), we obtain the one-dimensional wave equation.
+
+\begin{definition}[One-Dimensional Wave Equation]
+\label{One-Dimensional Wave Equation}
+    The one-dimensional wave equation is defined as
+    \begin{equation}
+    \frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2},
+    \end{equation}
+    where
+    \begin{equation}
+    c^2 = \frac{T}{\rho}, \quad [c] = \si{\meter \per \second}.
+    \end{equation}
+\end{definition}
+
+\Cref{One-Dimensional Wave Equation} is very similar to the diffusion equation, but the latter is derived from the conservation laws. The steady solutions to both equations satisfy the Laplace equation
+\begin{equation}
+\frac{\partial^2 u}{\partial x^2} = 0.
+\end{equation}
+
+\subsection{Boundary Conditions}
+
+Each of diffusion, wave and Laplace have a second spatial derivative. We require exactly 2 \emph{boundary conditions} to find a unique solution to each equation. But they require different number of initial conditions.
+
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Diffusion: 1, \(u(x, 0) = f(x)\).
+    \item Wave: 2, \(u(x, 0) = f(x), \frac{\partial u}{\partial t}(x, 0) = g(x)\).
+    \item Laplace: 0.
+\end{itemize}
+
+\subsubsection{Dirichlet Boundary Condition}
+
+Dirichlet boundary conditions are given by
+\begin{equation}
+u(0, t) = 0 \quad \& \quad u(L, t) = 0.
+\end{equation}
+This is the homogeneous Dirichlet condition. Physically, in terms of the wave equation, it means that the string is clamped down on both ends. In terms of diffusion, the concentration at both ends are specified.
+
+The inhomogeneous equations have non-zero RHS.
+
+\subsubsection{Von Neumann Boundary Condition}
+
+Von Neumann boundary conditions are given by
+\begin{equation}
+\frac{\partial u}{\partial x}(0, t) = 0 \quad \& \quad \frac{\partial u}{\partial x}(L, t) = 0.
+\end{equation}
+This is the homogeneous Von Neumann condition. Physically, for the wave equation, the ends are horizontal. The ends are not fixed. For diffusion, it is the insulating condition, it prevents mass/stuff from entering/leaving.
+
+\subsubsection{Mixed/Robin Boundary Condition}
+
+The homogeneous mixed/Robin conditions are given by
+\begin{align}
+    A \, \frac{\partial u}{\partial x}(0, t) + B \, u(0, t) &= 0 \\
+    C \, \frac{\partial u}{\partial x}(L , t) + D \, u(L, t) &= 0.
+\end{align}
+
+\subsubsection{Period Boundary Condition (Circular Drum)}
+
+The period boundary conditions are
+\begin{equation}
+u(0, t) = u(L, t) \quad \& \quad \frac{\partial u}{\partial x}(0, t) = \frac{\partial u}{\partial x} (L ,t).
+\end{equation}
+We will see this later in the course when dealing with waves in a drum or anything in polar coordinates.
+\clearpage
+
+\section*{Lecture 4}
+\addcontentsline{toc}{section}{Lecture 4}
+\stepcounter{section}
+\setcounter{section}{4}
+\setcounter{equation}{0}
+
+\subsection{Vibrating Membrane}
+
+Consider a circular drum.
+
+\vspace{1em}
+
+\begin{center}
+\begin{tikzpicture}
+    % --- Custom Colors to match the sketch ---
+    \definecolor{sketchgreen}{RGB}{30, 110, 30}   % Dark green
+    \definecolor{sketchred}{RGB}{220, 50, 30}     % Orange-red
+    \definecolor{sketchpurple}{RGB}{200, 80, 220} % Light purple/pink
+
+    % =========================================
+    % LEFT FIGURE: TOP VIEW
+    % =========================================
+    \begin{scope}[shift={(0,0)}]
+        % Green Circle
+        \draw[thick] (0,0) circle (1.5cm);
+
+        % Red Tangent Vector (t-hat)
+        \draw[->, sketchred, thick] (1.5, 0) -- (1.5, 1.2) node[right] {$\hat{t}$};
+
+        % Label "Top"
+        \node at (0, -2) {Top};
+    \end{scope}
+
+    % =========================================
+    % RIGHT FIGURE: SIDE VIEW
+    % =========================================
+    \begin{scope}[shift={(6,0)}]
+        % 1. Green Equilibrium Line
+        \draw[thick] (-2, 0) -- (2, 0);
+
+        % 2. Purple Tension Vectors (F_T)
+        % Drawn *before* the red curve so the curve endpoints sit nicely on top if needed
+        % Left Vector (pointing up-left)
+        \draw[->, sketchpurple, thick] (-2, 0) -- (-2.8, 0.6);
+        % Right Vector (pointing up-right) with Label
+        \draw[->, sketchpurple, thick] (2, 0) -- (2.8, 0.6) node[right] {$\bm{F}_T$};
+
+        % 3. Red Displacement Curve
+        % Using Bezier controls to create the sag
+        \draw[sketchred, thick] (-2, 0) .. controls (-0.8, -1.2) and (0.8, -1.2) .. (2, 0);
+
+        % 4. Red Labels and Small Vectors
+        % Label u(x,y,t)
+        \node[sketchred] at (0, 0.6) {$u(x,y,t)$};
+
+        % Vertical displacement arrow (double headed)
+        \draw[<->, sketchred, thick] (-0.3, -0.05) -- (-0.3, -0.8);
+
+        % Normal Vector (n-hat)
+        % Positioned on the right half of the slope
+        \draw[->, sketchred, thick] (1.2, -0.45) -- (1.5, 0.2) node[above] {$\hat{n}$};
+
+        % Label "Side"
+        \node at (0, -1.5) {Side};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+We are only considering the vertical displacement given by
+\(u(x, y, t)\) where \([u] = \si{\meter}\). Let \(\rho(x, y)\) be the mass density with \([\rho] = \si{\kilogram \per \meter \squared}\).
+
+We also define \(\hat{t}\) to be the unit tangent vector in the \(xy\)-plane and \(\hat{n}\) to be the unit upward normal vector.
+
+\begin{definition}[Tensile Force]
+    The tensile (line) force \(\bm F_t\) is the tangent to the membrane and acts outwards. It is defined as
+    \begin{equation}
+    \bm F_t = T_0 \hat{\bm t} \times \hat{\bm n}.
+    \end{equation}
+\end{definition}
+
+The tensile force is in a plane tangent to the surface of the membrane. It is orthogonal to \(\hat{t}\).
+
+The tensile force acting on the boundary is the vertical component of the tensile force.
+
+\begin{definition}[Vertical Component of Tensile Force]
+    The vertical component of the tensile force is
+    \begin{equation}
+    \bm F_t \cdot \hat{\bm z} = T_0 (\hat{\bm t} \times \hat{\bm n}) \cdot \hat{\bm z}.
+    \end{equation}
+\end{definition}
+
+\subsubsection{Deriving the PDE}
+
+We use Newton's second law to derive the PDE. Consider a small patch of our surface. The mass of this small area is \(\rho_0 dA\). The vertical acceleration is \(\frac{\partial^2 u}{\partial t^2}\). Hence the LHS of Newton's second law is
+\begin{equation}
+ma \approx \rho_0 dA \frac{\partial^2 u}{\partial t^2}.
+\end{equation}
+
+To find the net contribution over the whole surface, we integrate over an arbitrary area \(A\) as follows
+\begin{equation}
+\iint_A \rho_0 \frac{\partial^2 u}{\partial t^2} dA.
+\end{equation}
+This is the \(ma\) for our subsurface \(A\).
+
+The tensile force in the vertical direction at a point is
+\begin{equation}
+T_0 (\hat{\bm t} \times \hat{\bm n}) \cdot \hat{\bm z}.
+\end{equation}
+This is the force at a point on the boundary. We must integrate over the boundary of our area \(\partial A\)
+\begin{equation}
+\oint_{\partial A} T_0 (\hat{\bm t} \times \hat{\bm n}) \cdot \hat{\bm z} \, dS = \oint_{\partial A} T_0 (\hat{\bm n} \times \hat{\bm z}) \cdot \hat{\bm t} \, dS.
+\end{equation}
+Combing them together with Newton's second law
+\begin{equation}
+\iint_A \rho_0 \frac{\partial^2 u}{\partial t^2} dA = \oint_{\partial A} T_0 (\hat{\bm n} \times \hat{\bm z}) \cdot \hat{\bm t} \, dS.
+\end{equation}
+Use Stokes theorem to rewrite the RHS
+\begin{equation}
+\iint_A \rho_0 \frac{\partial^2 u}{\partial t^2} dA = \iint_A \bm \nabla \times [T_0(\hat{\bm n} \times \hat{\bm z})] \cdot \hat{\bm n} \, dA.
+\end{equation}
+Since our surface is given by \(z = u(x, y, t)\), we can find a normal vector to the surface
+\begin{equation}
+\hat{\bm N} = \bm \nabla (z - u) = \lp -\frac{\partial u}{\partial x}, -\frac{\partial u}{\partial y}, 1 \rp.
+\end{equation}
+The unit normal is then
+\begin{equation}
+\hat{\bm n} = \frac{\hat{\bm N}}{\norm*{\hat{\bm N}}} = \frac{\left( -\frac{\partial u}{\partial x}, -\frac{\partial u}{\partial y}, -1 \right)}{\sqrt{1 + \left(\frac{\partial u}{\partial x}\right)^2 + \left(\frac{\partial u}{\partial y}\right)^2}}.
+\end{equation}
+We assume the slopes are small
+\begin{equation}
+\lp \frac{\partial u}{\partial x} \rp^2, \lp \frac{\partial u}{\partial y} \rp^2 \ll 1.
+\end{equation}
+We need
+\begin{equation}
+\hat{\bm{n}} \times \hat{\bm{z}} =
+\begin{vmatrix}
+\hat{\bm{x}} & \hat{\bm{y}} & \hat{\bm{z}} \\
+-\frac{\partial u}{\partial x} & -\frac{\partial u}{\partial y} & 1 \\
+0 & 0 & 1
+\end{vmatrix}
+= \left( -\frac{\partial u}{\partial y}, \frac{\partial u}{\partial x}, 0 \right).
+\end{equation}
+Next
+\begin{equation}
+\bm \nabla \times (\hat{\bm{n}} \times \hat{\bm{z}}) =
+\begin{vmatrix}
+\hat{\bm{x}} & \hat{\bm{y}} & \hat{\bm{z}} \\
+\frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\
+-\frac{\partial u}{\partial y} & \frac{\partial u}{\partial x} & 0
+\end{vmatrix}
+= \left( 0, 0, \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} \right).
+\end{equation}
+Finally
+\begin{equation}
+\bm \nabla \times (\hat{\bm{n}} \times \hat{\bm{z}}) \cdot \hat{\bm{n}} = \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = \nabla_H^2 u \quad \text{(horizontal Laplacian)}.
+\end{equation}
+We plug our expressions into the integral equation and obtain
+\begin{equation}
+\iint_A \lp \rho_0 \frac{\partial^2 u}{\partial t^2} - T_0 \nabla^2_H u \rp dA = 0.
+\end{equation}
+Since this must be true for all \(A\), we deduce using our lemma that the integrand is zero. And we arrive at our 2D wave equation
+\begin{equation}
+\rho_0 \frac{\partial^2 u}{\partial t^2} = T_0 \nabla^2_H u.
+\end{equation}
+or
+\begin{equation}
+\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2_H u, \quad c^2 \equiv \frac{T_0}{\rho_0}.
+\end{equation}
+
+\subsection{Solving the Wave Equation}
+
+The wave eqn in 1D can be written as
+\begin{equation}
+\frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial^2 u}{\partial x^2} = 0 \iff \left( \frac{\partial^2}{\partial t^2} \right)u - c^2 \left( \frac{\partial^2}{\partial x^2} \right)u = 0,
+\end{equation}
+or
+\begin{equation}
+\left( \frac{\partial^2}{\partial t^2} - c^2 \frac{\partial^2}{\partial x^2} \right) u = 0.
+\end{equation}
+This is similar to the quadratic eqn
+\begin{equation}
+(t^2 - c^2 x^2) = (t - cx)(t + cx).
+\end{equation}
+We can do the same thing with differential operators,
+\begin{equation}
+\left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) \left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) u = 0.
+\end{equation}
+\emph{When the coefficients are not constants, we get more terms.} If we define
+\begin{equation}
+\left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) u = V,
+\end{equation}
+then the eqn is
+\begin{equation}
+\left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) V = 0.
+\end{equation}
+This rewrites a 2nd order scalar PDE in terms of 2 first-order PDEs. This is similar to the linear advection equation from lecture 2. Recall
+\begin{align}
+    \frac{\partial V}{\partial t} - c \frac{\partial V}{\partial x} &= 0 \quad (\text{soln moves to the left}) \\
+    \frac{\partial u}{\partial t} + c \frac{\partial u}{\partial x} &= 0 \quad (\text{soln moves to the right}).
+\end{align}
+To solve the wave eqn, we choose variables:
+\begin{equation}
+\begin{aligned}
+\zeta &= x - ct \\
+\eta &= x + ct
+\end{aligned}
+\quad \implies \quad
+\begin{aligned}
+x &= \frac{1}{2}(\zeta + \eta) \\
+t &= \frac{1}{2c}(\eta - \zeta).
+\end{aligned}
+\end{equation}
+To change variables, we use the chain rule:
+\begin{gather}
+\frac{\partial u}{\partial \zeta} = \frac{\partial x}{\partial \zeta} \frac{\partial u}{\partial x} + \frac{\partial t}{\partial \zeta} \frac{\partial u}{\partial t} = \frac{1}{2} \frac{\partial u}{\partial x} - \frac{1}{2c} \frac{\partial u}{\partial t} = -\frac{1}{2c} \left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) u \\
+\frac{\partial u}{\partial \eta} = \frac{\partial x}{\partial \eta} \frac{\partial u}{\partial x} + \frac{\partial t}{\partial \eta} \frac{\partial u}{\partial t} = \frac{1}{2} \frac{\partial u}{\partial x} + \frac{1}{2c} \frac{\partial u}{\partial t} = \frac{1}{2c} \left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) u.
+\end{gather}
+This shows,
+\begin{gather}
+\frac{\partial}{\partial \zeta} = -\frac{1}{2c} \left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) \implies \left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) = -2c \frac{\partial}{\partial \zeta} \\
+\frac{\partial}{\partial \eta} = \frac{1}{2c} \left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) \implies \left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) = 2c \frac{\partial}{\partial \eta}.
+\end{gather}
+We sub these eqns into our factored wave eqn
+\begin{equation}
+\left( \frac{\partial}{\partial t} - c \frac{\partial}{\partial x} \right) \left( \frac{\partial}{\partial t} + c \frac{\partial}{\partial x} \right) u = \left( -2c \frac{\partial}{\partial \zeta} \right) \left( 2c \frac{\partial}{\partial \eta} \right) u = -4c^2 \frac{\partial^2 u}{\partial \zeta \partial \eta} = 0.
+\end{equation}
+Divide by $-4c^2$,
+\begin{equation}
+\boxed{\frac{\partial^2 u}{\partial \zeta \partial \eta} = 0} \quad \text{(PDE)}.
+\end{equation}
+
+\subsubsection{Solving the Wave Equation: Integration}
+
+First, we integrate w.r.t. $\eta$,
+\begin{equation}
+\frac{\partial u}{\partial \zeta} = \alpha'(\zeta).
+\end{equation}
+Next, integrate w.r.t. $\zeta$,
+\begin{equation}
+u = \alpha(\zeta) + \beta(\eta)
+\end{equation}
+or
+\begin{equation}
+\boxed{u(x,t) = \alpha(x - ct) + \beta(x + ct)}.
+\end{equation}
+This shows that the first term is moving to the right at speed \(c\), the second term moves to the left with speed \(c\). The solution is called d'Alembert's solution.
+
+This is valid for the wave equation on the real line. To find a unique solution, we need two initial conditions
+\begin{equation}
+u(x, 0) = f(x)
+\end{equation}
+and
+\begin{equation}
+\frac{\partial u}{\partial t}(x, 0) = g(x).
+\end{equation}
+We can find $\alpha$ and $\beta$ in terms of $f$ and $g$:
+\begin{equation}
+\label{first equation}
+u(x,0) = \alpha(x) + \beta(x) = f(x)
+\end{equation}
+and
+\begin{equation}
+\frac{\partial u}{\partial t}(x,0) = -c\alpha'(x) + c\beta'(x) = g(x).
+\end{equation}
+Integrate,
+\begin{equation}
+\label{second equation}
+-c\alpha(x) + c\beta(x) = \int_0^x g(s) \, ds
+\end{equation}
+Adding \(c\) times \cref{first equation} and \cref{second equation}, we obtain
+\begin{equation}
+2c\beta(x) = cf(x) + \int_0^x g(s)\,ds \implies \beta(x) = \frac{1}{2}f(x) + \frac{1}{2c}\int_0^x g(s)\,ds.
+\end{equation}
+Subtracting \cref{second equation} from \(c\) times \cref{first equation}, we obtain
+\begin{equation}
+2c\alpha(x) = cf(x) - \int_0^x g(s)\,ds \implies \alpha(x) = \frac{1}{2}f(x) - \frac{1}{2c}\int_0^x g(s)\,ds.
+\end{equation}
+We then have our solution to the wave equation that satisfies the given initial conditions:
+\begin{equation}
+u(x,t)
+= \frac{1}{2}f(x-ct) - \frac{1}{2c}\int_0^{x-ct} g(s)\,ds
++ \frac{1}{2}f(x+ct) + \frac{1}{2c}\int_0^{x+ct} g(s)\,ds.
+\end{equation}
+Equivalently,
+\begin{equation}
+\boxed{
+u(x,t)
+= \frac{1}{2}\bigl[f(x-ct) + f(x+ct)\bigr]
++ \frac{1}{2c}\int_{x-ct}^{x+ct} g(s)\,ds
+}.
+\end{equation}
+\clearpage
+
+\section*{Lecture 5}
+\addcontentsline{toc}{section}{Lecture 5}
+\stepcounter{section}
+\setcounter{section}{5}
+\setcounter{equation}{0}
+
+\subsection{Introduction to Separation of Variables}
+
+Consider the following PDE in conservation form
+\begin{equation}
+\frac{\partial}{\partial t}(\rho u) + \bm \nabla \cdot \bm \phi = f.
+\end{equation}
+If we assume
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Ficks's law
+    \begin{equation}
+    \bm \phi = - p(x) \bm \nabla u,
+    \end{equation}
+    \item Newton's law of cooling
+    \begin{equation}
+    f = -q(\bm x) u + \rho(\bm x) F(\bm x, t).
+    \end{equation}
+\end{itemize}
+This produces the PDE
+\begin{equation}
+\rho \frac{\partial u}{\partial t} + \bm \nabla \cdot (-\rho \bm \nabla u) = -qu + \rho F.
+\end{equation}
+It yields
+\begin{equation}
+\label{parabolic PDE}
+    \rho \frac{\partial u}{\partial t} - \bm \nabla \cdot (\rho\bm \nabla u) + qu = \rho F.
+\end{equation}
+This is a parabolic PDE. We will assume that
+\begin{equation}
+\rho(\bm x) > 0, \quad p, q \geq 0.
+\end{equation}
+If we pick
+\begin{equation}
+\rho = 1, \quad p = D, \quad q = 0, \quad F= 0,
+\end{equation}
+then we have the diffusion equation
+\begin{equation}
+\frac{\partial u}{\partial t} = D \nabla^2 u.
+\end{equation}
+
+\subsubsection{Linear Operators and Classification of PDEs}
+
+\begin{definition}[Linear Operator]
+    The linear operator is defined as
+    \begin{equation}
+    L[u] \coloneqq - \bm \nabla \cdot (p \bm \nabla u) + q u.
+    \end{equation}
+    It is a linear spatial differential operator.
+\end{definition}
+
+\begin{insight}[Classifications of PDEs]
+    \textbf{Why do we classify?} \\
+    Classifying PDEs (second-order, linear for this course) is useful because it instantly tells us what the solutions look like.
+
+    \textbf{How to classify second-order linear based on discriminants} \\
+    For a general second-order linear PDE in two variables of the form:
+    \begin{equation}
+        A u_{xx} + B u_{xy} + C u_{yy} + D u_x + E u_y + F u = G
+    \end{equation}
+    We calculate the discriminant, $\Delta = B^2 - 4AC$, evaluating the coefficients of the second-derivative terms. The sign of $\Delta$ dictates the classification:
+
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Hyperbolic} ($B^2 - 4AC > 0$): Represents wave propagation, has second-order temporal and spatial derivatives with different signs. \\
+        \textit{Example:} The Wave Equation ($u_{tt} - c^2 u_{xx} = 0$).
+        \item \textbf{Parabolic} ($B^2 - 4AC = 0$): Represents diffusion and smoothing, has first-order temporal and second-order spatial. \\
+        \textit{Example:} The Heat Equation ($u_t - \alpha u_{xx} = 0$).
+        \item \textbf{Elliptic} ($B^2 - 4AC < 0$): Represents steady-state equilibrium, has second-order temporal and spatial derivatives with same signs \\
+        \textit{Example:} Laplace's Equation ($u_{xx} + u_{yy} = 0$).
+    \end{itemize}
+\end{insight}
+
+Using this operator, the parabolic equation can be written as
+\begin{equation}
+\rho \frac{\partial u}{\partial t} + L[u] = \rho F.
+\end{equation}
+The hyperbolic PDE we will study is
+\begin{equation}
+\rho \frac{\partial^2 u}{\partial t^2} + L[u] = \rho F.
+\end{equation}
+
+If we pick \(\rho = 1\), \(p = c^2\), \(q = 0\), and \(F = 0\), then we obtain the wave equation
+\begin{equation}
+\frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u.
+\end{equation}
+
+In both the parabolic and hyperbolic cases, if we ignore the time derivatives, we obtain
+\begin{equation}
+L[u] = \rho F.
+\end{equation}
+This is an elliptic equation. However, the more general elliptic form we will consider is
+\begin{equation}
+-\rho \frac{\partial^2 u}{\partial t^2} + L[u] = \rho F.
+\end{equation}
+If we pick \(\rho = 1\), \(p = 1\), \(q = 0\), \(F = 0\), and relabel the independent variables appropriately, this reduces to Laplace’s equation in higher dimensions
+\begin{equation}
+\frac{\partial^2 u}{\partial t^2} + \frac{\partial^2 u}{\partial x^2} = 0.
+\end{equation}
+
+\subsubsection{Boundary Conditions}
+
+In higher dimensions, we use the following general boundary condition:
+\begin{equation}
+\alpha(\bm{x}) u + \beta(\bm{x}) \frac{\partial u}{\partial n}
+= B(\bm{x}, t),
+\quad \bm{x} \in \partial V,
+\end{equation}
+where
+\begin{equation}
+\frac{\partial u}{\partial n} = \hat{n} \cdot \bm \nabla u.
+\end{equation}
+
+We distinguish the following cases:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\alpha \neq 0\), \(\beta = 0\): Dirichlet boundary condition.
+    \item \(\alpha = 0\), \(\beta \neq 0\): Von Neumann boundary condition.
+    \item \(\alpha \neq 0\), \(\beta \neq 0\): Robin boundary condition.
+\end{itemize}
+
+If \(B(\bm{x}, t) = 0\), the boundary conditions are homogeneous; otherwise, they are inhomogeneous.
+
+In 1D, on a domain \(x \in [0,\ell]\), the boundary conditions become
+\begin{gather}
+\alpha_1 u(0,t) - \beta_1 \frac{\partial u}{\partial x}(0,t) = B_0(t), \\[6pt]
+\alpha_2 u(\ell,t) + \beta_2 \frac{\partial u}{\partial x}(\ell,t) = B_\ell(t).
+\end{gather}
+
+\subsection{Separation of Variables}
+
+Separation of variables is an approach we can use to solve some linear PDEs. We begin with the homogeneous PDE (\(F=0\)) and homogeneous boundary conditions (\(B=0\)) in 1D:
+\begin{equation}
+\rho \frac{\partial^2 u}{\partial t^2} + L[u] = 0,
+\quad x \in (0,\ell), \ t>0,
+\end{equation}
+where
+\begin{equation}
+L[u] = -\frac{d}{dx}\!\left(p(x)\frac{du}{dx}\right) + q(x)u.
+\end{equation}
+
+\subsubsection{Wave Equation in 1D}
+
+For the wave equation, take \(\rho=1\), \(p=c^2\), and \(q=0\). Then
+\begin{equation}
+\frac{\partial^2 u}{\partial t^2} = c^2 \frac{\partial^2 u}{\partial x^2},
+\quad x \in (0,\ell), \ t>0.
+\end{equation}
+
+The boundary conditions are
+\begin{equation}
+\alpha_1 u(0,t) - \beta_1 \frac{\partial u}{\partial x}(0,t) = 0,
+\quad
+\alpha_2 u(\ell,t) + \beta_2 \frac{\partial u}{\partial x}(\ell,t) = 0,
+\end{equation}
+and the initial conditions are
+\begin{equation}
+u(x,0) = f(x), \quad
+\frac{\partial u}{\partial t}(x,0) = g(x),
+\quad x \in [0,\ell].
+\end{equation}
+
+\subsubsection{Separable Solutions}
+
+Assume a separable solution of the form
+\begin{equation}
+u(x,t) = M(x)N(t).
+\end{equation}
+Substitute this into the homogeneous PDE to obtain
+\begin{gather}
+\rho \frac{d^2}{dt^2}(MN) + L[MN] = 0 \\
+\rho M \frac{d^2N}{dt^2} + NL[M] = 0.
+\end{gather}
+Let \(N''\) be the second time derivative of \(N\) and dividing by \(\rho MN\) (assuming \(MN \not\equiv 0\)) gives
+\begin{equation}
+\frac{N''}{N} = -\frac{L[M]}{\rho M}.
+\end{equation}
+The left-hand side depends only on \(t\) and the right-hand side only on \(x\), so both must be equal to a constant. We denote this constant by \(-\lambda\).
+
+Thus we obtain the ODEs
+\begin{equation}
+N'' + \lambda N = 0,
+\end{equation}
+and
+\begin{equation}
+L[M] = \lambda \rho M.
+\end{equation}
+
+In 1D, this spatial equation becomes
+\begin{equation}
+-(pM')' + qM = \lambda \rho M,
+\end{equation}
+where prime denotes differentiation with respect to \(x\).
+
+The sign of \(\lambda\) determines the qualitative behavior:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\lambda > 0\): oscillatory (trigonometric, harmonic oscillator).
+    \item \(\lambda = 0\): linear solutions.
+    \item \(\lambda < 0\): exponential growth or decay.
+\end{itemize}
+
+For the wave equation, we expect \(\lambda > 0\).
+
+\subsubsection{Eigenvalue Problem}
+
+Here, \(\lambda\) is an eigenvalue and \(M(x)\) is the corresponding eigenfunction. The function \(M\) must satisfy an ODE together with two boundary conditions.
+
+For example, if \(\beta_1=\beta_2=0\) (Dirichlet boundary conditions), then
+\begin{equation}
+M(0) = 0, \quad M(\ell) = 0.
+\end{equation}
+To obtain non-trivial solutions, we must have
+\begin{equation}
+L[M] = \lambda \rho M,
+\quad
+M(0)=0=M(\ell).
+\end{equation}
+
+If \(\rho=1\), \(p=1\), and \(q=0\), this reduces to
+\begin{equation}
+M'' + \lambda M = 0,
+\quad
+M(0)=0=M(\ell),
+\end{equation}
+which we will solve later.
+
+Today, using simple separation of variables, we obtain two functions: one depending only on space and one depending only on time.
+
+\subsection{Parabolic Case}
+
+Consider the homogeneous parabolic PDE and boundary conditions:
+\begin{equation}
+\rho \frac{\partial u}{\partial t} + L[u] = 0,
+\quad x \in (0,\ell), \ t>0,
+\end{equation}
+with
+\begin{equation}
+\alpha_1 u(0,t) - \beta_1 \frac{\partial u}{\partial x}(0,t) = 0,
+\quad
+\alpha_2 u(\ell,t) - \beta_2 \frac{\partial u}{\partial x}(\ell,t) = 0,
+\end{equation}
+and initial condition
+\begin{equation}
+u(x,0) = f(x), \quad x \in [0,\ell].
+\end{equation}
+
+As an example, pick \(\rho=1\), \(p=D\), and \(q=0\). Then
+\begin{equation}
+\frac{\partial u}{\partial t} = D \frac{\partial^2 u}{\partial x^2},
+\end{equation}
+which is the diffusion equation. Assume again \(u(x,t)=M(x)N(t)\). Substituting into the PDE gives
+\begin{equation}
+\rho \frac{d}{dt}(MN) + L[MN] = 0.
+\end{equation}
+Dividing by \(\rho MN\) yields
+\begin{equation}
+\frac{N'}{N} = -\frac{L[M]}{\rho M} = -\lambda.
+\end{equation}
+Hence,
+\begin{equation}
+N' + \lambda N = 0
+\quad \Rightarrow \quad
+N(t) \propto e^{-\lambda t}.
+\end{equation}
+If
+\begin{equation}
+\lambda > 0 \ \text{(decay)}, \quad
+\lambda = 0 \ \text{(constant)}, \quad
+\lambda < 0 \ \text{(growth)}.
+\end{equation}
+The eigenvalue problem for \(M\) is the same as before:
+\begin{equation}
+L[M] = \lambda \rho M.
+\end{equation}
+Thus, although the physics is different, the mathematical eigenvalue problem is the same.
+\clearpage
+
+\section*{Lecture 6}
+\addcontentsline{toc}{section}{Lecture 6}
+\stepcounter{section}
+\setcounter{section}{6}
+\setcounter{equation}{0}
+
+\subsection{Separation of Variables: Elliptic Case}
+
+We now consider the elliptic case, where we use the spatial variable $y$ instead of time. The general form of the PDE is
+\begin{equation}
+\rho \frac{\partial^2 u}{\partial y^2} - L[u] = 0,
+\end{equation}
+together with appropriate boundary conditions.
+
+If we choose $\rho = 1$, $p = 1$, and $q = 0$, then the operator becomes
+\begin{equation}
+L[u] = -\frac{\partial}{\partial x}\left(p \frac{\partial u}{\partial x}\right) + q u,
+\end{equation}
+and the PDE reduces to Laplace’s equation
+\begin{equation}
+\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0,
+\end{equation}
+defined on the rectangle $0 \le x \le \ell$, $0 \le y \le \ell_y$.
+
+The boundary conditions in the $x$-direction are taken to be
+\begin{equation}
+\left.
+\begin{aligned}
+\alpha_1 u(0,y) - \beta_1 \frac{\partial u}{\partial x}(0,y) &= 0, \\
+\alpha_2 u(\ell,y) + \beta_2 \frac{\partial u}{\partial x}(\ell,y) &= 0,
+\end{aligned}
+\right\}
+\quad 0 \le y \le \ell_y.
+\end{equation}
+
+The boundary conditions in the $y$-direction (the same as initial conditions if we had \(t\) instead of \(y\)) are
+\begin{equation}
+u(x,0) = f(x), \quad u(x,\ell_y) = g(x),
+\quad 0 \le x \le \ell.
+\end{equation}
+
+\subsection{Separation Ansatz}
+
+We seek solutions of the form
+\begin{equation}
+u(x,y) = M(x) N(y).
+\end{equation}
+Substituting into the PDE gives
+\begin{equation}
+\rho \frac{\partial^2}{\partial y^2}(MN) = L[MN].
+\end{equation}
+Since $M$ depends only on $x$ and $N$ only on $y$, this simplifies to
+\begin{equation}
+\rho M N'' = N L[M].
+\end{equation}
+Dividing by $\rho M N$ yields
+\begin{equation}
+\frac{N''}{N} = \frac{L[M]}{\rho M} = \lambda,
+\end{equation}
+where $\lambda$ is a separation constant.
+
+This leads to the system
+\begin{align}
+N'' &= \lambda N, \\
+L[M] &= \lambda \rho M.
+\end{align}
+
+If $\lambda > 0$, the solutions are exponential; if $\lambda < 0$, the solutions are sinusoidal; and if $\lambda = 0$, the solutions are linear.
+
+We note that the parabolic, hyperbolic, and elliptic cases all yield the same eigenvalue problem in the $x$-variable.
+
+\subsection{Eigenvalue Problem}
+
+The eigenvalue problem in $x$ is
+\begin{equation}
+L[M] = \lambda \rho M,
+\end{equation}
+with boundary conditions
+\begin{equation}
+\alpha_1 M - \beta_1 M' = 0 \quad \text{at } x=0,
+\quad
+\alpha_2 M + \beta_2 M' = 0 \quad \text{at } x=\ell.
+\end{equation}
+
+\begin{fact}
+    \label{types of temporal pdes}
+    For the three PDE types, the equations for $N$ are:
+    \begin{align}
+        N'' + \lambda N &= 0 \quad \text{(hyperbolic)}, \\
+        N' + \lambda N &= 0 \quad \text{(parabolic)}, \\
+        N'' - \lambda N &= 0 \quad \text{(elliptic)}.
+    \end{align}
+\end{fact}
+
+\subsubsection{Example: Dirichlet Boundary Conditions}
+
+As a special case, take $\rho = 1$, $p = 1$, $q = 0$, and $\beta_1 = \beta_2 = 0$. Then the eigenvalue problem becomes
+\begin{equation}
+- M'' = \lambda M,
+\quad
+M(0) = 0, \quad M(\ell) = 0.
+\end{equation}
+
+We consider three cases.
+
+\paragraph{Case 1: $\lambda < 0$.}
+The solution is exponential and leads only to the trivial solution.
+
+\paragraph{Case 2: $\lambda = 0$.}
+The solution is linear and again yields only the trivial solution.
+
+\begin{note}[Detailed Breakdown: Why $\lambda \le 0$ Yields Trivial Solutions]
+    When solving the eigenvalue problem $-M'' = \lambda M$ with Dirichlet boundary conditions $M(0) = 0$ and $M(\ell) = 0$, we test the different signs of $\lambda$.
+
+    \textbf{Case 1: $\lambda < 0$ (The Exponential Case)} \\
+    Let's assume $\lambda$ is a negative number. To make the algebra easy, let's write it as $\lambda = -k^2$ (where $k > 0$). Our differential equation becomes:
+    \begin{equation}
+        M'' - k^2 M = 0.
+    \end{equation}
+    Using the characteristic equation $r^2 - k^2 = 0$, our roots are real ($r = \pm k$). This means our general solution is made of exponential functions:
+    \begin{equation}
+        M(x) = C_1 e^{kx} + C_2 e^{-kx}.
+    \end{equation}
+    Now, we apply the physical boundary conditions:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Left Boundary ($x = 0$):} We need $M(0) = 0$.
+        \begin{equation}
+            C_1 e^{0} + C_2 e^{0} = 0 \implies C_1 + C_2 = 0 \implies C_2 = -C_1
+        \end{equation}
+        Update our equation: $M(x) = C_1(e^{kx} - e^{-kx})$
+        \item \textbf{Right Boundary ($x = \ell$):} We need $M(\ell) = 0$.
+        \begin{equation}
+            C_1(e^{k\ell} - e^{-k\ell}) = 0.
+        \end{equation}
+    \end{itemize}
+    For this to equal zero, either $C_1 = 0$, or the term inside the parentheses is zero. Because $k$ and $\ell$ are strictly positive numbers, $e^{k\ell}$ will always be larger than $e^{-k\ell}$. They can never cancel each other out. Therefore, we are forced to conclude that $C_1 = 0$, which also means $C_2 = 0$. \\
+    \textbf{Result:} $M(x) = 0$. The solution is purely exponential and leads only to the trivial solution.
+
+    \textbf{Case 2: $\lambda = 0$ (The Linear Case)} \\
+    If $\lambda = 0$, the equation simplifies significantly:
+    \begin{equation}
+        M'' = 0.
+    \end{equation}
+    Integrating this twice gives us the general equation for a straight line:
+    \begin{equation}
+        M(x) = Ax + B.
+    \end{equation}
+    Let's apply the boundary conditions again:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Left Boundary ($x = 0$):} We need $M(0) = 0$.
+        \begin{equation}
+            A(0) + B = 0 \implies B = 0
+        \end{equation}
+        Update our equation: $M(x) = Ax$
+        \item \textbf{Right Boundary ($x = \ell$):} We need $M(\ell) = 0$.
+        \begin{equation}
+            A(\ell) = 0
+        \end{equation}
+    \end{itemize}
+    Since the length of the domain ($\ell$) is not zero, the only way this product equals zero is if $A = 0$. \\
+    \textbf{Result:} $M(x) = 0$. A straight line tied down at both ends must be perfectly flat. This yields only the trivial solution.
+\end{note}
+
+\begin{insight}[Conversions: Exponentials, Trig, and Hyperbolics]
+    \textbf{The Exponential Foundation} \\
+    Both trigonometric and hyperbolic functions are built directly from the exponential function $e$. The only difference is the presence of the imaginary unit $i$.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Hyperbolic:} $\cosh(x) = \frac{e^x + e^{-x}}{2}$ \quad and \quad $\sinh(x) = \frac{e^x - e^{-x}}{2}$
+        \item \textbf{Trigonometric:} $\cos(x) = \frac{e^{ix} + e^{-ix}}{2}$ \quad and \quad $\sin(x) = \frac{e^{ix} - e^{-ix}}{2i}$
+    \end{itemize}
+
+    \textbf{The Bridge (Euler's Formula)} \\
+    Euler's formula is the master key that connects real exponentials to complex trigonometric rotations:
+    \begin{equation}
+        e^{ix} = \cos(x) + i\sin(x).
+    \end{equation}
+    
+    \textbf{Direct Conversions Using $i$} \\
+    Because of their exponential definitions, plugging an imaginary number ($ix$) into a hyperbolic function magically turns it into a standard trigonometric function, and vice versa.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item $\cosh(ix) = \cos(x)$
+        \item $\sinh(ix) = i\sin(x)$
+        \item $\cos(ix) = \cosh(x)$
+        \item $\sin(ix) = i\sinh(x)$
+    \end{itemize}
+\end{insight}
+
+\paragraph{Case 3: $\lambda > 0$.}
+The solution is
+\begin{equation}
+M(x) = A \sin(\sqrt{\lambda} x) + B \cos(\sqrt{\lambda} x).
+\end{equation}
+Applying the boundary conditions gives $B=0$ and
+\begin{equation}
+\sqrt{\lambda} \ell = n \pi,
+\quad n = 1,2,3,\dots
+\end{equation}
+Thus,
+\begin{equation}
+\lambda_n = \left(\frac{n\pi}{\ell}\right)^2,
+\quad
+M_n(x) = A_n \sin\!\left(\frac{n\pi x}{\ell}\right).
+\end{equation}
+
+There are infinitely many eigenvalues and eigenfunctions. These eigenfunctions form a basis on which we build the general solution.
+
+\begin{center}
+\begin{tikzpicture}[xscale=1.5, yscale=1.2]
+    % Define the length of the domain (L)
+    \def\L{4}
+
+    % Draw Axes
+    \draw[->] (-0.2,0) -- (\L+0.5,0) node[right] {$x$};
+    \draw[->] (0,-1.2) -- (0,1.2);
+
+    % n=1: Blue
+    \draw[thick, blue] plot[domain=0:\L, samples=100] (\x, {sin(1*180*\x/\L)});
+    \node[blue] at (2.5, 1.3) {$n=1$};
+
+    % n=2: Red
+    \draw[thick, red] plot[domain=0:\L, samples=100] (\x, {sin(2*180*\x/\L)});
+    \node[red] at (3, -1.3) {$n=2$};
+
+    % n=3: Green (using distinct "green!50!black" for better visibility)
+    \draw[thick, green!50!black] plot[domain=0:\L, samples=100] (\x, {sin(3*180*\x/\L)});
+    \node[green!50!black] at (0.7, 1.3) {$n=3$};
+    
+    % Boundary Tick
+    \draw (\L, 0.1) -- (\L, -0.1) node[below] {$\ell$};
+
+\end{tikzpicture}
+\end{center}
+
+\subsection{Inner Products and Operator Properties}
+
+From linear algebra, $\mathbb{R}^n$ requires $n$ linearly independent vectors to form a basis. Similarly, for an $n$th-order ODE, we require $n$ linearly independent functions.
+
+The eigenfunctions $M_n$ depend on the boundary conditions and on the operator $L$, which encodes the physics and geometry of the problem.
+
+\begin{definition}[Inner Product (1D)]
+Let $f$ and $g$ be functions defined on $[0,\ell]$ and let $\rho(x) > 0$.  
+We define the inner product of $f$ and $g$ by
+\begin{equation}
+(f,g) = \int_0^\ell \rho(x)\, f(x)\, g(x)\, dx.
+\end{equation}
+\end{definition}
+
+\begin{definition}[Inner Product (3D)]
+Let $f$ and $g$ be functions defined on a volume $V \subset \mathbb{R}^3$ and let $\rho(\bm{x}) > 0$.  
+We define the inner product of $f$ and $g$ by
+\begin{equation}
+(f,g) = \iiint_V \rho(\bm{x})\, f(\bm{x})\, g(\bm{x})\, dV.
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Inner Product is Symmetric]
+    The inner product is symmetric
+    \begin{equation}
+        (f, g) = (g, f).
+    \end{equation}
+\end{theorem}
+
+\begin{theorem}[Orthogonality]
+    $f$ and $g$ are orthogonal with respect to $\rho$ if $(f,g)=0$.
+\end{theorem}
+
+\begin{definition}[Norm]
+    The norm is defined by
+    \begin{equation}
+    \|f\| = (f,f)^{1/2} = \left( \int_0^\ell \rho(x) f(x)^2\,dx \right)^{1/2}.
+    \end{equation}
+\end{definition}
+
+Since $\rho(x) > 0$ and $f(x)^2 \ge 0$, we have $\|f\| \ge 0$, with $\|f\| = 0$ if and only if $f=0$.
+
+\subsection{Self-Adjointness and Positivity}
+
+\begin{definition}[Self-Adjoint]
+    The operator $L$ is self-adjoint if
+    \begin{equation}
+    (w,L[u]) = (L[w],u),
+    \end{equation}
+    assuming $u$ and $w$ satisfy the appropriate boundary conditions.
+\end{definition}
+
+\begin{theorem}
+\label{theorem 1rho is self-adjoint}
+The operator $\dfrac{1}{\rho} L$ is self-adjoint.
+\begin{equation}
+\left( w, \frac{1}{\rho} L[u] \right)
+=
+\left( \frac{1}{\rho} L[w], u \right),
+\end{equation}
+where
+\begin{equation}
+L[u] = -\nabla \cdot (p \nabla u) + q u,
+\end{equation}
+with boundary conditions
+\begin{equation}
+\alpha(\bm{x}) u + \beta(\bm{x}) \frac{\partial u}{\partial n} = 0
+\quad \text{on } \partial V.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+    We compute
+    \begin{align}
+    \left( w, \frac{1}{\rho} L[u] \right)
+    &= \iiint_V \rho\, w \frac{1}{\rho} L[u] \, dV \\
+    &= \iiint_V w L[u] \, dV \\
+    &= \iiint_V w \big( -\nabla \cdot (p \nabla u) + q u \big) \, dV.
+    \end{align}
+    Similarly,
+    \begin{equation}
+    \left( \frac{1}{\rho} L[w], u \right)
+    = \iiint_V u \big( -\nabla \cdot (p \nabla w) + q w \big) \, dV.
+    \end{equation}
+    Subtracting, the $qwu$ terms cancel, giving
+    \begin{equation}
+    \iiint_V \Big( - w \nabla \cdot (p \nabla u) + u \nabla \cdot (p \nabla w) \Big)\, dV.
+    \end{equation}
+    Using the product rule,
+    \begin{align}
+    &- \nabla \cdot (w p \nabla u)
+    + p \nabla w \cdot \nabla u
+    + \nabla \cdot (u p \nabla w)
+    - p \nabla u \cdot \nabla w \\
+    &= - \nabla \cdot \big( p (w \nabla u - u \nabla w) \big).
+    \end{align}
+    Therefore,
+    \begin{equation}
+    - \iiint_V \nabla \cdot \big( p (w \nabla u - u \nabla w) \big)\, dV.
+    \end{equation}
+    \begin{definition}[Normal Derivative]
+        In vector calculus, the \textbf{directional derivative in the normal direction} (or simply the \textit{normal derivative}) is defined as the dot product of the gradient of a scalar function (like $\nabla u$) with the outward unit normal vector ($\mathbf{n}$).
+        
+        Mathematically, it is written using the following shorthand notation:
+        \begin{equation}
+            \frac{\partial u}{\partial n} = \nabla u \cdot \mathbf{n}.
+        \end{equation}
+        
+        \textit{Physical Meaning:} It represents the instantaneous rate of change of the function $u$ as you move directly outward from a boundary surface in the exact direction of $\mathbf{n}$.
+    \end{definition}
+    \begin{note}[Derivation: Why the Normal Derivative $\frac{\partial u}{\partial n} = \nabla u \cdot \mathbf{n}$]
+        To understand why this notation works, we expand the dot product of the gradient $\nabla u$ and the unit normal vector $\mathbf{n} = \langle n_x, n_y, n_z \rangle$:
+        \begin{equation}
+            \nabla u \cdot \mathbf{n} = \frac{\partial u}{\partial x}n_x + \frac{\partial u}{\partial y}n_y + \frac{\partial u}{\partial z}n_z
+        \end{equation}
+        
+        Let the scalar variable $n$ represent the physical distance traveled along the outward normal path. Because $\mathbf{n}$ is a unit vector, its Cartesian components literally represent the rate of change of our spatial coordinates with respect to that distance $n$:
+        \begin{equation}
+            n_x = \frac{\partial x}{\partial n}, \quad n_y = \frac{\partial y}{\partial n}, \quad n_z = \frac{\partial z}{\partial n}.
+        \end{equation}
+        
+        Substituting these physical definitions back into our expanded dot product yields:
+        \begin{equation}
+            \nabla u \cdot \mathbf{n} = \frac{\partial u}{\partial x}\left(\frac{\partial x}{\partial n}\right) + \frac{\partial u}{\partial y}\left(\frac{\partial y}{\partial n}\right) + \frac{\partial u}{\partial z}\left(\frac{\partial z}{\partial n}\right).
+        \end{equation}
+        
+        By the Multivariable Chain Rule, this exact sum of partial derivatives is the definition of the total rate of change of $u$ with respect to $n$. Therefore, we arrive perfectly at the condensed notation:
+        \begin{equation}
+            \nabla u \cdot \mathbf{n} = \frac{\partial u}{\partial n}.
+        \end{equation}
+    \end{note}
+    By Gauss’ theorem, this becomes
+    \begin{equation}
+    - \oiint_{\partial V} p \left(
+    w \frac{\partial u}{\partial n}
+    - u \frac{\partial w}{\partial n}
+    \right) dS.
+    \end{equation}
+    
+    \paragraph{Case 1}
+    If $\beta(\bm{x}) = 0$ on $\partial V$, then $u=w=0$ on $\partial V$, and the surface integral vanishes, completing the proof.
+    
+    \begin{important}[Boundary Conditions Requirements]
+        In the study of boundary value problems, it is a strict rule that $\alpha(\bm{x})$ and $\beta(\bm{x})$ cannot both be zero at the same time (otherwise, there is noboundary condition at all).
+    \end{important}
+    
+    \paragraph{Case 2}
+    If
+    \begin{equation}
+    \frac{\partial u}{\partial n} = -\frac{\alpha}{\beta} u,
+    \quad
+    \frac{\partial w}{\partial n} = -\frac{\alpha}{\beta} w,
+    \end{equation}
+    then the integrand becomes zero, and again the surface integral vanishes, completing the proof.
+\end{proof}
+
+\subsection{Positivity}
+
+\begin{definition}[Positive Operator]
+    The operator $\dfrac{1}{\rho} L$ is said to be positive if
+    \begin{equation}
+    \left( u, \frac{1}{\rho} L[u] \right) \ge 0.
+    \end{equation}
+\end{definition}
+
+To show positivity, we expand
+\begin{align}
+\left(u,\frac{1}{\rho}L[u]\right)
+&= \iiint_V \rho u \,\frac{1}{\rho}L[u]\, dV \\
+&= \iiint_V u\Big(-\nabla\cdot(p\nabla u)+qu\Big)\, dV \\
+&= \iiint_V qu^2\, dV \;+\; \iiint_V\Big(-\nabla\cdot(pu\nabla u) + p\nabla u\cdot\nabla u\Big)\, dV \\
+&= \iiint_V \Big(qu^2 + p|\nabla u|^2\Big)\, dV \;-\; \oiint_{\partial V} p u \frac{\partial u}{\partial n}\, dS
+\end{align}
+Using the boundary condition, this becomes
+\begin{equation}
+\iiint_V q u^2 \, dV
++ \iiint_V p |\nabla u|^2 \, dV
++ \oiint_{\partial V} \frac{\alpha}{\beta} p u^2 \, dS.
+\end{equation}
+If $q\ge 0$, $p>0$, and $\alpha,\beta\ge 0$, then the RHS is $\ge 0$, hence $\dfrac{1}{\rho}L$ is a positive operator.
+\clearpage
+
+\section*{Lecture 7}
+\addcontentsline{toc}{section}{Lecture 7}
+\stepcounter{section}
+\setcounter{section}{7}
+\setcounter{equation}{0}
+
+\subsection{Eigenfunction Expansions}
+
+We have studied hyperbolic, parabolic, and elliptic PDEs.
+
+\begin{fact}
+    In our three PDEs, we found the same eigenvalue problem
+    \begin{equation}
+    L[M_n] = \lambda_n \rho M_n \quad \text{or} \quad \frac{1}{\rho}L[M_n] = \lambda_n M_n,
+    \end{equation}
+    combined with boundary conditions and \cref{types of temporal pdes}.
+\end{fact}
+
+We previously showed that the operator \(\frac{1}{\rho}L\) is self-adjoint and positive. Today, we use these results to show two key properties:
+\begin{enumerate}[nosep]
+    \item Eigenfunctions are orthogonal.
+    \item Eigenvalues are non-negative.
+\end{enumerate}
+
+\subsubsection{Orthogonality}
+
+\begin{theorem}[Orthogonality of Eigenfunctions]
+\label{orthogonality of eigenfunctions}
+    If \(\lambda_n \neq \lambda_m\), then the corresponding eigenfunctions \(M_n\) and \(M_m\) are orthogonal with respect to the weight \(\rho\), i.e., \((M_n, M_m) = 0\).
+\end{theorem}
+
+\begin{proof}
+    Recall that the operator \(\frac{1}{\rho}L\) is self-adjoint, hence
+    \begin{equation}
+    \lp w, \frac{1}{\rho}L[u] \rp = \lp \frac{1}{\rho}L[w], u \rp.
+    \end{equation}
+    This is true if \(u\) and \(w\) are eigenfunctions satisfying the boundary conditions. Pick \(u = M_n\) and \(w = M_m\) to be the two eigenfunctions. Substituting these into the self-adjoint identity:
+    \begin{align}
+        \lp M_m, \frac{1}{\rho}L[M_n] \rp - \lp \frac{1}{\rho}L[M_m], M_n \rp &= 0 \\
+        \lp M_m, \lambda_n M_n \rp - \lp \lambda_m M_m, M_n \rp &= 0 \\
+        (\lambda_n - \lambda_m)(M_m, M_n) &= 0 \quad \text{(by bilinearity)}.
+    \end{align}
+    If \(\lambda_n \neq \lambda_m\), then it must be that \((M_m, M_n) = 0\), so the eigenfunctions are orthogonal. Note that we assume that each eigenfunction is non-trivial, so it is not exactly 0.
+\end{proof}
+
+\begin{example}
+    From the last lecture, we found for Dirichlet boundary conditions:
+    \begin{equation}
+    \lambda_n = \lp \frac{n\pi}{\ell} \rp^2, \quad M_n = \sin \lp \frac{n\pi x}{\ell} \rp \quad \text{for } n=1, 2, 3, \dots
+    \end{equation}
+    We can check their orthogonality explicitly:
+    \begin{equation}
+    \int_0^\ell M_m M_n \, dx = \int_0^\ell \sin \lp \frac{m\pi x}{\ell} \rp \sin \lp \frac{n\pi x}{\ell} \rp \, dx.
+    \end{equation}
+    Using the trigonometric identity (which will be provided on the formula sheet)
+    \begin{equation}
+    \sin A \sin B = \frac{1}{2} [\cos(A-B) - \cos(A+B)],
+    \end{equation}
+    the integral becomes
+    \begin{align}
+        &\int_0^\ell M_m M_n \, dx \notag \\
+        = &\int_0^\ell \frac{1}{2} \lb \cos \lp \frac{(n-m)\pi x}{\ell} \rp - \cos \lp \frac{(n+m)\pi x}{\ell} \rp \rb \, dx \\
+        = &\frac{1}{2} \lb \frac{\ell}{(n-m)\pi} \sin \lp \frac{(n-m)\pi x}{\ell} \rp - \frac{\ell}{(n+m)\pi} \sin \lp \frac{(n+m)\pi x}{\ell} \rp \rb_0^\ell.
+    \end{align}
+    Evaluating this at the bounds \(0\) and \(\ell\), all sine terms vanish (since \(\sin(k\pi)=0\) for integer \(k\)). Thus,
+    \begin{equation}
+    \int_0^\ell M_m M_n \, dx = 0 \quad \text{if } n \neq m.
+    \end{equation}
+\end{example}
+
+\subsubsection{Positivity (Non-negativity)}
+
+Using the property that the operation \(\frac{1}{\rho}L\) is positive, we can show the eigenvalues cannot be negative.
+
+\begin{theorem}[Non-negative Eigenvalues]
+    The eigenvalues \(\lambda_n\) are non-negative, i.e., \(\lambda_n \geq 0\).
+\end{theorem}
+
+\begin{proof}
+    Consider the inner product of an eigenfunction with the operator acting on itself:
+    \begin{equation}
+    \lp M_n, \frac{1}{\rho}L[M_n] \rp \geq 0 \quad \text{(since operator is positive)}.
+    \end{equation}
+    Substituting the eigenvalue relation \(\frac{1}{\rho}L[M_n] = \lambda_n M_n\):
+    \begin{equation}
+    \lp M_n, \lambda_n M_n \rp = \lambda_n (M_n, M_n) = \lambda_n \norm{M_n}^2 \geq 0.
+    \end{equation}
+    Since \(\norm{M_n}^2 > 0\) (as \(M_n\) is non-trivial), we must have \(\lambda_n \geq 0\). Hence the eigenvalues are non-negative.
+\end{proof}
+
+\begin{example}
+    For the Dirichlet case, \(\lambda_n = \lp \frac{n\pi}{\ell} \rp^2\). For \(n=1, 2, 3 \dots\), clearly \(\lambda_n \geq 0\).
+    We know that our eigenfunctions are orthogonal and eigenvalues are not negative. This is without knowing the explicit solution.
+\end{example}
+
+\subsection{General Solutions}
+
+Recall the ODEs for the time component \(N(t)\) derived from separation of variables:
+\begin{enumerate}[nosep]
+    \item \(N_k'' + \lambda_k N_k = 0\) \quad (Hyperbolic)
+    \item \(N_k' + \lambda_k N_k = 0\) \quad (Parabolic)
+    \item \(N_k'' - \lambda_k N_k = 0\) \quad (Elliptic)
+\end{enumerate}
+Our solutions depend on the sign of \(\lambda_k\). Since we proved \(\lambda_k \geq 0\):
+\begin{enumerate}[nosep]
+    \item For \(\lambda_k > 0\):
+    \begin{equation}
+    N_k = A_k \cos(\sqrt{\lambda_k} t) + B_k \sin(\sqrt{\lambda_k} t).
+    \end{equation}
+    For \(\lambda_k = 0\):
+    \begin{equation}
+    N_k = A_k + B_k t.
+    \end{equation}
+    \item For \(\lambda_k \geq 0\):
+    \begin{equation}
+    N_k = A_k \exp(-\lambda_k t).
+    \end{equation}
+    \item For the elliptic case (using \(y\) instead of \(t\)):
+    \begin{equation}
+    N_k = A_k \cosh(\sqrt{\lambda_k} y) + B_k \sinh(\sqrt{\lambda_k} y),
+    \end{equation}
+    where \(\cosh(x) = \frac{e^x + e^{-x}}{2}\) and \(\sinh(x) = \frac{e^x - e^{-x}}{2}\).
+\end{enumerate}
+
+\begin{important}[From Trial Solution to General Solution]
+    Our trial solution was \(u_k(x,t) = M_k(x)N_k(t)\). Even if \(u_k(t)\) is a solution, it is not a general solution. A general solution needs to be able to generate any initial conditions.
+\end{important}
+
+Since \(u_k(x,t)\) is a solution to a homogeneous PDE with homogeneous BCs, we can sum all of these and still have a solution (superposition). 
+
+\begin{definition}[General Solution to Linear Second-Order PDEs]
+    The general solution is
+    \begin{equation}
+    \label{general solution sum}
+        u(x, t) = \sum_{k=1}^\infty M_k(x) N_k(t).
+    \end{equation}
+    Note that we are ordering \(\lambda_k\) in non-decreasing order.
+\end{definition}
+
+\subsubsection{Parabolic Equation coefficients}
+
+The solution \(u(x, t)\) satisfies the PDE and BCs. We also need to impose the Initial Condition (IC). Given \(u(x, 0) = f(x)\), after all the work we've done, the general solution is
+\begin{equation}
+u(x, t) = \sum_{k=1}^\infty A_k e^{-\lambda_k t} M_k(x).
+\end{equation}
+Set \(t=0\),
+\begin{equation}
+u(x, 0) = \sum_{k=1}^\infty A_k M_k(x) = f(x).
+\end{equation}
+This is a Generalized Fourier Series. We project \(f(x)\) onto \(M_n(x)\) using the inner product:
+\begin{equation}
+\lp \sum_{k=1}^\infty A_k M_k, M_n \rp = (f, M_n).
+\end{equation}
+We assume convergence for now. By linearity of the inner product:
+\begin{equation}
+\sum_{k=1}^\infty A_k (M_k, M_n) = (f, M_n).
+\end{equation}
+Since the eigenfunctions are orthogonal, \((M_k, M_n) \neq 0\) only when \(k=n\). The sum collapses to a single term:
+\begin{equation}
+A_n (M_n, M_n) = (f, M_n).
+\end{equation}
+Thus, the coefficient is given by
+\begin{equation}
+\label{parabolic coefficient}
+    A_n = \frac{(f, M_n)}{(M_n, M_n)}.
+\end{equation}
+
+\subsubsection{Hyperbolic Equation coefficients}
+
+In the hyperbolic case, we need to find the general solution and the coefficients to satisfy the initial conditions.
+For \(\lambda_k > 0\), \(N_k = A_k \cos(\sqrt{\lambda_k} t) + B_k \sin(\sqrt{\lambda_k} t)\).
+For \(\lambda_k = 0\), \(N_k = A_k + B_k t\).
+
+Assuming \(\lambda_k > 0\), the solution becomes
+\begin{equation}
+u(x, t) = \sum_{k=1}^\infty M_k(x) \lb A_k \cos(\sqrt{\lambda_k} t) + B_k \sin(\sqrt{\lambda_k} t) \rb.
+\end{equation}
+We have two initial conditions:
+\begin{enumerate}
+    \item \(u(x, 0) = f(x)\).
+    \item \(\dfrac{\partial u}{\partial t}(x, 0) = g(x)\).
+\end{enumerate}
+
+Applying IC 1 (\(t=0\)):
+\begin{equation}
+u(x, 0) = \sum_{k=1}^\infty A_k M_k(x) = f(x).
+\end{equation}
+This is the same as the parabolic case. We project onto \(M_k\) to find \(A_k\):
+\begin{equation}
+    A_k = \frac{(f, M_k)}{(M_k, M_k)}.
+\end{equation}
+
+Applying IC 2 (taking the time derivative first):
+\begin{equation}
+\frac{\partial u}{\partial t}(x, t) = \sum_{k=1}^\infty M_k(x) \lb -A_k \sqrt{\lambda_k} \sin(\sqrt{\lambda_k} t) + B_k \sqrt{\lambda_k} \cos(\sqrt{\lambda_k} t) \rb.
+\end{equation}
+Evaluate at \(t=0\):
+\begin{equation}
+\frac{\partial u}{\partial t}(x, 0) = \sum_{k=1}^\infty \sqrt{\lambda_k} B_k M_k(x) = g(x).
+\end{equation}
+We project \(g(x)\) onto \(M_n\) using the inner product:
+\begin{equation}
+\lp \sum_{k=1}^\infty \sqrt{\lambda_k} B_k M_k, M_n \rp = (g, M_n).
+\end{equation}
+Using orthogonality, only the \(k=n\) term survives:
+\begin{equation}
+\sqrt{\lambda_n} B_n (M_n, M_n) = (g, M_n).
+\end{equation}
+Thus,
+\begin{equation}
+    B_k = \frac{1}{\sqrt{\lambda_k}} \frac{(g, M_k)}{(M_k, M_k)}.
+\end{equation}
+\clearpage
+
+\section*{Lecture 8}
+\addcontentsline{toc}{section}{Lecture 8}
+\stepcounter{section}
+\setcounter{section}{8}
+\setcounter{equation}{0}
+
+\subsection{Sturm--Liouville Problems}
+
+We now focus on the 1D eigenvalue problem. The Sturm--Liouville problem is defined in 1D as finding the non-trivial solutions to
+\begin{equation}
+L[v] \equiv -\frac{d}{dx}\lp p(x) \frac{dv}{dx} \rp + q(x)v = \lambda \rho(x) v
+\end{equation}
+on the domain \(0 < x < \ell\) with mixed boundary conditions:
+\begin{align}
+    \alpha_1 v(0) - \beta_1 \frac{dv}{dx}(0) &= 0 \\
+    \alpha_2 v(\ell) + \beta_2 \frac{dv}{dx}(\ell) &= 0.
+\end{align}
+
+\begin{definition}[Regular Sturm--Liouville Problem]
+    The problem is classified as a Regular Sturm--Liouville Problem if it satisfies the following conditions:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item The coefficients satisfy \(p(x) > 0\), \(\rho(x) > 0\), and \(q(x) \geq 0\) on \([0, \ell]\).
+
+        \item The functions \(p(x)\), \(\rho(x)\), \(q(x)\), and \(\frac{dp}{dx}\) are continuous.
+
+        \item The boundary parameters satisfy \(\alpha_i \geq 0\), \(\beta_i \geq 0\), and \(\alpha_i + \beta_i > 0\) for \(i=1, 2\).
+    \end{itemize}
+\end{definition}
+
+\subsection{Generalized Fourier Series}
+
+To discuss solutions to these problems, we generalize our notion of dot products and orthogonality to function spaces.
+
+\subsubsection{Hermitian Inner Product}
+
+\begin{definition}[Hermitian Inner Product]
+    The Hermitian inner product of two complex-valued functions \(\varphi(x)\) and \(\psi(x)\) is defined as
+    \begin{equation}
+    (\varphi, \psi) = \int_0^\ell \rho(x) \varphi(x) \overline{\psi(x)} \, dx,
+    \end{equation}
+    where the overbar denotes the complex conjugate.
+\end{definition}
+
+\begin{fact}[Complex Modulus Identity]
+    For any complex number \(z\), multiplying the number by its conjugate equals the square of its magnitude (modulus):
+    \begin{equation}
+    z \cdot \overline{z} = \abs{z}^2.
+    \end{equation}
+\end{fact}
+
+\begin{insight}[Norm, Magnitude and Modulus]
+    The norm is the broader term, every magnitude is a norm, but not every norm is a magnitude. In most physics and engineering contexts, the ``norm" we use by default is the $L^2$ norm (or Euclidean norm).
+    
+    The 2-norm is defined as
+    \begin{equation}
+        \| \bm{a} \| = \sqrt{\bm{a} \cdot \bm{a}^*},
+    \end{equation}
+    the 2-norm squared is defined as
+    \begin{equation}
+        \| \bm{a} \|^2 = (\bm{a} \cdot \bm{a}^*) (\bm{a} \cdot \bm{a}^*).
+    \end{equation}
+    If the vector is real, then it simplifies to
+    \begin{gather}
+        \| \bm{a} \| = \sqrt{\bm{a} \cdot \bm{a}} \\
+        \| \bm{a} \|^2 = (\bm{a} \cdot \bm{a}) (\bm{a} \cdot \bm{a}).
+    \end{gather}
+    This is exactly our definition of magnitude, so
+    \begin{gather}
+        | \bm{a} | = \sqrt{\bm{a} \cdot \bm{a}} \\
+        | \bm{a} |^2 = (\bm{a} \cdot \bm{a}) (\bm{a} \cdot \bm{a}).
+    \end{gather}
+    In most physics and engineering courses, norm and magnitude are used as synonyms.
+\end{insight}
+
+\begin{theorem}[Properties of Hermitian Inner Product]
+    The inner product satisfies the following properties:
+    \begin{enumerate}[nosep]
+        \item \textbf{Conjugate Symmetry:} \((\varphi, \psi) = \overline{(\psi, \varphi)}\).
+        \item \textbf{Linearity:} It is linear with respect to the first argument, \((a\varphi + \alpha, \psi) = a(\varphi, \psi) + (\alpha, \psi)\).
+        \item \textbf{Positivity:} \((\varphi, \varphi) \geq 0\), and \((\varphi, \varphi) = 0\) if and only if \(\varphi = 0\).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof of (1)]
+    \begin{align}
+        \text{RHS} = \overline{(\psi, \varphi)} &= \overline{\int_0^\ell \rho \psi \overline{\varphi} \, dx} \\
+        &= \int_0^\ell \overline{\rho \psi \overline{\varphi}} \, dx \\
+        &= \int_0^\ell \rho \overline{\psi} \varphi \, dx \quad (\text{since } \rho \text{ is real}) \\
+        &= (\varphi, \psi),
+    \end{align}
+    which completes the proof. \qedhere
+\end{proof}
+
+\begin{proof}[Proof of (2)]
+    \begin{align}
+        (a\varphi + \alpha, \psi) &= \int_0^\ell \rho (a\varphi + \alpha) \overline{\psi} \, dx \\
+        &= a \int_0^\ell \rho \varphi \overline{\psi} \, dx + \int_0^\ell \rho \alpha \overline{\psi} \, dx \\
+        &= a(\varphi, \psi) + (\alpha, \psi),
+    \end{align}
+    which completes the proof. \qedhere
+\end{proof}
+
+\begin{proof}
+    \begin{equation}
+    (\varphi, \varphi) = \int_0^\ell \rho \varphi \overline{\varphi} \, dx = \int_0^\ell \rho |\varphi|^2 \, dx.
+    \end{equation}
+    Since \(\rho > 0\) is assumed and we know \(|\varphi|^2 \geq 0\), hence \((\varphi, \varphi) \geq 0\).
+    For \((\varphi, \varphi) = 0\), we need \(|\varphi|^2 = 0\), which implies \(\varphi = 0\). \qedhere
+\end{proof}
+
+\subsubsection{Function Spaces and Orthogonality}
+
+Using the inner product, we define the norm and orthogonality.
+
+\begin{definition}[Norm]
+    The norm of \(\varphi(x)\) (the 2-norm) is defined as
+    \begin{equation}
+    \|\varphi\|^2 = (\varphi, \varphi) \geq 0.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Square Integrable]
+    If \(\|\varphi(x)\|^2 < \infty\), then \(\varphi(x)\) is called \textbf{square integrable}. This property makes the space of functions a complete inner product space (Hilbert Space).
+\end{definition}
+
+\begin{definition}[Normalization]
+    If \(\varphi(x)\) is square integrable, we can normalize it:
+    \begin{equation}
+    \hat{\varphi}(x) = \frac{\varphi(x)}{\|\varphi(x)\|}, \quad \text{then } \|\hat{\varphi}(x)\| = 1.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Orthogonality]
+    Two functions \(\varphi\) and \(\psi\) are \textbf{orthogonal} if \((\varphi, \psi) = 0\).
+\end{definition}
+
+\begin{definition}[Orthogonal and Orthonormal Sets]
+    A set of functions \(\{\varphi_k(x)\}\) for \(k=1, 2, \dots\) is an \textbf{orthogonal set} if
+    \begin{equation}
+    (\varphi_k, \varphi_j) = 0 \quad \text{if } j \neq k.
+    \end{equation}
+    An orthogonal set that is normalized is an \textbf{orthonormal set}, meaning \((\varphi_k, \varphi_j) = \delta_{kj}\) (Kronecker delta).
+\end{definition}
+
+\subsubsection{Fourier Series Convergence}
+
+Given an orthonormal set \(\{\varphi_k\}\) for \(k=1, 2, 3, \dots\), we define the \textbf{Fourier Coefficients} of a square integrable function \(\varphi(x)\) to be
+\begin{equation}
+c_k = (\varphi, \varphi_k).
+\end{equation}
+The \textbf{Fourier Series} of \(\varphi(x)\) is
+\begin{equation}
+\varphi(x) \sim \sum_{k=1}^\infty (\varphi, \varphi_k) \varphi_k(x).
+\end{equation}
+\begin{insight}[Dropping Variable in Inner Product]
+    We drop the explicit $x$ dependency inside the inner product $(\varphi, \varphi_k)$ because it evaluates to a constant scalar. The variable acts purely as a dummy variable of integration that is completely consumed to produce this final number.
+\end{insight}
+
+To study convergence, consider the \(N\)-th partial sum \(\varphi_N = \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k\). We examine the norm squared of the error:
+\begin{equation}
+\|\varphi - \varphi_N\|^2 = (\varphi - \varphi_N, \varphi - \varphi_N).
+\end{equation}
+Expanding this inner product term by term:
+\begin{align}
+    \|\varphi - \varphi_N\|^2 &= (\varphi, \varphi) - (\varphi, \varphi_N) - (\varphi_N, \varphi) + (\varphi_N, \varphi_N) \\
+    &= (\varphi, \varphi) - \lp \varphi, \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k \rp - \lp \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k, \varphi \rp \\
+    &\quad + \lp \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k, \sum_{m=1}^N (\varphi, \varphi_m)\varphi_m \rp.
+\end{align}
+We explicitly calculate the term involving the sum in the second slot to demonstrate how the complex conjugate operates:
+\begin{align}
+    \left( \varphi, \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k \right) &= \int_0^\ell \rho(x) \varphi(x) \overline{\lb \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k(x) \rb} \, dx \\
+    &= \int_0^\ell \rho(x) \varphi(x) \sum_{k=1}^N \overline{(\varphi, \varphi_k)} \, \overline{\varphi_k(x)} \, dx \\
+    &= \sum_{k=1}^N \overline{(\varphi, \varphi_k)} \int_0^\ell \rho(x) \varphi(x) \overline{\varphi_k(x)} \, dx \\
+    &= \sum_{k=1}^N \overline{(\varphi, \varphi_k)} (\varphi, \varphi_k) \\
+    &= \sum_{k=1}^N \abs{(\varphi, \varphi_k)}^2.
+\end{align}
+Similarly, we calculate the third term where the sum appears in the first slot. By linearity of the first argument, we do not conjugate the coefficients when pulling them out:
+\begin{align}
+    \left( \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k, \varphi \right) &= \int_0^\ell \rho(x) \lb \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k(x) \rb \overline{\varphi(x)} \, dx \\
+    &= \sum_{k=1}^N (\varphi, \varphi_k) \int_0^\ell \rho(x) \varphi_k(x) \overline{\varphi(x)} \, dx \\
+    &= \sum_{k=1}^N (\varphi, \varphi_k) (\varphi_k, \varphi).
+\end{align}
+Using the conjugate symmetry property \((\varphi_k, \varphi) = \overline{(\varphi, \varphi_k)}\), this becomes:
+\begin{equation}
+= \sum_{k=1}^N (\varphi, \varphi_k) \overline{(\varphi, \varphi_k)} = \sum_{k=1}^N \abs{(\varphi, \varphi_k)}^2.
+\end{equation}
+
+\begin{note}[Alternative: Using Symmetry]
+    We can also find the third term without expanding the integrals by using the properties of the inner product directly.
+    
+    Since the inner product is linear in the first argument, we can pull the summation and coefficients out directly:
+    \begin{equation}
+    (\varphi_N, \varphi) = \lp \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k, \varphi \rp = \sum_{k=1}^N (\varphi, \varphi_k) (\varphi_k, \varphi).
+    \end{equation}
+    We now apply the \textbf{conjugate symmetry} property, \((\varphi_k, \varphi) = \overline{(\varphi, \varphi_k)}\):
+    \begin{equation}
+    = \sum_{k=1}^N (\varphi, \varphi_k) \overline{(\varphi, \varphi_k)} = \sum_{k=1}^N \abs{(\varphi, \varphi_k)}^2.
+    \end{equation}
+\end{note}
+
+We expand the fourth term first with the sesquilinearity properties of the inner product:
+\begin{equation}
+    \left( \sum_{k=1}^N (\varphi, \varphi_k)\varphi_k, \sum_{m=1}^N (\varphi, \varphi_m)\varphi_m \right) = \sum_{k=1}^N (\varphi, \varphi_k) \left( \varphi_k, \sum_{m=1}^N (\varphi, \varphi_m)\varphi_m \right).
+\end{equation}
+Next, pull out the summation and coefficients from the second argument. Because the inner product is conjugate linear in the second slot, we must take the complex conjugate of those coefficients:
+\begin{equation}
+    = \sum_{k=1}^N \sum_{m=1}^N (\varphi, \varphi_k)\overline{(\varphi, \varphi_m)} (\varphi_k, \varphi_m).
+\end{equation}
+Since the set is orthonormal, \((\varphi_k, \varphi_m) = \delta_{km}\), the inner sum vanishes unless \(m=k\).
+\begin{equation}
+    \sum_{k=1}^N \sum_{m=1}^N (\varphi, \varphi_k)\overline{(\varphi, \varphi_m)} (\varphi_k, \varphi_m) = \sum_{k=1}^N (\varphi, \varphi_k)\overline{(\varphi, \varphi_k)} = \sum_{k=1}^N |(\varphi, \varphi_k)|^2.
+\end{equation}
+Substituting these back into the expression for the error norm:
+\begin{align}
+    \|\varphi - \varphi_N\|^2 &= (\varphi, \varphi) - \sum_{k=1}^N |(\varphi, \varphi_k)|^2 - \sum_{k=1}^N |(\varphi, \varphi_k)|^2 + \sum_{k=1}^N |(\varphi, \varphi_k)|^2 \\
+    &= \|\varphi\|^2 - \sum_{k=1}^N |(\varphi, \varphi_k)|^2.
+\end{align}
+Since the norm squared must be non-negative (\(\|\varphi - \varphi_N\|^2 \geq 0\)), we obtain:
+\begin{gather}
+    \|\varphi - \varphi_N\|^2 = \|\varphi\|^2 - \sum_{k=1}^N |(\varphi, \varphi_k)|^2 \geq 0 \\
+    \|\varphi\|^2 \geq \sum_{k=1}^N |(\varphi, \varphi_k)|^2.
+\end{gather}
+This result leads to a fundamental inequality.
+
+\begin{theorem}[Bessel's Inequality]
+    Since the norm is non-negative,
+    \begin{equation}
+    \|\varphi\|^2 \geq \sum_{k=1}^N |A_k|^2,
+    \end{equation}
+    where \(A_k = (\varphi, \varphi_k)\). Taking the limit as \(N \to \infty\):
+    \begin{equation}
+    \|\varphi\|^2 \geq \sum_{k=1}^\infty |A_k|^2.
+    \end{equation}
+\end{theorem}
+
+\begin{theorem}
+    This shows that the sum of the squared moduli of the Fourier coefficients is bounded by the norm of the function. This implies that the Fourier coefficients must tend to 0:
+    \begin{equation}
+    \lim_{k \to \infty} (\varphi, \varphi_k) = 0.
+    \end{equation}   
+\end{theorem}
+
+\begin{definition}[Mean Square Convergence]
+    The \(N\)-th partial sum \(\varphi_N(x)\) converges to \(\varphi(x)\) \textbf{in the mean} if
+    \begin{equation}
+    \lim_{N \to \infty} \|\varphi(x) - \varphi_N(x)\| = 0.
+    \end{equation}
+\end{definition}
+
+\begin{definition}[Parseval's Equality]
+    If we have equality in Bessel's inequality, i.e.,
+    \begin{equation}
+    \sum_{k=1}^\infty |(\varphi, \varphi_k)|^2 = \|\varphi\|^2,
+    \end{equation}
+    this is called \textbf{Parseval's Equality}. If this is true, then we have convergence in the mean.
+\end{definition}
+
+\begin{note}
+    All of this is enough to guarantee, with all of our assumptions (Regular Sturm--Liouville Problem), that the Fourier Series of a square integrable function converges to that function in the mean. This is to say our basis is \textbf{complete}.
+\end{note}
+\clearpage
+
+\section*{Lecture 9}
+\addcontentsline{toc}{section}{Lecture 9}
+\stepcounter{section}
+\setcounter{section}{9}
+\setcounter{equation}{0}
+
+\subsection{Properties of Sturm--Liouville Problems}
+
+Previously, we defined the Sturm--Liouville operator and discussed the convergence of Fourier Series. Today, we formalize the properties of these problems.
+
+\begin{theorem}[Property 0: Self-Adjointness]
+    The operator \(\frac{1}{\rho}L\) is self-adjoint with respect to the inner product defined by the weighting function \(\rho\). This is shown using Green's Identity.
+\end{theorem}
+
+\begin{proof}
+    Consider Green's Identity for the operator \(\frac{1}{\rho}L\). We evaluate the difference of inner products for two functions \(v_i\) and \(v_j\), let them be the eigenfunctions of our eigenvalue problem:
+    \begin{equation}
+    \lp v_i, \frac{1}{\rho}L[v_j] \rp - \lp \frac{1}{\rho}L[v_i], v_j \rp = \int_0^\ell \lb \rho v_i \overline{\frac{1}{\rho}L[v_j]} - \rho \frac{1}{\rho}L[v_i] \overline{v}_j \rb \, dx.
+    \end{equation}
+    Expanding the operator \(L[u] = -(pu')' + qu\), the integral becomes:
+    \begin{equation}
+    = \int_0^\ell \lc v_i \lb -\frac{d}{dx}\lp p \frac{d\overline{v}_j}{dx} \rp + q\overline{v}_j \rb - \lb -\frac{d}{dx}\lp p \frac{dv_i}{dx} \rp + qv_i \rb \overline{v}_j \rc \, dx.
+    \end{equation}
+    We observe that the terms involving \(q\), specifically \(q v_i \overline{v}_j\) and \(-q v_i \overline{v}_j\), cancel each other out. We integrate the remaining derivative terms by parts (using the product rule):
+    \begin{equation}
+    = \int_0^\ell \lc -\frac{d}{dx} \lp p v_i \frac{d\overline{v}_j}{dx} \rp + p \frac{dv_i}{dx} \frac{d\overline{v}_j}{dx} + \frac{d}{dx} \lp p \frac{dv_i}{dx} \overline{v}_j \rp - p \frac{dv_i}{dx} \frac{d\overline{v}_j}{dx} \rc \, dx.
+    \end{equation}
+    The terms \(p \frac{dv_i}{dx} \frac{d\overline{v}_j}{dx}\) and \(-p \frac{dv_i}{dx} \frac{d\overline{v}_j}{dx}\) also cancel out. We are left with the boundary terms:
+    \begin{equation}
+    = \lb -p v_i \frac{d\overline{v}_j}{dx} + p \frac{dv_i}{dx} \overline{v}_j \rb_0^\ell.
+    \end{equation}
+    If we assume mixed boundary conditions where \(\alpha_1 v(0) - \beta_1 v'(0) = 0\) and \(\alpha_2 v(\ell) + \beta_2 v'(\ell) = 0\), the boundary evaluation becomes:
+    \begin{equation}
+    = \lb p(\ell) \frac{\alpha_2}{\beta_2} v_i(\ell) \overline{v}_j(\ell) - p(\ell) \frac{\alpha_2}{\beta_2} v_i(\ell) \overline{v}_j(\ell) \rb - \lb -p(0) \frac{\alpha_1}{\beta_1} v_i(0) \overline{v}_j(0) + p(0) \frac{\alpha_1}{\beta_1} v_i(0) \overline{v}_j(0) \rb.
+    \end{equation}
+    These terms sum to zero, proving the operator is self-adjoint.
+\end{proof}
+
+\begin{theorem}[Property 1: Real and Non-negative Eigenvalues]
+    The eigenvalues \(\lambda\) are real and non-negative. Also, the eigenfunctions can be chosen to be real-valued.
+\end{theorem}
+
+\begin{proof}[Proof of Real Eigenvalues]
+    Let \(\lambda_i\) and \(v_i\) be an eigenvalue and its corresponding eigenfunction. Then:
+    \begin{equation}
+    L[v_i] = \rho \lambda_i v_i, \quad \text{and} \quad L[\overline{v}_i] = \rho \overline{\lambda}_i \overline{v}_i.
+    \end{equation}
+    Substitute \(v_j = v_i\) into Green's Identity derived above:
+    \begin{equation}
+    \lp v_i, \frac{1}{\rho}L[v_i] \rp - \lp \frac{1}{\rho}L[v_i], v_i \rp = 0.
+    \end{equation}
+    Using the eigenvalue relations:
+    \begin{equation}
+    \lp v_i, \lambda_i v_i \rp - \lp \lambda_i v_i, v_i \rp = 0 \implies \overline{\lambda}_i (v_i, v_i) - \lambda_i (v_i, v_i) = 0.
+    \end{equation}
+    Factoring gives \((\overline{\lambda}_i - \lambda_i) \norm{v_i}^2 = 0\). Since \(\norm{v_i}^2 \neq 0\), it implies \(\overline{\lambda}_i = \lambda_i\), hence \(\lambda_i\) is real.
+\end{proof}
+
+\begin{note}[Real Eigenfunctions]
+    Suppose \(V\) is a complex eigenfunction, \(V = V^R + iV^I\), where \(V^R\) and \(V^I\) are real functions. We rewrite our eigen-relations for \(V\) and its complex conjugate \(\overline{V}\) (since \(\lambda\) is real):
+    \begin{align}
+        L[V^R + iV^I] &= \rho \lambda [V^R + iV^I] \\
+        L[V^R - iV^I] &= \rho \lambda [V^R - iV^I]
+    \end{align}
+    Adding the two equations yields:
+    \begin{equation}
+    2L[V^R] = 2\rho \lambda V^R \implies L[V^R] = \rho \lambda V^R.
+    \end{equation}
+    Subtracting the second equation from the first yields:
+    \begin{equation}
+    2i L[V^I] = 2i \rho \lambda V^I \implies L[V^I] = \rho \lambda V^I.
+    \end{equation}
+    Since the real and imaginary parts satisfy this eigen-relation independently, without loss of generality, we can take eigenfunctions to be real.
+\end{note}
+
+\begin{proof}[Proof of Positivity]
+    To show positivity, we examine the inner product:
+    \begin{equation}
+    \lp v, \frac{1}{\rho}L[v] \rp = \int_0^\ell \rho v \frac{1}{\rho} L[\overline{v}] \, dx = \int_0^\ell v \lb -\frac{d}{dx} \lp p \frac{d\overline{v}}{dx} \rp + q \overline{v} \rb \, dx.
+    \end{equation}
+    Using product rule and expanding:
+    \begin{equation}
+    = \int_0^\ell q \abs{v}^2 \, dx + \int_0^\ell \lb -\frac{d}{dx}\lp p v \frac{d\overline{v}}{dx} \rp + p \frac{dv}{dx} \frac{d\overline{v}}{dx} \rb \, dx.
+    \end{equation}
+    Evaluating the boundary terms yields:
+    \begin{align}
+    &= \int_0^\ell q \abs{v}^2 + p \left|\frac{dv}{dx}\right|^2 \, dx + \lb -p v \frac{d\overline{v}}{dx} \rb_0^\ell \\
+    &= \int_0^\ell \lp q \abs{v}^2 + p \left|\frac{dv}{dx}\right|^2 \rp dx + p(\ell) \frac{\alpha_2}{\beta_2} \abs{v(\ell)}^2 + p(0) \frac{\alpha_1}{\beta_1} \abs{v(0)}^2. \label{proof of positivity end result}
+    \end{align}
+    Given that \(q \ge 0\), \(p > 0\), and \(\alpha_i, \beta_i \ge 0\), we have \cref{proof of positivity end result} or
+    \begin{equation}
+        \lp v, \frac{1}{\rho}L[v] \rp \ge 0
+    \end{equation}
+    Substituting the eigen-relation \(\frac{1}{\rho}L[v] = \lambda v\), we get \(\lambda \norm{v}^2 \ge 0\), which implies \(\lambda \ge 0\).
+\end{proof}
+
+\begin{theorem}[Property 2: Orthogonality]
+    Eigenfunctions with different eigenvalues are orthogonal.
+\end{theorem}
+
+\begin{proof}
+    Consider Green's Identity again. Plugging in the eigen-relations:
+    \begin{equation}
+    \lp v_i, \frac{1}{\rho}L[v_j] \rp - \lp \frac{1}{\rho}L[v_i], v_j \rp = 0 \implies \lp v_i, \lambda_j v_j \rp - \lp \lambda_i v_i, v_j \rp = 0.
+    \end{equation}
+    Since eigenvalues are real, this simplifies to:
+    \begin{equation}
+    (\lambda_j - \lambda_i) (v_i, v_j) = 0.
+    \end{equation}
+    If \(\lambda_i \neq \lambda_j\), then it must be that \((v_i, v_j) = 0\), hence they are orthogonal.
+\end{proof}
+
+\begin{theorem}[Property 3]
+    Each eigenvalue is simple (has a multiplicity of one).
+\end{theorem}
+
+\begin{theorem}[Property 4]
+    There are a countable infinite number of eigenvalues and they are unbounded:
+    \begin{equation}
+    0 \le \lambda_1 < \lambda_2 < \lambda_3 < \dots \quad \text{with} \quad \lim_{k \to \infty} \lambda_k \to \infty.
+    \end{equation}
+\end{theorem}
+
+\begin{theorem}[Property 5: Completeness]
+    The orthonormal set \(\lc V_k(x) \rc\) for \(k=1, 2, 3, \dots\) forms a complete set of square integrable functions on \(0 < x < \ell\). This allows us to express any continuous square integrable \(V(x)\) as a Fourier Series:
+    \begin{equation}
+    V(x) = \sum_{k=1}^\infty (V, V_k) V_k(x).
+    \end{equation}
+\end{theorem}
+
+\subsection{Examples}
+
+\subsubsection{Fourier Series}
+Consider the problem:
+\begin{equation}
+-\frac{d^2 V}{dx^2} = \lambda V, \quad -\ell < x < \ell,
+\end{equation}
+with Periodic Boundary Conditions (BCs):
+\begin{equation}
+    V(-\ell) = V(\ell) \quad \text{and} \quad \frac{dV}{dx}(-\ell) = \frac{dV}{dx}(\ell).
+\end{equation}
+This is not a Regular Sturm--Liouville Problem because the BCs are not the mixed type. However, we can show the properties apply with periodic BCs.
+
+The general solution to the ODE is:
+\begin{equation}
+V(x) = A \cos(\sqrt{\lambda} x) + B \sin(\sqrt{\lambda} x).
+\end{equation}
+We must pick \(\lambda\) to satisfy the BCs.
+
+\textbf{Check BC 1:} \(V(-\ell) = V(\ell)\)
+\begin{equation}
+A \cos(-\sqrt{\lambda} \ell) + B \sin(-\sqrt{\lambda} \ell) = A \cos(\sqrt{\lambda} \ell) + B \sin(\sqrt{\lambda} \ell).
+\end{equation}
+Using even/odd properties \(\cos(-x)=\cos(x)\) and \(\sin(-x)=-\sin(x)\), this becomes:
+\begin{equation}
+A \cos(\sqrt{\lambda} \ell) - B \sin(\sqrt{\lambda} \ell) = A \cos(\sqrt{\lambda} \ell) + B \sin(\sqrt{\lambda} \ell).
+\end{equation}
+Canceling the cosine terms yields:
+\begin{equation}
+-2B \sin(\sqrt{\lambda} \ell) = 0 \implies 2B \sin(\sqrt{\lambda} \ell) = 0.
+\end{equation}
+If \(B \neq 0\), then we must have \(\sin(\sqrt{\lambda} \ell) = 0\), which implies:
+\begin{equation}
+\sqrt{\lambda} \ell = n \pi \implies \lambda = \lp \frac{n \pi}{\ell} \rp^2, \quad n = 0, 1, 2, \dots
+\end{equation}
+
+\textbf{Check BC 2:} \(V'(-\ell) = V'(\ell)\)
+The derivative is \(V'(x) = -A\sqrt{\lambda}\sin(\sqrt{\lambda}x) + B\sqrt{\lambda}\cos(\sqrt{\lambda}x)\). Applying the BC:
+\begin{equation}
+-A\sqrt{\lambda}\sin(-\sqrt{\lambda}\ell) + B\sqrt{\lambda}\cos(-\sqrt{\lambda}\ell) = -A\sqrt{\lambda}\sin(\sqrt{\lambda}\ell) + B\sqrt{\lambda}\cos(\sqrt{\lambda}\ell).
+\end{equation}
+Using symmetry again:
+\begin{equation}
+A\sqrt{\lambda}\sin(\sqrt{\lambda}\ell) + B\sqrt{\lambda}\cos(\sqrt{\lambda}\ell) = -A\sqrt{\lambda}\sin(\sqrt{\lambda}\ell) + B\sqrt{\lambda}\cos(\sqrt{\lambda}\ell).
+\end{equation}
+Canceling the cosine terms yields:
+\begin{equation}
+2A\sqrt{\lambda}\sin(\sqrt{\lambda}\ell) = 0.
+\end{equation}
+If \(A \neq 0\), then \(\sin(\sqrt{\lambda}\ell) = 0\), which leads to the same condition:
+\begin{equation}
+\sqrt{\lambda} \ell = n \pi \implies \lambda = \lp \frac{n \pi}{\ell} \rp^2, \quad n = 0, 1, 2, 3, \dots
+\end{equation}
+In summary, we have the eigenfunctions:
+\begin{equation}
+V_n^{(1)} = \cos \lp \frac{n \pi x}{\ell} \rp \quad \text{and} \quad V_n^{(2)} = \sin \lp \frac{n \pi x}{\ell} \rp.
+\end{equation}
+These are orthogonal. The general solution is:
+\begin{equation}
+V_n = A_n \cos \lp \frac{n \pi x}{\ell} \rp + B_n \sin \lp \frac{n \pi x}{\ell} \rp, \quad \lambda_n = \lp \frac{n \pi}{\ell} \rp^2, \quad n = 0, 1, 2, 3, \dots
+\end{equation}
+This is the classical Fourier Series.
+
+\subsubsection{Bessel Function Expansions}
+Consider Bessel's Differential Equation (where \(n\) is an integer):
+\begin{equation}
+z^2 \frac{d^2 V}{dz^2} + z \frac{dV}{dz} + (z^2 - n^2)V = 0.
+\end{equation}
+We define a change of variables \(z = \sqrt{\lambda}x\). Using the chain rule,
+\begin{equation}
+\frac{d}{dz} = \frac{dx}{dz} \frac{d}{dx} = \frac{1}{\sqrt{\lambda}} \frac{d}{dx}
+\end{equation}
+and
+\begin{equation}
+\frac{d^2}{dz^2} = \frac{1}{\lambda} \frac{d^2}{dx^2}.
+\end{equation}
+Substituting these into the ODE:
+\begin{equation}
+\lambda x^2 \frac{1}{\lambda} \frac{d^2 V}{dx^2} + \sqrt{\lambda} x \frac{1}{\sqrt{\lambda}} \frac{dV}{dx} + (\lambda x^2 - n^2) V = 0.
+\end{equation}
+The \(\lambda\) terms cancel in the derivatives, yielding:
+\begin{equation}
+x^2 V'' + x V' + (\lambda x^2 - n^2) V = 0.
+\end{equation}
+To bring this into Sturm--Liouville form, we divide by \(x\):
+\begin{equation}
+-x V'' - V' + \frac{n^2}{x} V = \lambda x V.
+\end{equation}
+This can be condensed into the self-adjoint form:
+\begin{equation}
+\boxed{-(x V')' + \frac{n^2}{x} V = \lambda x V.}
+\end{equation}
+This is a Sturm--Liouville type with:
+\begin{equation}
+\rho(x) = x, \quad q(x) = \frac{n^2}{x}, \quad p(x) = x.
+\end{equation}
+This is fine if \(x \neq 0\). There is a singularity at \(x=0\). The 2 BCs we impose on \(0 < x < \ell\) are:
+\begin{enumerate}[nosep]
+    \item \(V(0)\) is bounded (Regularity condition).
+    \item \(V(\ell) = 0\).
+\end{enumerate}
+Note that these are not Mixed BCs, but the Singular Sturm--Liouville theory still guarantees real eigenvalues and orthogonal eigenfunctions.
+
+The general solution to Bessel's Equation is given by:
+\begin{equation}
+V(x) = A J_n(\sqrt{\lambda}x) + B Y_n(\sqrt{\lambda}x),
+\end{equation}
+where \(J_n\) is the Bessel function of the first kind and \(Y_n\) is the Bessel function of the second kind.
+
+\begin{note}[Applying BCs]
+    Since \(Y_n(z) \to -\infty\) as \(z \to 0\), the boundedness condition at \(x=0\) requires \(B=0\). Thus, the eigenfunctions are:
+    \begin{equation}
+    V(x) = A J_n(\sqrt{\lambda}x).
+    \end{equation}
+    The second BC \(V(\ell)=0\) requires \(J_n(\sqrt{\lambda}\ell) = 0\). The eigenvalues \(\lambda_k\) are determined by the zeros of the Bessel function \(J_n\).
+\end{note}
+
+Is the operator self-adjoint with these BCs? We check Green's Identity:
+\begin{align}
+    \lp v_i, \frac{1}{\rho}L[v_j] \rp - \lp \frac{1}{\rho}L[v_i], v_j \rp &= \int_0^\ell \lb \rho v_i \frac{1}{\rho} L[v_j] - \rho \frac{1}{\rho} L[v_i] v_j \rb \, dx \\
+    &= \int_0^\ell \lc v_i \lb -(pv_j')' + q v_j \rb - \lb -(pv_i')' + q v_i \rb v_j \rc \, dx.
+\end{align}
+The terms involving \(q\), specifically \(q v_i v_j\) and \(-q v_i v_j\), cancel out. We assume the product rule expansion to handle the derivatives (integration by parts logic shown on board):
+\begin{align*}
+    &= \int_0^\ell \lb -(p v_i v_j')' + p v_i' v_j' + (p v_j v_i')' - p v_j' v_i' \rb \, dx.
+\end{align*}
+Here, the terms \(p v_i' v_j'\) and \(-p v_j' v_i'\) cancel each other explicitly. We are left with the integral of total derivatives:
+\begin{align}
+    &= \int_0^\ell \frac{d}{dx} \lb p(v_j v_i' - v_i v_j') \rb \, dx \\
+    &= \lb p(x) (v_j v_i' - v_i v_j') \rb_0^\ell.
+\end{align}
+Substituting \(p(x) = x\) and the boundary conditions:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item At \(x = \ell\): \(v(\ell) = 0\), so the term vanishes.
+    \item At \(x = 0\): \(p(0) = 0\). Since \(v\) is bounded, the term vanishes.
+\end{itemize}
+Thus, the result is 0, confirming the operator is self-adjoint for this problem.
+
+\clearpage
+
+\section*{Lecture 10}
+\addcontentsline{toc}{section}{Lecture 10}
+\stepcounter{section}
+\setcounter{section}{10}
+\setcounter{equation}{0}
+
+\subsection{Bessel Function Expansions (Continued)}
+
+We continue our discussion of the eigenvalue problem associated with Bessel's equation.
+
+\begin{definition}[Bessel Eigenvalue Problem]
+The eigenvalue problem is given by the ODE:
+\begin{equation}
+-\frac{d}{dx}\lp x \frac{dV}{dx} \rp + \frac{n^2}{x} V = \lambda x V, \quad 0 < x < \ell, \quad (n=0, 1, 2, \dots).
+\end{equation}
+This equation has a regular singular point at \(x=0\). We impose the following boundary conditions:
+\begin{enumerate}[nosep]
+    \item \(V(0) < \infty\) (boundedness at the singularity).
+    \item \(V(\ell) = 0\).
+\end{enumerate}
+\end{definition}
+
+\subsubsection{Self-Adjointness}
+
+\begin{theorem}[Self-Adjointness of the Bessel Operator]
+    The operator
+    \begin{equation}
+    L[V] = -\frac{d}{dx}(x V') + \frac{n^2}{x}V
+    \end{equation}
+    is self-adjoint with respect to the weight \(\rho(x)=x\) under the boundary conditions \(V(0) < \infty\) and \(V(\ell) = 0\).
+\end{theorem}
+
+\begin{proof}
+    We examine Green's Identity:
+    \begin{equation}
+    \lp v_i, \frac{1}{\rho}L[v_j] \rp - \lp \frac{1}{\rho}L[v_i], v_j \rp = \lb -x \lp v_i \frac{dv_j}{dx} - v_j \frac{dv_i}{dx} \rp \rb_0^\ell.
+    \end{equation}
+    Evaluating the boundary term at \(x=\ell\):
+    \begin{equation}
+    -\ell \lp \underbrace{v_i(\ell)}_{0} \frac{dv_j}{dx}(\ell) - \underbrace{v_j(\ell)}_{0} \frac{dv_i}{dx}(\ell) \rp = 0.
+    \end{equation}
+    The terms vanish due to the boundary condition \(V(\ell)=0\).
+    
+    For the boundary term at \(x=0\), we evaluate the limit:
+    \begin{equation}
+    \lim_{x \to 0} \lb -x \lp v_i \frac{dv_j}{dx} - v_j \frac{dv_i}{dx} \rp \rb.
+    \end{equation}
+    As long as the derivative \(\frac{dV}{dx}\) is bounded (or does not diverge too quickly) at the origin, the factor of \(x\) ensures that this limit is zero.
+    Thus, the operator is self-adjoint and the properties of Sturm--Liouville theory hold (real eigenvalues, orthogonal eigenfunctions).
+\end{proof}
+
+\subsubsection{Solutions}
+
+To find a solution to this ODE, we use the Method of Frobenius, which provides series solutions for differential equations with regular singular points.
+
+\begin{note}[Method of Frobenius]
+\label{method of frobenius}
+    The Method of Frobenius is a technique to find an infinite series solution for a second-order ordinary differential equation of the form
+    \begin{equation}
+    y'' + P(x)y' + Q(x)y = 0
+    \end{equation}
+    near a \textbf{regular singular point} \(x = 0\). The method proceeds as follows:
+    \begin{enumerate}[nosep]
+        \item \textbf{Ansatz:} Assume a solution of the form
+        \begin{equation}
+        V(x) = x^r \sum_{m=0}^\infty a_m x^m = \sum_{m=0}^\infty a_m x^{m+r}, \quad (a_0 \neq 0),
+        \end{equation}
+        where \(r\) is a constant to be determined.
+        \item \textbf{Derivatives:} Compute \(V'(x)\) and \(V''(x)\) term-by-term.
+        \item \textbf{Substitution:} Substitute the series into the ODE and combine terms with the same power of \(x\).
+        \item \textbf{Indicial Equation:} The coefficient of the lowest power of \(x\) must be zero. This yields a quadratic equation for \(r\). The roots \(r_1\) and \(r_2\) determine the behavior of the solution near the singularity.
+        \item \textbf{Recurrence Relation:} The coefficients of the higher powers of \(x\) yield a recurrence relation that allows \(a_m\) to be calculated from previous coefficients.
+    \end{enumerate}
+    For Bessel's equation, this method yields the Bessel functions \(J_n(x)\) and \(Y_n(x)\).
+\end{note}
+
+In this course, we present the solutions without deriving them fully via Frobenius. The solutions to the ODE are:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(J_n(\sqrt{\lambda}x)\): Bessel functions of the first kind.
+    \item \(Y_n(\sqrt{\lambda}x)\): Bessel functions of the second kind.
+ \end{itemize}
+
+The general solution is
+\begin{equation}
+V_n(x) = A J_n(\sqrt{\lambda}x) + B Y_n(\sqrt{\lambda}x).
+\end{equation}
+
+The behavior of these functions is illustrated below. \(J_n(x)\) oscillates for all values of \(x\), while \(Y_n(x)\) has a singularity at the origin.
+
+\begin{center}
+\begin{tikzpicture}
+    % This "declare function" block defines the math logic
+    % since pgfplots cannot calculate Bessel functions natively.
+    \tikzset{
+        declare function={
+            approxJ0(\x) = cos(deg(\x)*1.5) * exp(-0.1*\x);
+            approxJ1(\x) = sin(deg(\x)*1.5) * exp(-0.1*\x);
+            approxY0(\x) = sin(deg(\x)*1.5) * exp(-0.1*\x) - 0.5/\x;
+            approxY1(\x) = -cos(deg(\x)*1.5) * exp(-0.1*\x) - 0.5/\x;
+        }
+    }
+
+    \begin{groupplot}[
+        group style={
+            group size=2 by 1,
+            horizontal sep=2cm,
+            vertical sep=1cm
+        },
+        width=0.45\textwidth,
+        height=5cm,
+        axis lines=middle,
+        xmin=0, xmax=7,
+        ymin=-1.5, ymax=1.5,
+        xtick=\empty, ytick=\empty,
+        xlabel={$x$},
+        every axis x label/.style={at={(current axis.right of origin)},anchor=north west},
+    ]
+
+    % Plot for Jn
+    \nextgroupplot[title={Bessel Functions of the First Kind $J_n(x)$}]
+        % J0
+        \addplot[thick, domain=0:7, samples=100] {approxJ0(x)};
+        \node[above] at (axis cs: 0.5, 0.8) {\footnotesize $J_0$};
+        
+        % J1
+        \addplot[thick, dashed, domain=0:7, samples=100] {approxJ1(x)};
+        \node[above] at (axis cs: 1.9, 0.4) {\footnotesize $J_1$};
+
+    % Plot for Yn
+    \nextgroupplot[title={Bessel Functions of the Second Kind $Y_n(x)$}, ymin=-3, ymax=1.5]
+        % Y0
+        \addplot[thick, domain=0.2:7, samples=100] {approxY0(x)};
+        \node[below] at (axis cs: 1.5, -0.5) {\footnotesize $Y_0$};
+        
+        % Y1
+        \addplot[thick, dashed, domain=0.2:7, samples=100] {approxY1(x)};
+        \node[right] at (axis cs: 0.5, -2.5) {\footnotesize $Y_1$};
+
+    \end{groupplot}
+\end{tikzpicture}
+\end{center}
+
+Since the limit \(\lim_{x \to 0} Y_n(x)\) is infinite and we require \(V(0) < \infty\), we must set \(B=0\).
+Thus, the eigenfunctions are of the form
+\begin{equation}
+V_n(x) = A J_n(\sqrt{\lambda} x).
+\end{equation}
+
+The second boundary condition is \(V(\ell) = 0\), which implies
+\begin{equation}
+V_n(\ell) = A J_n(\sqrt{\lambda} \ell) = 0.
+\end{equation}
+This is similar to the condition \(\sin(\sqrt{\lambda}\ell)=0\).
+There are an infinite number of solutions to this equation. We define \(\alpha_{kn}\) to be the \(k\)-th zero of \(J_n(x)\). We don't know the exact numerical values here, but we can define our parameters using them.
+
+\begin{theorem}[Bessel Eigenvalues and Eigenfunctions]
+    For the problem defined above, the eigenvalues are determined by the zeros of the Bessel function \(\alpha_{kn}\):
+    \begin{equation}
+    \label{bessel eigenvalues}
+        \lambda_{kn} = \lp \frac{\alpha_{kn}}{\ell} \rp^2, \quad k=1, 2, 3, \dots
+    \end{equation}
+    The corresponding eigenfunctions are:
+    \begin{equation}
+        V_{kn} = A_k J_n \lp \frac{\alpha_{kn} x}{\ell} \rp.
+    \end{equation}
+    Note that \(n\) is picked by the ODE (think of \(n\) as being given).
+\end{theorem}
+
+If we wanted to normalize the eigenfunctions to get an orthonormal set, we compute the norm:
+\begin{equation}
+\norm{V_{kn}}^2 = (V_{kn}, V_{kn}) = \int_0^\ell x \, J_n^2 \lp \frac{\alpha_{kn} x}{\ell} \rp \, dx.
+\end{equation}
+We define the normalized eigenfunctions as
+\begin{equation}
+\hat{V}_{kn}(x) = \frac{V_{kn}(x)}{\norm{V_{kn}}}.
+\end{equation}
+The generalized Fourier Series is
+\begin{equation}
+V(x) = \sum_{k=1}^\infty \underbrace{(V, \hat{V}_{kn})}_{A_k} \hat{V}_{kn}(x).
+\end{equation}
+
+\subsection{Series Solution to the Wave Equation on a Bounded Interval}
+
+We now solve the Wave Equation on a bounded domain \(0 < x < \ell\) with \(t > 0\). The PDE is
+\begin{equation}
+    \frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial^2 u}{\partial x^2} = 0.
+\end{equation}
+The boundary conditions (BCs) are Dirichlet:
+\begin{equation}
+u(0, t) = 0 \quad \text{and} \quad u(\ell, t) = 0, \quad t > 0.
+\end{equation}
+The initial conditions (ICs) are:
+\begin{equation}
+u(x, 0) = f(x) \quad \text{and} \quad \frac{\partial u}{\partial t}(x, 0) = g(x), \quad 0 < x < \ell.
+\end{equation}
+We solve this using separation of variables, \(u(x, t) = M(x)N(t)\). Plugging this into the PDE and dividing by \(c^2 MN\):
+\begin{equation}
+MN'' = c^2 M'' N \implies \frac{N''}{c^2 N} = \frac{M''}{M} = -\lambda.
+\end{equation}
+(Note: having \(c^2\) on the time-dependent side makes solving slightly easier).
+
+This yields two ODEs:
+\begin{equation}
+N'' + c^2 \lambda N = 0 \quad \text{and} \quad M'' + \lambda M = 0.
+\end{equation}
+Our eigenvalue problem is specified by the spatial part:
+\begin{equation}
+M'' + \lambda M = 0, \quad M(0) = 0, \quad M(\ell) = 0.
+\end{equation}
+From previous lectures, we know the normalized solution is
+\begin{equation}
+    M_k(x) = \sqrt{\frac{2}{\ell}} \sin \lp \frac{k \pi x}{\ell} \rp, \quad \lambda_k = \lp \frac{\pi k}{\ell} \rp^2, \quad k=1, 2, 3, \dots
+\end{equation}
+Together, they form an orthonormal set of eigenfunctions.
+The solutions to \(N(t)\) are
+\begin{equation}
+N_k(t) = A_k \cos \lp \frac{\pi k c}{\ell} t \rp + B_k \sin \lp \frac{\pi k c}{\ell} t \rp.
+\end{equation}
+The general solution to the wave equation in 1D is
+\begin{equation}
+    u(x, t) = \sum_{k=1}^\infty \lb A_k \cos \lp \frac{\pi k c}{\ell} t \rp + B_k \sin \lp \frac{\pi k c}{\ell} t \rp \rb \underbrace{\sqrt{\frac{2}{\ell}} \sin \lp \frac{\pi k x}{\ell} \rp}_{M_k(x)}.
+\end{equation}
+We derive these coefficients by imposing the initial conditions.
+\begin{equation}
+u(x, 0) = \sum_{k=1}^\infty A_k \sqrt{\frac{2}{\ell}} \sin \lp \frac{\pi k x}{\ell} \rp = f(x) = \sum_{k=1}^\infty A_k \hat{M}_k(x).
+\end{equation}
+The initial velocity is given by:
+\begin{equation}
+\frac{\partial u}{\partial t}(x, 0) = \sum_{k=1}^\infty \lp \frac{\pi k c}{\ell} \rp B_k \sqrt{\frac{2}{\ell}} \sin \lp \frac{\pi k x}{\ell} \rp = g(x).
+\end{equation}
+
+The strategy for finding these coefficients is the same as before: we take the inner product and exploit the orthogonality of the eigenfunctions.
+If we take the inner product of the first equation with \(\hat{M}_n(x)\), we get:
+\begin{equation}
+(f, \hat{M}_n(x)) = \lp \sum_{k=1}^\infty A_k \hat{M}_k(x), \hat{M}_n(x) \rp.
+\end{equation}
+By the linearity of the inner product, we can pull the summation out:
+\begin{equation}
+= \sum_{k=1}^\infty A_k (\hat{M}_k, \hat{M}_n).
+\end{equation}
+Since the eigenfunctions are orthonormal, \((\hat{M}_k, \hat{M}_n) = \delta_{kn}\), the sum collapses to a single term \(A_n\).
+Thus, the coefficient \(A_n\) is:
+\begin{equation}
+A_n = (f, \hat{M}_n) = \int_0^\ell f(x) \sqrt{\frac{2}{\ell}} \sin \lp \frac{n \pi x}{\ell} \rp \, dx.
+\end{equation}
+Similarly, for the second coefficient \(B_n\), we divide by the time factor \(\frac{n \pi c}{\ell}\):
+\begin{equation}
+B_n = \frac{1}{\left( \frac{n \pi c}{\ell} \right)} (g, \hat{M}_n) = \frac{\ell}{n \pi c} \int_0^\ell g(x) \sqrt{\frac{2}{\ell}} \sin \lp \frac{n \pi x}{\ell} \rp \, dx.
+\end{equation}
+
+\begin{theorem}[Series Solution to the Homogeneous Wave Equation]
+    The general solution to the wave equation in 1D on a bounded domain with Dirichlet boundary conditions is:
+    \begin{equation}
+        u(x, t) = \sum_{k=1}^\infty \lb A_k \cos \lp \frac{\pi k c}{\ell} t \rp + B_k \sin \lp \frac{\pi k c}{\ell} t \rp \rb \underbrace{\sqrt{\frac{2}{\ell}} \sin \lp \frac{\pi k x}{\ell} \rp}_{M_k(x)}.
+    \end{equation}
+    The coefficients \(A_n\) and \(B_n\) are determined by the initial conditions \(f(x)\) and \(g(x)\):
+    \begin{equation}
+    A_n = (f, \hat{M}_n) = \int_0^\ell f(x) \sqrt{\frac{2}{\ell}} \sin \lp \frac{n \pi x}{\ell} \rp \, dx,
+    \end{equation}
+    \begin{equation}
+    B_n = \frac{\ell}{n \pi c} (g, \hat{M}_n) = \frac{\ell}{n \pi c} \int_0^\ell g(x) \sqrt{\frac{2}{\ell}} \sin \lp \frac{n \pi x}{\ell} \rp \, dx.
+    \end{equation}
+\end{theorem}
+
+\subsection{Energy Conservation in the Wave Equation}
+
+We want to find the equation for conservation of energy.
+
+\begin{definition}[Total Energy]
+    To match dimensions with \(c^2 = T/\rho\), we define the total energy \(E(t)\) as:
+    \begin{equation}
+    E(t) = \int_0^\ell \lb \frac{1}{2} \rho \lp \frac{\partial u}{\partial t} \rp^2 + \frac{1}{2} T \lp \frac{\partial u}{\partial x} \rp^2 \rb \, dx,
+    \end{equation}
+    where the first term represents kinetic energy and the second represents potential energy.
+\end{definition}
+
+\begin{theorem}[Conservation of Energy]
+    For the wave equation with Dirichlet boundary conditions, the total mechanical energy is conserved:
+    \begin{equation}
+    \frac{dE}{dt} = 0.
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    Start with the wave equation:
+    \begin{equation}
+    \frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial^2 u}{\partial x^2} = 0.
+    \end{equation}
+    Aside: recall
+    \begin{equation}
+    v(m \frac{dv}{dt}) = \frac{d}{dt}(\frac{1}{2}m v^2).
+    \end{equation}
+    So we multiply the PDE by \(\frac{\partial u}{\partial t}\):
+    \begin{equation}
+    \frac{\partial u}{\partial t} \frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial u}{\partial t} \frac{\partial^2 u}{\partial x^2} = 0.
+    \end{equation}
+    The first term can be rewritten as
+    \begin{equation}
+    \frac{\partial}{\partial t} \lp \frac{1}{2} \lp \frac{\partial u}{\partial t} \rp^2 \rp \propto \text{Kinetic Energy}.
+    \end{equation}
+    The second term can be expanded using the product rule:
+    \begin{equation}
+    c^2 \lb \frac{\partial}{\partial x} \lp \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \rp - \frac{\partial u}{\partial x} \frac{\partial^2 u}{\partial t \partial x} \rb.
+    \end{equation}
+    Recognizing that
+    \begin{equation}
+    \frac{\partial u}{\partial x} \frac{\partial^2 u}{\partial t \partial x} = \frac{\partial}{\partial t} \lp \frac{1}{2} \lp \frac{\partial u}{\partial x} \rp^2 \rp,
+    \end{equation}
+    we rewrite the full equation:
+    \begin{equation}
+    \frac{\partial}{\partial t} \lb \frac{1}{2} \lp \frac{\partial u}{\partial t} \rp^2 + \frac{c^2}{2} \lp \frac{\partial u}{\partial x} \rp^2 \rb = c^2 \frac{\partial}{\partial x} \lp \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \rp.
+    \end{equation}
+    We integrate \(\int_0^\ell dx\) to get a global conservation law:
+    \begin{equation}
+    \frac{d}{dt} \int_0^\ell \lb \underbrace{\frac{1}{2} \lp \frac{\partial u}{\partial t} \rp^2}_{\text{K.E.}} + \underbrace{\frac{c^2}{2} \lp \frac{\partial u}{\partial x} \rp^2}_{\text{P.E.}} \rb \, dx = c^2 \int_0^\ell \frac{\partial}{\partial x} \lp \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \rp \, dx.
+    \end{equation}
+    Using the Fundamental Theorem of Calculus on the RHS:
+    \begin{equation}
+    = c^2 \lb \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \rb_0^\ell = c^2 \lp \frac{\partial u}{\partial t}(\ell, t) \frac{\partial u}{\partial x}(\ell, t) - \frac{\partial u}{\partial t}(0, t) \frac{\partial u}{\partial x}(0, t) \rp.
+    \end{equation}
+    Given our Dirichlet Boundary Conditions \(u(0, t) = 0\) and \(u(\ell, t) = 0\), the velocities at the boundaries are zero:
+    \begin{equation}
+    \frac{\partial u}{\partial t}(0, t) = 0, \quad \frac{\partial u}{\partial t}(\ell, t) = 0.
+    \end{equation}
+    Then the boundary term vanishes:
+    \begin{equation}
+    c^2 \lb \frac{\partial u}{\partial t} \frac{\partial u}{\partial x} \rb_0^\ell = 0.
+    \end{equation}
+    This implies the total mechanical energy is conserved because there are no dissipative forces at work here.
+    To match dimensions with \(c^2 = T/\rho\), we define the total energy as:
+    \begin{equation}
+    E = \int_0^\ell \lb \frac{1}{2} \rho \lp \frac{\partial u}{\partial t} \rp^2 + \frac{1}{2} T \lp \frac{\partial u}{\partial x} \rp^2 \rb \, dx,
+    \end{equation}
+    which completes the proof. \qedhere
+\end{proof}
+\clearpage
+
+\section*{Lecture 11}
+\addcontentsline{toc}{section}{Lecture 11}
+\stepcounter{section}
+\setcounter{section}{11}
+\setcounter{equation}{0}
+
+\subsection{General Solution to the Diffusion Equation}
+
+We return to the diffusion equation to find a general series solution.
+\begin{equation}
+    \frac{\partial u}{\partial t} = D \frac{\partial^2 u}{\partial x^2}.
+\end{equation}
+We consider the problem on the domain $0 < x < l$ with homogeneous boundary conditions $u(0,t) = 0$ and $u(l,t) = 0$, and an initial condition $u(x,0) = f(x)$.
+
+\subsubsection{Separation of Variables}
+
+Using separation of variables, we propose a solution of the form $u(x,t) = M(x)N(t)$. Substituting this into the PDE yields:
+\begin{equation}
+MN_t = D M_{xx} N \implies \frac{N_t}{DN} = \frac{M_{xx}}{M} = -\lambda.
+\end{equation}
+This separates into two ordinary differential equations:
+\begin{align}
+    \frac{d N}{d t} + \lambda D N &= 0, \\
+    \frac{d^2 M}{d x^2} + \lambda M &= 0.
+\end{align}
+The spatial equation is subject to the boundary conditions $M(0) = 0$ and $M(l) = 0$.
+
+\begin{theorem}[Eigenpairs of the 1D Diffusion Equation]
+    For $\lambda > 0$, the spatial problem has the solution:
+    \begin{equation}
+    \lambda_k = \left( \frac{k\pi}{l} \right)^2, \quad M_k(x) = \sqrt{\frac{2}{l}} \sin \left( \frac{k\pi x}{l} \right), \quad k=1, 2, 3, \dots
+    \end{equation}
+\end{theorem}
+
+Solving the temporal equation yields exponential decay:
+\begin{equation}
+N_k(t) = A_k e^{-D \left( \frac{k\pi}{l} \right)^2 t}.
+\end{equation}
+Combining these, the general solution is the superposition of all modes:
+\begin{equation}
+    u(x,t) = \sum_{k=1}^\infty A_k e^{-D \left( \frac{k\pi}{l} \right)^2 t} \sqrt{\frac{2}{l}} \sin \left( \frac{k\pi x}{l} \right).
+\end{equation}
+
+\subsubsection{Initial Conditions}
+
+To find the coefficients $A_k$, we impose the initial condition $u(x,0) = f(x)$:
+\begin{equation}
+\sum_{k=1}^\infty A_k \underbrace{\sqrt{\frac{2}{l}} \sin \left( \frac{k\pi x}{l} \right)}_{M_k(x)} = f(x).
+\end{equation}
+Using the orthogonality of the eigenfunctions $M_k(x)$, we can isolate the coefficients:
+\begin{equation}
+    A_k = (f, M_k) = \int_0^l f(x) \sqrt{\frac{2}{l}} \sin \left( \frac{k\pi x}{l} \right) \, dx.
+\end{equation}
+Note that as $t \to \infty$, $u(x,t) \to 0$ for all $f(x)$ because the larger $k$ terms decay faster.
+
+\subsection{Non-Homogeneous Boundary Conditions}
+
+What if the boundary conditions are not zero? Consider the case:
+\begin{equation}
+u(0,t) = 0, \quad u(l,t) = 1.
+\end{equation}
+We cannot use the method above directly because $k=0$ would generate a trivial solution. Instead, we decompose the solution into a steady part and a transient part.
+
+\begin{definition}[Steady State Decomposition]
+    We assume the solution takes the form:
+    \begin{equation}
+    u(x,t) = U(x) + \hat{u}(x,t),
+    \end{equation}
+    where $U(x)$ is the steady solution (as $t \to \infty$) and $\hat{u}(x,t)$ is the transient solution.
+\end{definition}
+
+\subsubsection{The Steady Solution}
+For the steady solution, we assume $\frac{\partial u}{\partial t} \to 0$. The PDE reduces to an ODE:
+\begin{equation}
+D \frac{d^2 U}{dx^2} = 0.
+\end{equation}
+Integrating twice yields the linear equation $U(x) = Ax + B$. Applying the boundary conditions $U(0)=0$ and $U(l)=1$:
+\begin{equation}
+    U(x) = \frac{x}{l}.
+\end{equation}
+
+\subsubsection{The Transient Solution}
+The transient function $\hat{u}(x,t)$ must satisfy the original PDE:
+\begin{equation}
+\frac{\partial \hat{u}}{\partial t} = D \frac{\partial^2 \hat{u}}{\partial x^2}.
+\end{equation}
+We determine the boundary conditions for $\hat{u}$ by subtracting the steady state from the original BCs:
+\begin{align}
+    u(0,t) &= U(0) + \hat{u}(0,t) \implies 0 = 0 + \hat{u}(0,t) \implies \hat{u}(0,t) = 0. \\
+    u(l,t) &= U(l) + \hat{u}(l,t) \implies 1 = 1 + \hat{u}(l,t) \implies \hat{u}(l,t) = 0.
+\end{align}
+The initial condition for $\hat{u}$ is modified as well:
+\begin{equation}
+u(x,0) = f(x) = U(x) + \hat{u}(x,0) \implies \hat{u}(x,0) = f(x) - \frac{x}{l}.
+\end{equation}
+The solution for $\hat{u}$ is the same as the homogeneous case derived previously, just with a different initial condition. As $t \to \infty$, $\hat{u} \to 0$, so the total solution approaches the steady state $U(x)$.
+
+\subsection{Laplace's Equation on a Rectangle}
+
+We now consider Laplace's equation on a rectangle defined by $0 < x < L_x$ and $0 < y < L_y$.
+\begin{equation}
+    \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = 0.
+\end{equation}
+Laplace's equation has no time derivative; boundary conditions determine the solution. We consider the case where three sides are zero and one side is non-zero:
+\begin{equation}
+u(0,y) = 0, \quad u(L_x, y) = 0, \quad u(x,0) = 0, \quad u(x, L_y) = g(x).
+\end{equation}
+
+\subsubsection{Separation of Variables}
+
+We seek a solution of the form $u(x,y) = M(x)N(y)$. Substituting into the PDE:
+\begin{equation}
+M N_{xx} + M N_{yy} = 0 \implies \frac{M_{xx}}{M} = - \frac{N_{yy}}{N}.
+\end{equation}
+Since the boundary conditions in $x$ are homogeneous ($M(0)=0, M(L_x)=0$), we set the separation constant to be negative ($-\lambda$) to yield oscillatory solutions in $x$.
+\begin{equation}
+\frac{d^2 M}{d x^2} = -\lambda M, \quad \frac{d^2 N}{d y^2} = \lambda N.
+\end{equation}
+
+\begin{theorem}[Spatial Solutions for Laplace]
+    The solution for $M(x)$ subject to homogeneous BCs is:
+    \begin{equation}
+    M_k(x) = \sqrt{\frac{2}{L_x}} \sin \left( \frac{k\pi x}{L_x} \right), \quad \lambda_k = \left( \frac{k\pi}{L_x} \right)^2.
+    \end{equation}
+    The solution for $N(y)$ (which supports the non-homogeneous boundary) must be linear combinations of hyperbolic functions:
+    \begin{equation}
+    N_k(y) = A_k \cosh(\sqrt{\lambda_k} y) + B_k \sinh(\sqrt{\lambda_k} y).
+    \end{equation}
+\end{theorem}
+
+\subsubsection{Applying Boundary Conditions}
+
+The general series solution is:
+\begin{equation}
+    u(x,y) = \sum_{k=1}^\infty M_k(x) \left[ A_k \cosh\left( \frac{k\pi y}{L_x} \right) + B_k \sinh\left( \frac{k\pi y}{L_x} \right) \right].
+\end{equation}
+We apply the boundary condition at $y=0$, which is $u(x,0) = 0$.
+\begin{equation}
+\sum M_k(x) [ A_k(1) + B_k(0) ] = 0 \implies A_k = 0.
+\end{equation}
+The solution simplifies to terms involving only $\sinh$. We now apply the non-homogeneous condition at $y=L_y$, where $u(x, L_y) = g(x)$:
+\begin{equation}
+\sum_{k=1}^\infty B_k \sinh\left( \frac{k\pi L_y}{L_x} \right) \sqrt{\frac{2}{L_x}} \sin \left( \frac{k\pi x}{L_x} \right) = g(x).
+\end{equation}
+This is a Fourier sine series. We can solve for the constant coefficient $B_k \sinh(\dots)$ by projecting $g(x)$ onto the eigenfunctions $M_k$:
+\begin{equation}
+B_k \sinh\left( \frac{k\pi L_y}{L_x} \right) = (g, M_k) = \int_0^{L_x} g(x) M_k(x) \, dx.
+\end{equation}
+Thus, the coefficients $B_k$ are:
+\begin{equation}
+    B_k = \frac{(g, M_k)}{\sinh\left( \frac{k\pi L_y}{L_x} \right)}.
+\end{equation}
+
+\subsection{Alternative Boundary Configurations}
+
+What if the boundary conditions were on $y$? For example:
+\begin{equation}
+u(x,0) = 0, \quad u(x, L_y) = 0, \quad u(0,y) = h(y), \quad u(L_x, y) = q(y).
+\end{equation}
+In this case, the homogeneous boundary conditions are in the $y$-direction. We switch the roles of the variables:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item The eigenfunction is in the $y$-direction: $M_k(y) = \sin \left( \frac{k\pi y}{L_y} \right)$ with $\lambda_k = \left( \frac{k\pi}{L_y} \right)^2$.
+    \item The hyperbolic function is in the $x$-direction: $N_k(x) = A_k \cosh \left( \frac{k\pi x}{L_y} \right) + B_k \sinh \left( \frac{k\pi x}{L_y} \right)$.
+\end{itemize}
+By solving four such problems (one for each non-zero side) and summing the solutions, we can solve Laplace's equation for a rectangle with non-zero boundary conditions on all four sides.
+
+\clearpage
+
+\section*{Lecture 12}
+\addcontentsline{toc}{section}{Lecture 12}
+\stepcounter{section}
+\setcounter{section}{12}
+\setcounter{equation}{0}
+
+\subsection{Laplace's Equation on a Circle}
+
+We now consider Laplace's equation in 2D polar coordinates. This is the prototype for elliptic problems on circular domains.
+
+\begin{definition}[Laplace's Equation in Polar Coordinates]
+    The PDE is given by:
+    \begin{equation}
+        \nabla^2 u = \frac{1}{r}\frac{\partial}{\partial r}\lp r \frac{\partial u}{\partial r} \rp + \frac{1}{r^2}\frac{\partial^2 u}{\partial \theta^2} = 0,
+    \end{equation}
+    defined on the disk $0 \le r \le a$ and $0 \le \theta \le 2\pi$.
+    
+    \begin{center}
+    \begin{tikzpicture}[scale=0.8]
+        \draw[thick] (0,0) circle (1.5cm);
+        \draw[->] (0,0) -- (1.06, 1.06) node[midway, above left] {$a$};
+        \filldraw (0,0) circle (1pt);
+        \node at (3.5, 0) {$u(a, \theta) = f(\theta)$};
+    \end{tikzpicture}
+    \end{center}
+
+    The boundary conditions are:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Explicit:} $u(a, \theta) = f(\theta)$.
+        \item \textbf{Implicit (Boundedness):} $|u(r, \theta)| < \infty$ as $r \to 0$.
+        \item \textbf{Implicit (Periodicity):} 
+        \begin{equation}
+        u(r, 0) = u(r, 2\pi) \quad \text{and} \quad \frac{\partial u}{\partial \theta}(r, 0) = \frac{\partial u}{\partial \theta}(r, 2\pi).
+        \end{equation}
+    \end{itemize}
+\end{definition}
+
+\subsubsection{Separation of Variables}
+
+We seek a separable solution of the form:
+\begin{equation}
+u(r, \theta) = R(r)\Theta(\theta).
+\end{equation}
+Substituting this into the PDE:
+\begin{equation}
+\frac{1}{r}(rR')'\Theta + \frac{1}{r^2}R\Theta'' = 0.
+\end{equation}
+Dividing by $R\Theta/r^2$ to separate variables:
+\begin{equation}
+\frac{r(rR')'}{R} + \frac{\Theta''}{\Theta} = 0 \implies \frac{r(rR')'}{R} = -\frac{\Theta''}{\Theta} = \lambda^2.
+\end{equation}
+Here $\lambda^2$ is the separation constant (eigenvalue), and it must be non-negative. This leads to two Ordinary Differential Equations (ODEs):
+\begin{align}
+    \Theta'' + \lambda^2 \Theta &= 0 \label{eq:angular_ode_laplace}\\
+    r^2 R'' + rR' - \lambda^2 R &= 0 \label{eq:radial_ode_laplace}
+\end{align}
+
+\subsubsection{Solving the Angular Equation}
+
+The angular equation \cref{eq:angular_ode_laplace} is coupled with the periodic boundary conditions:
+\begin{equation}
+\Theta(0) = \Theta(2\pi), \quad \Theta'(0) = \Theta'(2\pi).
+\end{equation}
+This is an eigenvalue problem we have solved previously. The eigenvalues must be integers to satisfy periodicity:
+\begin{equation}
+\lambda_n = n, \quad n = 0, 1, 2, \dots
+\end{equation}
+The eigenfunctions are:
+\begin{equation}
+\Theta_n(\theta) = A_n \cos(n\theta) + B_n \sin(n\theta).
+\end{equation}
+
+\subsubsection{Solving the Radial Equation}
+
+Substituting $\lambda = n$ into the radial equation \cref{eq:radial_ode_laplace}, we obtain:
+\begin{equation}
+r^2 R'' + rR' - n^2 R = 0.
+\end{equation}
+This is a \textbf{Cauchy-Euler equation}. We guess a solution of the form $R = r^\alpha$, which leads to the characteristic equation:
+\begin{equation}
+\alpha(\alpha - 1) + \alpha - n^2 = 0 \implies \alpha^2 - n^2 = 0 \implies \alpha = \pm n.
+\end{equation}
+We must consider two cases for the solution:
+
+\paragraph{Case 1: $n = 0$}
+The characteristic equation gives a repeated root $\alpha = 0$.
+\begin{equation}
+\int \frac{R''}{R'} = \int -\frac{1}{r} \implies \ln R' = -\ln r + \ln D_0 \implies R' = \frac{D_0}{r}.
+\end{equation}
+Integrating again:
+\begin{equation}
+R_0(r) = C_0 + D_0 \ln r.
+\end{equation}
+\begin{note}[Boundedness Condition]
+    Since we require $|R(0)| < \infty$ and $\ln r \to -\infty$ as $r \to 0$, we must set $D_0 = 0$. Thus, $R_0(r) = C_0$.
+\end{note}
+
+\paragraph{Case 2: $n \ge 1$}
+The roots are distinct real numbers $\alpha = \pm n$. The general solution is:
+\begin{equation}
+R_n(r) = C_n r^n + D_n r^{-n}.
+\end{equation}
+Again, applying the boundedness condition $|R(0)| < \infty$, the term $r^{-n}$ blows up at the origin. We must set $D_n = 0$.
+\begin{equation}
+R_n(r) = C_n r^n.
+\end{equation}
+
+\subsubsection{General Solution}
+
+Summing over all possible $n$, the general solution is:
+\begin{equation}
+    u(r, \theta) = \sum_{n=0}^\infty [A_n \cos(n\theta) + B_n \sin(n\theta)] r^n.
+\end{equation}
+(Note that the constant $C_n$ from the radial part has been absorbed into $A_n$ and $B_n$).
+
+To determine the coefficients, we apply the final boundary condition at $r=a$:
+\begin{equation}
+u(a, \theta) = f(\theta) = \sum_{n=0}^\infty [A_n a^n \cos(n\theta) + B_n a^n \sin(n\theta)].
+\end{equation}
+This is a standard Fourier Series. We use the orthogonality relations for the Fourier Basis:
+\begin{equation}
+\int_0^{2\pi} \cos(m\theta)\cos(n\theta)\,d\theta = \begin{cases} 0 & m \neq n \\ \pi & m=n \neq 0 \\ 2\pi & m=n=0 \end{cases}
+\end{equation}
+\begin{equation}
+\int_0^{2\pi} \sin(m\theta)\sin(n\theta)\,d\theta = \begin{cases} 0 & m \neq n \\ \pi & m=n \neq 0 \end{cases}
+\end{equation}
+\begin{equation}
+\int_0^{2\pi} \sin(m\theta)\cos(n\theta)\,d\theta = 0.
+\end{equation}
+
+\subsubsection{Finding the Coefficients (Orthogonality)}
+
+To determine the coefficients $A_n$ and $B_n$, we apply the boundary condition at $r=a$:
+\begin{equation}
+u(a, \theta) = f(\theta) = \sum_{n=0}^\infty a^n [A_n \cos(n\theta) + B_n \sin(n\theta)].
+\end{equation}
+We use the orthogonality of the Fourier basis. We denote the inner product of two functions on the interval $[0, 2\pi]$ as:
+\begin{equation}
+(u, v) = \int_0^{2\pi} u(\theta) v(\theta) \, d\theta.
+\end{equation}
+The orthogonality relations are:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $(\cos(m\theta), \cos(n\theta)) = 0$ if $m \neq n$.
+    \item $(\sin(m\theta), \sin(n\theta)) = 0$ if $m \neq n$.
+    \item $(\sin(m\theta), \cos(n\theta)) = 0$ for all $m, n$.
+\end{itemize}
+
+\begin{theorem}[Coefficients via Inner Products]
+    To find $A_m$, we take the inner product of $f(\theta)$ with $\cos(m\theta)$:
+    \begin{equation}
+    (f, \cos(m\theta)) = \sum_{n=0}^\infty A_n a^n (\cos(n\theta), \cos(m\theta)).
+    \end{equation}
+    Due to orthogonality, only the term where $n=m$ survives:
+    \begin{equation}
+    (f, \cos(m\theta)) = A_m a^m (\cos(m\theta), \cos(m\theta)).
+    \end{equation}
+    Solving for $A_m$:
+    \begin{equation}
+        A_m = \frac{(f, \cos(m\theta))}{a^m (\cos(m\theta), \cos(m\theta))}.
+    \end{equation}
+    Similarly for the sine terms:
+    \begin{equation}
+        B_m = \frac{(f, \sin(m\theta))}{a^m (\sin(m\theta), \sin(m\theta))}.
+    \end{equation}
+\end{theorem}
+
+\begin{note}[Explicit Values]
+    Using the calculated norms $(\cos m\theta, \cos m\theta) = \pi$ (for $m \ge 1$) and $2\pi$ (for $m=0$), we recover the standard integral forms:
+    \begin{equation}
+    A_0 = \frac{1}{2\pi} \int_0^{2\pi} f(\theta) \, d\theta, \quad
+    A_n = \frac{1}{\pi a^n} \int_0^{2\pi} f(\theta) \cos(n\theta) \, d\theta.
+    \end{equation}
+\end{note}
+
+\begin{theorem}[Coefficients for Laplace on a Disk]
+    By projecting $f(\theta)$ onto the basis functions, we find:
+    \begin{align}
+        A_0 &= \frac{1}{2\pi} \int_0^{2\pi} f(\theta) \, d\theta, \\
+        A_n &= \frac{1}{\pi a^n} \int_0^{2\pi} f(\theta) \cos(n\theta) \, d\theta, \quad n \ge 1, \\
+        B_n &= \frac{1}{\pi a^n} \int_0^{2\pi} f(\theta) \sin(n\theta) \, d\theta, \quad n \ge 1.
+    \end{align}
+\end{theorem}
+
+\subsection{The Vibrating Drum}
+
+We now consider the wave equation on a circular domain (a drumhead).
+
+\begin{definition}[Wave Equation in Polar Coordinates]
+    The PDE is:
+    \begin{equation}
+    \frac{\partial^2 u}{\partial t^2} = c^2 \nabla^2 u = c^2 \lb \frac{1}{r}\frac{\partial}{\partial r}\lp r \frac{\partial u}{\partial r} \rp + \frac{1}{r^2}\frac{\partial^2 u}{\partial \theta^2} \rb.
+    \end{equation}
+    The domain is defined by $0 \le \theta \le 2\pi$ and $0 \le r < 1$ (taking radius $a=1$ for simplicity).
+    
+    The conditions are:
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{BCs:} $u(1, \theta, t) = 0$ (fixed rim), $|u(0, \theta, t)| < \infty$ (bounded center), and periodic in $\theta$.
+        \item \textbf{ICs:} $u(r, \theta, 0) = f(r, \theta)$ and $\frac{\partial u}{\partial t}(r, \theta, 0) = g(r, \theta)$ (often $0$).
+    \end{itemize}
+\end{definition}
+
+\subsubsection{Separation of Variables}
+
+Assume $u(r, \theta, t) = R(r)\Theta(\theta)T(t)$. Substituting into the PDE:
+\begin{equation}
+R\Theta T'' = c^2 \lb \Theta T \frac{1}{r}(rR')' + \frac{RT}{r^2}\Theta'' \rb.
+\end{equation}
+Divide by $c^2 R\Theta T$:
+\begin{equation}
+\frac{T''}{c^2 T} = \frac{1}{rR}(rR')' + \frac{1}{r^2}\frac{\Theta''}{\Theta} = -\lambda^2.
+\end{equation}
+This gives the \textbf{Time Equation}:
+\begin{equation}
+    T'' + c^2 \lambda^2 T = 0.
+\end{equation}
+For the spatial part, we rearrange the remaining terms:
+\begin{equation}
+\frac{r}{R}(rR')' + \lambda^2 r^2 = -\frac{\Theta''}{\Theta} = \mu^2.
+\end{equation}
+Here $\mu^2$ is the second separation constant.
+
+\paragraph{Angular Equation}
+\begin{equation}
+\Theta'' + \mu^2 \Theta = 0, \quad \Theta(0)=\Theta(2\pi), \quad \Theta'(0)=\Theta'(2\pi).
+\end{equation}
+As before, periodicity implies $\mu$ must be an integer $n$.
+\begin{equation}
+\mu = n \quad \implies \quad \Theta_n(\theta) = A_n \cos(n\theta) + B_n \sin(n\theta), \quad n=0, 1, 2, \dots
+\end{equation}
+
+\paragraph{Radial Equation}
+Substituting $\mu = n$ back into the spatial equation:
+\begin{equation}
+\frac{r}{R}(rR')' + \lambda^2 r^2 = n^2 \implies r(rR')' + (\lambda^2 r^2 - n^2)R = 0.
+\end{equation}
+Expanding the derivative term gives \textbf{Bessel's Equation} of order $n$:
+\begin{equation}
+    r^2 R'' + rR' + (\lambda^2 r^2 - n^2)R = 0.
+\end{equation}
+The general solution is:
+\begin{equation}
+R_n(r) = C_n J_n(\lambda r) + D_n Y_n(\lambda r).
+\end{equation}
+\begin{note}
+    Since $Y_n(\lambda r)$ is unbounded at $r=0$ and we require $|R(0)| < \infty$, we must set $D_n = 0$ for all $n$.
+    Thus, $R_n(r) = C_n J_n(\lambda r)$.
+\end{note}
+
+\subsubsection{Eigenvalues}
+
+We apply the boundary condition at the rim, $R(1) = 0$:
+\begin{equation}
+C_n J_n(\lambda) = 0.
+\end{equation}
+For a non-trivial solution ($C_n \neq 0$), we require $J_n(\lambda) = 0$. This means $\lambda$ must be a root (zero) of the Bessel function $J_n$.
+Let $\alpha_{kn}$ be the $k$-th zero of $J_n$. Then the eigenvalues are:
+\begin{equation}
+\lambda_{kn} = \alpha_{kn}, \quad k=1, 2, 3, \dots
+\end{equation}
+So our radial eigenfunctions are $R_{kn}(r) = J_n(\alpha_{kn} r)$.
+
+\subsubsection{General Solution}
+
+The time equation $T'' + c^2 \lambda_{kn}^2 T = 0$ has solutions:
+\begin{equation}
+T_{kn}(t) = E_{kn} \cos(c \alpha_{kn} t) + F_{kn} \sin(c \alpha_{kn} t).
+\end{equation}
+If the initial velocity is zero ($\frac{\partial u}{\partial t}(r, \theta, 0) = 0$), then $F_{kn} = 0$.
+The general solution is a double sum over the spatial modes ($n$) and the radial modes ($k$):
+
+\begin{theorem}[General Solution for Vibrating Drum]
+    \begin{equation}
+        u(r, \theta, t) = \sum_{k=1}^\infty \sum_{n=0}^\infty \lb A_{kn} \cos(n\theta) + B_{kn} \sin(n\theta) \rb J_n(\alpha_{kn} r) \cos(c \alpha_{kn} t).
+    \end{equation}
+\end{theorem}
+
+To find the coefficients $A_{kn}$ and $B_{kn}$, we use projections at $t=0$:
+\begin{equation}
+f(r, \theta) = \sum_{k=1}^\infty \sum_{n=0}^\infty [ \dots ] J_n(\alpha_{kn} r).
+\end{equation}
+We use the orthogonality of both the trigonometric functions (in $\theta$) and the Bessel functions (in $r$). The weight function for the radial inner product is $r$.
+\begin{equation}
+A_{kn} \propto \int_0^1 \int_0^{2\pi} f(r, \theta) \cos(n\theta) J_n(\alpha_{kn} r) \, r \, d\theta \, dr.
+\end{equation}
+
+\subsection{Initial Conditions and Coefficients}
+
+To determine the coefficients $A_{kn}$ and $B_{kn}$, we use the initial position $u(r, \theta, 0) = f(r, \theta)$. Setting $t=0$:
+\begin{equation}
+f(r, \theta) = \sum_{k=1}^\infty \sum_{n=0}^\infty \left[ A_{kn} \cos(n\theta) + B_{kn} \sin(n\theta) \right] J_n(\alpha_{kn} r).
+\end{equation}
+This represents a Fourier-Bessel series expansion. We find the coefficients by projecting $f(r, \theta)$ onto the orthogonal basis functions.
+
+\begin{definition}[Orthogonality on the Disk]
+    The eigenfunctions are orthogonal with respect to the inner product defined by the area integral (weight $r$):
+    \begin{equation}
+    \iint_{\text{Disk}} \phi_{nm} \phi_{lk} \, r \, dr \, d\theta = 0, \quad \text{if } (n,m) \neq (l,k).
+    \end{equation}
+\end{definition}
+
+To find $A_{mn}$, we multiply both sides by $\cos(m\theta) J_m(\alpha_{lm} r)$ and integrate over the disk:
+\begin{equation}
+\int_0^1 \int_0^{2\pi} f(r, \theta) \cos(m\theta) J_m(\alpha_{lm} r) \, r \, d\theta \, dr.
+\end{equation}
+Due to orthogonality, all terms in the sum vanish except where $n=m$ and $k=l$.
+
+\begin{theorem}[Coefficient Formulas]
+    The coefficients are given by the projection of $f$ onto the basis functions divided by the norm of the basis functions:
+    \begin{equation}
+    A_{kn} = \frac{\int_0^1 \int_0^{2\pi} f(r, \theta) \cos(n\theta) J_n(\alpha_{kn} r) \, r \, d\theta \, dr}{\int_0^1 \int_0^{2\pi} \cos^2(n\theta) J_n^2(\alpha_{kn} r) \, r \, d\theta \, dr},
+    \end{equation}
+    \begin{equation}
+    B_{kn} = \frac{\int_0^1 \int_0^{2\pi} f(r, \theta) \sin(n\theta) J_n(\alpha_{kn} r) \, r \, d\theta \, dr}{\int_0^1 \int_0^{2\pi} \sin^2(n\theta) J_n^2(\alpha_{kn} r) \, r \, d\theta \, dr}.
+    \end{equation}
+\end{theorem}
+
+\subsection{Comparison with the 1D Wave Equation}
+
+It is instructive to compare this result with the 1D wave equation derived earlier in the course.
+For a string of length $\ell$, the solution was:
+\begin{equation}
+u(x, t) = \sum_{n=1}^\infty \underbrace{\left[ A_n \cos\left( \frac{\pi n c}{\ell} t \right) + B_n \sin\left( \frac{\pi n c}{\ell} t \right) \right]}_{\text{Temporal Part}} \underbrace{\sin\left( \frac{\pi n x}{\ell} \right)}_{\text{Spatial Part}}.
+\end{equation}
+Each term represents a standing wave mode.
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item In 1D, the spatial oscillation is $\sin(\frac{\pi n}{\ell}x)$.
+    \item In 2D polar, the spatial oscillation is a combination of angular $\cos(n\theta)$ and radial $J_n(\alpha_{kn} r)$.
+    \item In 1D, the frequency is $\omega_n = \frac{n \pi c}{\ell}$.
+    \item In 2D, the frequency is $\omega_{kn} = c \alpha_{kn}$ (where $\alpha_{kn}$ are roots of Bessel functions).
+\end{itemize}
+
+\subsection{Nodal Patterns}
+
+The vibration modes are determined by the indices $n$ and $k$. The nodes (where displacement is always zero) form distinct geometric patterns.
+
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $n$ (Angular Index): Determines the number of nodal diameters (lines passing through the center).
+    \item $k$ (Radial Index): Determines the number of nodal circles (concentric rings, including the boundary).
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+    % Styles
+    \tikzstyle{nodal}=[white, thick] % Nodal lines in white for visibility on filled circle
+    \tikzstyle{drum}=[fill=gray!20, draw=black, thick]
+
+    % --- Row n=0 ---
+    \node at (-0.8, 2.5) {\large $n=0$};
+    
+    % k=1
+    \begin{scope}[shift={(1, 2.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \node[above] at (0, 0.6) {$k=1$};
+    \end{scope}
+
+    % k=2
+    \begin{scope}[shift={(2.5, 2.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.25); % Nodal circle
+        \node[above] at (0, 0.6) {$k=2$};
+    \end{scope}
+    
+    % k=3
+    \begin{scope}[shift={(4, 2.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.35); % Outer nodal circle
+        \draw[black, thick] (0,0) circle (0.15); % Inner nodal circle
+        \node[above] at (0, 0.6) {$k=3$};
+    \end{scope}
+
+    % --- Row n=1 ---
+    \node at (-0.8, 1.0) {\large $n=1$};
+    
+    % k=1
+    \begin{scope}[shift={(1, 1.0)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); % Nodal diameter
+    \end{scope}
+
+    % k=2
+    \begin{scope}[shift={(2.5, 1.0)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.25); % Nodal circle
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); % Nodal diameter
+    \end{scope}
+
+    % k=3
+    \begin{scope}[shift={(4, 1.0)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.35); 
+        \draw[black, thick] (0,0) circle (0.15); 
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); 
+    \end{scope}
+
+    % --- Row n=2 ---
+    \node at (-0.8, -0.5) {\large $n=2$};
+    
+    % k=1
+    \begin{scope}[shift={(1, -0.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); 
+        \draw[black, thick] (-0.5, 0) -- (0.5, 0); 
+    \end{scope}
+
+    % k=2
+    \begin{scope}[shift={(2.5, -0.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.25); 
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); 
+        \draw[black, thick] (-0.5, 0) -- (0.5, 0); 
+    \end{scope}
+
+    % k=3
+    \begin{scope}[shift={(4, -0.5)}]
+        \draw[drum] (0,0) circle (0.5);
+        \draw[black, thick] (0,0) circle (0.35); 
+        \draw[black, thick] (0,0) circle (0.15); 
+        \draw[black, thick] (0, -0.5) -- (0, 0.5); 
+        \draw[black, thick] (-0.5, 0) -- (0.5, 0); 
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\clearpage
+
+\appendix
+
+\section{Summary of Separation of Variables}
+
+\setcounter{equation}{0}
+
+\subsection{The General Algorithm}
+
+We have established a consistent workflow for solving linear, separable PDEs on bounded domains. This process relies on the linearity of the operator to superimpose solutions and the separability of the variables to find building blocks.
+
+\begin{definition}[Algorithm: Method of Separation of Variables]
+    The standard procedure for solving $\rho \frac{\partial^2 u}{\partial t^2} + L[u] = 0$ (or similar forms) is:
+    \begin{enumerate}[nosep]
+        \item \textbf{Ansatz:} Assume the solution factors into spatial and temporal components:
+        \begin{equation}
+        u(\bm{x}, t) = M(\bm{x}) N(t).
+        \end{equation}
+        \item \textbf{Separation:} Substitute into the PDE and divide by $MN$ to isolate variables. This generates a separation constant, denoted $-\lambda$.
+        \item \textbf{Spatial Problem (Sturm--Liouville):} Solve the boundary value problem for $M(\bm{x})$:
+        \begin{equation}
+        L[M] = \lambda \rho M, \quad \text{with homogeneous BCs.}
+        \end{equation}
+        This filters the possible values of $\lambda$ (eigenvalues $\lambda_n$) and provides the spatial shapes (eigenfunctions $M_n$).
+        \item \textbf{Temporal Problem:} Solve the ODE for $N(t)$ using the specific $\lambda_n$ found in the previous step.
+        \item \textbf{Superposition:} Construct the general solution by summing over all $n$:
+        \begin{equation}
+        u(\bm{x}, t) = \sum_{n=1}^\infty c_n M_n(\bm{x}) N_n(t).
+        \end{equation}
+        \item \textbf{Coefficients:} Use the orthogonality of $M_n$ and the Initial Conditions to determine $c_n$.
+    \end{enumerate}
+\end{definition}
+
+\subsection{Solutions for the Temporal Variable}
+
+While the spatial problem $L[M] = \lambda \rho M$ is often identical across different physical contexts (leading to $\lambda_n > 0$), the equation for the second variable ($N$) changes based on the PDE classification.
+
+Below are the general solutions for $N(t)$ (or $N(y)$) determined by the sign of $\lambda$.
+
+\subsubsection{Hyperbolic Case (Wave Equation)}
+
+The temporal equation is second-order with a positive sign relative to $\lambda$.
+\begin{equation}
+    N'' + \lambda N = 0.
+\end{equation}
+
+\begin{theorem}[Hyperbolic Solutions for $N(t)$]
+    For each \(\lambda\):
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Case $\lambda > 0$ (Oscillatory):}
+        \begin{equation}
+        N(t) = A \cos(\sqrt{\lambda} t) + B \sin(\sqrt{\lambda} t).
+        \end{equation}
+        This represents standing waves.
+        \item \textbf{Case $\lambda = 0$ (Linear):}
+        \begin{equation}
+        N(t) = A + B t.
+        \end{equation}
+        This represents constant velocity drift.
+        \item \textbf{Case $\lambda < 0$ (Growth/Decay):}
+        \begin{equation}
+        N(t) = A \cosh(\sqrt{|\lambda|} t) + B \sinh(\sqrt{|\lambda|} t).
+        \end{equation}
+        \textit{(Rare in standard bounded wave problems due to stability constraints).}
+    \end{itemize}
+\end{theorem}
+
+\subsubsection{Parabolic Case (Diffusion Equation)}
+
+The temporal equation is first-order.
+\begin{equation}
+    N' + \lambda N = 0.
+\end{equation}
+
+\begin{theorem}[Parabolic Solutions for $N(t)$]
+    For each \(\lambda\):
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Case $\lambda > 0$ (Decay):}
+        \begin{equation}
+        N(t) = A e^{-\lambda t}.
+        \end{equation}
+        This represents diffusion/smoothing over time.
+        \item \textbf{Case $\lambda = 0$ (Steady State):}
+        \begin{equation}
+        N(t) = A.
+        \end{equation}
+        This represents a system that has reached equilibrium.
+        \item \textbf{Case $\lambda < 0$ (Unbounded Growth):}
+        \begin{equation}
+        N(t) = A e^{|\lambda| t}.
+        \end{equation}
+        \textit{(Physically unfeasible for standard diffusion without energy injection).}
+    \end{itemize}
+\end{theorem}
+
+\subsubsection{Elliptic Case (Laplace Equation)}
+
+The "temporal" variable is usually a spatial coordinate (e.g., $y$), and the sign on $\lambda$ is reversed relative to the second derivative.
+\begin{equation}
+    N'' - \lambda N = 0.
+\end{equation}
+
+\begin{theorem}[Elliptic Solutions for $N(y)$]
+    For each \(\lambda\):
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item \textbf{Case $\lambda > 0$ (Exponential/Hyperbolic):}
+        \begin{equation}
+        N(y) = A \cosh(\sqrt{\lambda} y) + B \sinh(\sqrt{\lambda} y).
+        \end{equation}
+        Alternatively written as $c_1 e^{\sqrt{\lambda}y} + c_2 e^{-\sqrt{\lambda}y}$. This represents smooth transitions between boundaries (equilibrium).
+        \item \textbf{Case $\lambda = 0$ (Linear):}
+        \begin{equation}
+        N(y) = A + B y.
+        \end{equation}
+        \item \textbf{Case $\lambda < 0$ (Oscillatory):}
+        \begin{equation}
+        N(y) = A \cos(\sqrt{|\lambda|} y) + B \sin(\sqrt{|\lambda|} y).
+        \end{equation}
+        \textit{(Occurs if the BCs in the $y$-direction are homogeneous, effectively swapping the roles of $x$ and $y$).}
+    \end{itemize}
+\end{theorem}
+
+\begin{note}
+    In most well-posed physical problems on bounded intervals with standard Dirichlet or Neumann boundary conditions, the Sturm--Liouville theory guarantees that the eigenvalues are non-negative ($\lambda_n \ge 0$). Thus, we primarily use the $\lambda > 0$ and $\lambda = 0$ cases.
+\end{note}
+
+\end{document}
+
+\end{document}
+
+% ---------- EXTRA COMMANDS ----------
+% LIST
+[nosep, leftmargin=*]
+[nosep, label=\tiny$\bullet$]
+
+% ENUMERATE LABEL TO ABC
+[label(breaking lable in cref)=(\alph*)]
+
+% INSERT MEDIA
+\includegraphics[width=\linewidth]{}
+
+% MINI PAGE 
+\begin{minipage}[t]{\linewidth}
+    \begin{center}
+    \adjustbox{valign=t}{
+    \includegraphics[width=0.5\linewidth]{q6b.jpeg}
+    }
+    \end{center}
+\end{minipage}

@@ -1,0 +1,1054 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+\usepackage{tikz}
+\usetikzlibrary{patterns, arrows.meta, calc, angles, quotes, decorations.pathreplacing, decorations.markings, positioning}
+\usepackage[most]{tcolorbox}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+\pgfplotsset{compat=1.18}
+
+% STATEMENT ENVIRONMENT
+\newtheoremstyle{conditionalstyle}
+  {3pt} % Space above
+  {3pt} % Space below
+  {\normalfont} % Body font - regular upright
+  {} % Indent amount
+  {\bfseries} % Theorem head font (only used when no optional argument)
+  {.} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {\thmnumber{\textbf{#1 #2}}\thmnote{\normalfont\textit{ (#3)}}} % Theorem head spec
+\theoremstyle{conditionalstyle}
+\newtheorem{definition}{Definition}[section]
+
+% ALIAS FOR SHARED NUMBERING
+\newaliascnt{axiom}{definition}
+\newtheorem{axiom}[axiom]{Axiom}
+\aliascntresetthe{axiom}
+
+\newaliascnt{lemma}{definition}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+
+\newaliascnt{theorem}{definition}
+\newtheorem{theorem}[theorem]{Theorem}
+\aliascntresetthe{theorem}
+
+\newaliascnt{corollary}{definition}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\newaliascnt{note}{definition}
+\newtheorem{note}[note]{Note}
+\aliascntresetthe{note}
+
+\newaliascnt{fact}{definition}
+\newtheorem{fact}[fact]{Fact}
+\aliascntresetthe{fact}
+
+\newaliascnt{example}{definition}
+\newtheorem{example}[example]{Example}
+\aliascntresetthe{example}
+
+% TCOLORBOX SETUP
+\tcolorboxenvironment{definition}{
+  breakable,
+  enhanced,
+  colback=teal!5!white,
+  frame hidden,
+  boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt, % Padding so text doesn't touch the bar
+  overlay={
+    \draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{axiom}{
+  breakable, enhanced, colback=teal!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[teal!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  breakable, enhanced,
+  colback=violet!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{lemma}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{corollary}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{fact}{
+  breakable, enhanced, colback=violet!5!white, frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt, left=5pt,
+  overlay={\draw[violet!75!black, line width=2pt] (frame.north west) -- (frame.south west);},
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{example}{
+  breakable, enhanced,
+  colback=gray!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[gray!60!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\tcolorboxenvironment{note}{
+  breakable, enhanced,
+  colback=orange!5!white,
+  frame hidden, boxrule=0pt,
+  arc=0pt, outer arc=0pt,
+  left=5pt,
+  overlay={
+    \draw[orange!80!black, line width=2pt] (frame.north west) -- (frame.south west);
+  },
+  before skip=10pt, after skip=10pt
+}
+\newtcolorbox{important}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=red!5!white,
+  colframe=red!75!black,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+\newtcolorbox{insight}[1][]{ % [1][] allows for an optional title override
+  breakable,
+  enhanced,
+  colback=blue!5,
+  colframe=blue!75,
+  fonttitle=\bfseries,
+  title={#1},
+  before skip=10pt,
+  after skip=10pt
+}
+
+% CLEVEREF ALIAS
+\crefname{definition}{definition}{definitions}
+\crefname{axiom}{axiom}{axioms}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{theorem}{theorem}{theorems}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{note}{note}{notes}
+\crefname{fact}{fact}{facts}
+\crefname{example}{example}{examples}
+
+\crefalias{axiom}{axiom}
+\crefalias{lemma}{lemma}
+\crefalias{theorem}{theorem}
+\crefalias{corollary}{corollary}
+\crefalias{note}{note}
+\crefalias{fact}{fact}
+\crefalias{example}{example}
+
+\Crefname{definition}{Definition}{Definitions}
+\Crefname{axiom}{Axiom}{Axioms}
+\Crefname{lemma}{Lemma}{Lemmas}
+\Crefname{theorem}{Theorem}{Theorems}
+\Crefname{corollary}{Corollary}{Corollaries}
+\Crefname{note}{Note}{Notes}
+\Crefname{fact}{Fact}{Facts}
+\Crefname{example}{Example}{Examples}
+\Crefname{equation}{Eq.}{Eqs.}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\pagenumbering{alph}
+\begin{titlepage}
+    \centering
+    \vspace*{5cm} % Pushes the title down the page
+    {\Large \textbf{AMATH 445}} \\[1em]
+    {\Large \textbf{Scientific Machine Learning}} \\[1em]
+    {\Large \textbf{Lecture Notes}} \\[1em]
+    {\Large Winter 2026}
+\end{titlepage}
+\clearpage
+
+\pagenumbering{roman}
+\tableofcontents
+\numberwithin{equation}{section}
+\clearpage
+
+\pagenumbering{arabic}
+
+\section*{Lecture 1}
+\addcontentsline{toc}{section}{Lecture 1}
+\stepcounter{section}
+\setcounter{section}{1}
+\setcounter{equation}{0}
+
+\subsection{What is Machine Learning}
+
+\begin{definition}[Machine Learning]
+  Machine learning is decision making based on data. The algorithm improves its performance on tasks based on experience (data).
+\end{definition}
+
+\begin{note}[Traditional Algorithm Workflow]
+  \[
+    \begin{rcases}
+      \text{data/info} \\
+      \text{recipe}
+    \end{rcases} \rightarrow \text{traditional algorithm} \rightarrow \text{output}
+  \]
+\end{note}
+
+\begin{note}[Machine Learning Workflow]
+  \[
+    \begin{rcases}
+      \text{data/info} \\
+      \text{output}
+    \end{rcases} \rightarrow \text{ML} \rightarrow \text{recipe}
+  \]
+\end{note}
+
+\begin{insight}[What, When and Why]
+  \textbf{What} does ML do really well:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+      \item Prediction: Forecasting unknown outcome (temperature).
+      \item Representation: Finding structure in data (clustering).
+      \item Decision making: Choosing the optimal action.
+      \item Generation: ChatGPT, new data, image generation.
+  \end{itemize}
+  \textbf{When}
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Complex patterns: When relationships in data are too complex for traditional programming and we are not able to find the patterns ourselves.
+    \item Large datasets: When there is an abundance of data that can be leveraged for learning.
+  \end{itemize}
+
+  \textbf{Why}
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item It can generalize well to unseen data, making accurate predictions or decisions based on learned patterns (not memorize only).
+  \end{itemize}
+\end{insight}
+
+\begin{important}[Important: ML and Data Quality]
+  Machine Learning is only as good as the data it is trained on. Poor quality or biased data can lead to inaccurate or unfair outcomes. 
+\end{important}
+
+\subsection{Factors Driving Popularity of ML}
+
+There are several factors driving the popularity of ML:
+\begin{enumerate}[nosep, label=\arabic*.]
+    \item Data availability.
+    \item Parallel computing (GPU).
+    \item Algorithm \& infrastructure maturity.
+    \begin{itemize}[nosep, label=\tiny$\bullet$]
+        \item CNN, RNN.
+        \item Backward differentiation.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Mechanics of ML}
+
+The mechanics of ML is as follows
+\begin{enumerate}[nosep]
+\item Data representation $\rightarrow$ turn things into feature
+    \item Pattern discovery $\rightarrow$ structure emerges from randomness
+    \item Pick a model
+    \item Training -- optimization
+    \item Generalize $\rightarrow$ good model works on new data
+    \item Evolution $\rightarrow$ test on new data (unseen)
+\end{enumerate}
+
+\subsection{Data}
+
+\subsubsection{Data Splitting}
+
+A common convention for data splitting is 70\% training, 15\% validation, and 15\% test.
+
+\begin{important}[Important]
+  TEST DATA is NEVER used in training!
+\end{important}
+
+\subsubsection{Label Availability}
+
+This table shows the availability of features and outputs during the modeling phases versus real-world deployment.
+\begin{center}
+\begin{tabular}{l c c}
+ & $F_1 \dots F_n$ & output \\
+ \hline
+ training & known & known \\
+ validation & known & known \\
+ test & known & known \\
+ new & known & unknown
+\end{tabular}
+\end{center}
+
+\subsection{Types of Error}
+
+There are three types of error to track during model development:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Training error: error on the training set. It measures how well the model fits the training data.
+    \item Validation error: error on the validation set. It guides hyperparameter tuning and model selection.
+    \item Test error: error on the test set. It provides an unbiased estimate of model performance on unseen data.
+\end{itemize}
+
+\subsection{Training Dynamics}
+
+As training progresses, training and validation errors evolve differently. The figure below illustrates the typical behavior.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+  % Axes
+  \draw[->] (-0.2, 0) -- (8.8, 0) node[right] {Epochs};
+  \draw[->] (0, -0.4) -- (0, 5.3) node[above left] {Error};
+
+  % Training error (blue, monotonically decreasing)
+  \draw[blue, thick, smooth, domain=0:8.3, samples=200]
+    plot (\x, {4.2*exp(-0.55*\x) + 0.4});
+
+  % Validation error (red, decreases then rises)
+  \draw[red, thick, smooth, domain=0:8.3, samples=200]
+    plot (\x, {3.5*exp(-0.65*\x) + 0.06*(\x)^2 + 0.55});
+
+  % Early stop green dashed vertical line at sweet spot (x~3)
+  \draw[green!60!black, dashed, thick] (3, 0) -- (3, 4.9);
+
+  % Sweet Spot label
+  \node[font=\small, above] at (3, 4.9) {Sweet Spot};
+
+  % Early Stop label below x-axis
+  \node[font=\small, green!60!black] at (3, -0.35) {Early Stop};
+
+  % Underfitting annotation
+  \node[font=\small] at (1.5, 4.2) {Underfitting};
+
+  % Overfitting annotation
+  \node[font=\small] at (6.3, 4.2) {Overfitting};
+
+  % Legend
+  \filldraw[blue] (5.4, 0.9) node[right, font=\small, blue] {Training Error};
+  \filldraw[red]  (5.1, 2) node[right, font=\small, red]  {Validation Error};
+\end{tikzpicture}
+\end{center}
+
+\begin{note}
+Three key behaviors emerge from the training dynamics:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Underfitting}: Both training and validation errors are high. The model is too simple to capture the underlying patterns.
+    \item \textbf{Overfitting}: Training error continues to decrease while validation error starts to increase. The model memorizes the training data but fails to generalize.
+    \item \textbf{Early Stopping}: Stop training when the validation error begins to increase. This achieves the best generalization by stopping at the sweet spot.
+  \end{itemize}
+\end{note}
+
+\subsubsection{Underfitting}
+
+A model underfits when it is too simple (high bias) to capture the underlying structure of the data. Both training and validation errors remain high. Remedies include:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Increase model complexity.
+    \item Add more or better features.
+    \item Obtain more or better training data.
+\end{itemize}
+
+\subsubsection{Overfitting}
+
+A model overfits when it learns the training data too closely — including its noise — and fails to generalize to new data. Training error is low but validation error is high. Remedies include:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Get more data.
+    \item Regularization.
+    \item Dropout.
+    \item Batch normalization.
+    \item Data augmentation.
+    \item Early stopping.
+\end{itemize}
+
+\clearpage
+
+\section*{Lecture 2}
+\addcontentsline{toc}{section}{Lecture 2}
+\stepcounter{section}
+\setcounter{section}{2}
+\setcounter{equation}{0}
+
+\subsection{Categories of Machine Learning}
+
+\subsubsection{Supervised Learning}
+
+\begin{definition}[Supervised Learning]
+  In supervised learning, the model is trained on a labeled dataset to learn a map
+  \begin{equation}
+    f : \mathbb{R}^d \to \mathcal{Y},
+  \end{equation}
+  where $\bm{X}_i \in \mathbb{R}^d$ is the feature vector of the $i$th data point (with $d$ features) and $y_i \in \mathcal{Y}$ is its label. The dataset consists of $N$ labeled pairs
+  \begin{equation}
+    \{(\bm{X}_i,\, y_i)\}_{i=1}^N,
+  \end{equation}
+  and the goal is to learn a mapping that generalizes to unseen data.
+\end{definition}
+
+Supervised learning is used for:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Classification} (binary, multi-class or multi-label): Predict discrete class label.
+    \item \textbf{Regression}: Predict continuous outputs (MSE, MAE are used commonly as loss function in regression).
+\end{itemize}
+
+\subsubsection{Unsupervised Learning}
+
+\begin{definition}[Unsupervised Learning]
+  The model is trained on unlabeled dataset:
+  \begin{equation}
+    \{\bm{X}_i\}^N_{i = 1}.
+  \end{equation}
+  The goal is to learn the underlying structure or distribution $p(\bm{X})$ of the data, without any label information.
+\end{definition}
+
+Common tasks include:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+  \item \textbf{Clustering:} partition the data into groups of similar points,
+  \item \textbf{Dimensionality Reduction:} learn a mapping $f: \mathbb{R}^d \to \mathbb{R}^{d'}$ with $d' \ll d$ that preserves important structure,
+  \item \textbf{Anomaly Detection:} identify points $\bm{X}_i$ where $p(\bm{X}_i) 
+  \ll 1$.
+\end{itemize}
+\clearpage
+
+\subsubsection{Reinforcement Learning}
+
+The key elements of reinforcement learning are:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+  \item \textbf{Agent:} The learner or decision-maker that interacts with the 
+  environment and learns to improve its behaviour over time.
+  \item \textbf{Environment:} The external system the agent interacts with, which 
+  responds to the agent's actions and produces new states and rewards.
+  \item \textbf{State} $\bm{s}_t \in \mathcal{S}$\textbf{:} The current situation of 
+  the agent in the environment, capturing all relevant information needed to make a 
+  decision.
+  \item \textbf{Action} $a_t \in \mathcal{A}$\textbf{:} The choices available to the 
+  agent at each timestep, which can be discrete (e.g. legal moves in chess) or 
+  continuous (e.g. joint angles of a robot arm).
+  \item \textbf{Reward} $r_t$\textbf{:} A feedback signal received after each action, 
+  indicating how successful that action was in progressing toward the goal.
+  \item \textbf{Policy} $\pi : \mathcal{S} \to \mathcal{A}$\textbf{:} A strategy that 
+  defines the agent's actions based on the current state, which the agent refines over 
+  time to maximise cumulative reward.
+\end{itemize}
+
+\begin{definition}[Reinforcement Learning]
+  In reinforcement learning, an agent learns a policy
+  \begin{equation}
+    \pi : \mathcal{S} \to \mathcal{A},
+  \end{equation}
+  where $\mathcal{S}$ is the state space and $\mathcal{A}$ is the action space. At 
+  each timestep $t$, the agent: 
+  \begin{enumerate}
+    \item observes state $\bm{s}_t \in \mathcal{S}$,
+    \item takes action $a_t \in \mathcal{A}$,
+    \item receives reward $r_t$, generating a trajectory of tuples
+    \begin{equation}
+      \{(\bm{s}_t,\, a_t,\, r_t,\, \bm{s}_{t+1})\}_{t=0}^T.
+    \end{equation}
+  \end{enumerate}
+  The goal is to learn a policy $\pi$ that maximizes the cumulative discounted reward
+  \begin{equation}
+    R = \sum_{t=0}^{T} \gamma^t r_t,
+  \end{equation}
+  where $\gamma \in [0,1]$ is a discount factor controlling the importance of future rewards.
+\end{definition}
+
+\begin{note}[State and Action Space]
+  The state space $\mathcal{S}$ is the set of all possible situations the agent can 
+  observe. For example, in a chess game $\mathcal{S}$ is the set of all possible board 
+  configurations, while in a self-driving car $\mathcal{S}$ might encode the car's 
+  position, speed, and surrounding obstacles.
+
+  The action space $\mathcal{A}$ is the set of all possible actions the agent can take.
+  The action space can be:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Discrete:} a finite set of distinct actions, 
+    $\mathcal{A} = \{a_1, a_2, \ldots, a_K\}$. For example, in a chess game 
+    $\mathcal{A}$ is the set of all legal moves.
+    \item \textbf{Continuous:} an infinite range of actions, 
+    $\mathcal{A} \subseteq \mathbb{R}^k$. For example, in a robot arm 
+    $\mathcal{A}$ might be the set of all possible joint rotation angles.
+  \end{itemize}
+  Together, they define the full decision-making problem --- the policy 
+  $\pi : \mathcal{S} \to \mathcal{A}$ maps each observed state to an action.
+\end{note}
+
+
+\subsubsection{Semi-supervised and Self-supervised Learning}
+
+
+\subsubsection{Integrating Mechanistic Models with ML}
+
+The goal is to integrate physical laws into the ML model.
+
+\subsection{Supervised Learning and Classification}
+
+\subsubsection{The Problem Statement of Classification}
+
+The input (feature vectors) is \(X \in \mathbb{R}^d\), the output is the class label is a discrete variable \(y \in \{1, 2, 3, \dots, k\}\). Given a new \(X\), the model should predict which class it belongs to.
+
+\subsubsection{A Probabilistic View of Classification}
+
+\begin{definition}[Posterior Probability]
+\label{Posterior Probability}
+    The posterior probability is defined as
+    \[
+    P(y = k \mid X),
+    \]
+    where \(y = k\) is the hypothesis and \(X\) is the data.
+\end{definition}
+
+The distinction is between conditional and posterior probability is not mathematical—it is conceptual. Posterior emphasizes learning from data, while conditional is a neutral probabilistic relationship.
+
+We want to minimize the probability of misclassifications.
+
+\begin{theorem}[Bayes Decision Rule]
+\label{Bayes Decision Rule}
+    The Bayes classifier assigns an input \(X\) to the class with largest posterior probability.
+    \[
+    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(y = k \mid X)
+    \]
+\end{theorem}
+
+\begin{theorem}[Bayes Theorem]
+\label{bayes theorem}
+    The Bayes theorem is
+    \[
+    P(y = k \mid X) = \frac{P(X \mid y = k) P (y = k)}{P(X)}.
+    \]
+\end{theorem}
+
+Using \cref{bayes theorem}, \cref{Bayes Decision Rule}, since the denominator is \(k\) independent, the Bayes decision rule is implied to be
+\begin{equation}
+\label{bayes classifier with bayes theorem}
+\hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(X \mid y = k) P (y = k),
+\end{equation}
+where \(P(X \mid y = k)\) is the class-condition and \(P (y = k)\) is the prior probability of class \(k\).
+
+\subsubsection{Linear Discriminant Analysis (LDA)}
+
+LDA is based on the following assumptions:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(P(X \mid y = k) = N(X|\mu_k, \Sigma_k)\), a multivariate Gaussian.
+    \item All classes share the same covariance matrix \(\Sigma_k = \Sigma\).
+    \item \(\Pi_k = P(y = k)\), the prior probability.
+    \item \(\mu_k\) is the mean vector of class \(k\).
+\end{itemize}
+
+Therefore
+\begin{equation}
+    P(X \mid y = k) P(y = k) = P(X \mid y = k)\Pi_k,
+\end{equation}
+so that \cref{bayes classifier with bayes theorem} is
+\begin{equation}
+\label{bayes classifier with LDA}
+    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(X \mid y = k)\Pi_k.
+\end{equation}
+Taking the log of \cref{bayes classifier with LDA}
+\begin{equation}
+    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} \lp \log P(X \mid y = k) + \log \Pi_k \rp.
+\end{equation}
+Given that
+\[
+P(X \mid  y=k) = \frac{1}{(2\pi)^{d} |\Sigma|^{1/2}} \exp\left( -\frac{1}{2} (X - \mu_k)^T \Sigma^{-1} (X - \mu_k) \right).
+\]
+Calculate \(\log P(X \mid y = k)\) to get
+\begin{equation}
+\label{log of posterior of X y=k}
+    \log P(X \mid y = k)
+    =
+    \frac{1}{2} X^{\top}\Sigma^{-1} X
+    + X^{\top}\Sigma^{-1}\mu_k
+    - \frac{1}{2}\mu_k^{\top}\Sigma^{-1}\mu_k
+    - \frac{1}{2}\log|\Sigma|
+    -\frac{d}{2}\log(2\pi).
+\end{equation}
+Substitute into \(\hat{y}(X)\) and drop terms that are independent of \(k\) to obtain the LDA
+\[
+\hat{y}(X)
+=
+\arg\max_k \, \delta_k(X)
+\]
+where
+\[
+\delta_k(X)
+=
+X^{\top}\Sigma^{-1}\mu_k
+- \frac{1}{2}\mu_k^{\top}\Sigma^{-1}\mu_k
++ \log \Pi_k.
+\]
+
+\begin{definition}[LDA]
+\label{lda}
+    The LDA is defined as
+    \[
+    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} \delta_k(X),
+    \]
+    where \(\delta_k\) is defined as
+    \[
+    \delta_k(X) = X^T \Sigma^{-1} \mu_k - \frac{1}{2}\mu_k^T \Sigma^{-1} \mu_k + \log \Pi_k.
+    \]
+\end{definition}
+
+Suppose we have a case where \(k = 2\), i.e., two classes
+\[
+\delta_1(X) - \delta_2(X) \ge 0.
+\]
+Substitute from
+\[
+\delta_k(X) \;\Longrightarrow\; W^\top X + b \ge 0
+\]
+Then
+\[
+W = \Sigma^{-1}(\mu_1 - \mu_2),
+\quad
+b = -\frac{1}{2}
+\left(
+\mu_1^\top \Sigma^{-1} \mu_1
+-
+\mu_2^\top \Sigma^{-1} \mu_2
+\right)
++ \log\frac{\Pi_1}{\Pi_2}
+\]
+
+\subsubsection{Logistic Regression}
+
+Logistic Regression is a supervised algorithm for classification. We approximate the posterior probability \(P(y = k \mid X)\).
+
+The problem we solve is a binary classification. We have features \(X \in \mathbb{R}^d\) and \(y = \{0, 1\}\) as outputs. The goal is to model the probability that an observation belongs to class \(1\), given its features, i.e., we need
+\[
+P(y = 1 \mid X).
+\]
+
+Recall in linear regression, we try to fit a line to data or hyperplane to higher dimension data with
+\[
+\beta^TX, \quad \beta_0+\beta_1x_1 + \dots + \beta_{d-1} x_d, \quad \beta \in \mathbb{R}^d
+\]
+for
+\[
+X =
+\begin{bmatrix}
+    1 \\
+    x_1 \\
+    \vdots \\
+    x_d
+\end{bmatrix}.
+\]
+To obtain results as probability, we need to transform \(\beta\) with a sigmoid function
+\[
+\beta^TX \rightarrow \sigma\lp \beta^T X \rp = \frac{1}{1 + e^{-\beta^T X}}.
+\]
+
+\begin{center}
+    \begin{tikzpicture}[scale=1.1]
+      % Axes
+      \draw[->] (-4.2,0) -- (4.5,0) node[below right] {$z$};
+      \draw[->] (0,-0.2) -- (0,3.2) node[above left] {$\sigma(z)$};
+    
+      % Sigmoid curve: y = 3/(1+e^{-z}) so it asymptotes to 3 (nice for drawing)
+      \draw[thick, smooth, domain=-4:4, samples=200]
+        plot (\x,{3/(1+exp(-\x))});
+    
+      % Dashed asymptote at 1 (in the board it's at the top; here we draw it at y=3 then label "1")
+      \draw[dashed] (-4.2,3) -- (4.2,3);
+      \node[left] at (0,3) {$1$};
+    
+      % Mark sigma(0)=1/2
+      \fill (0,1.5) circle (1.2pt);
+      \node[left] at (0,1.8) {$\tfrac{1}{2}$};
+    
+      % Origin label
+      \node[below left] at (0,0) {$0$};
+    \end{tikzpicture}
+\end{center}
+
+The new probability after the sigmoid transformation is
+\[
+\begin{cases}
+    P(y = 1 \mid X) = \frac{1}{1 + e^{-\beta^T X}} \\
+    P(y = 0 \mid X) = 1 - P(y = 1 \mid X).
+\end{cases}
+\]
+Likelihood function:
+Given the dataset $\{(x_i, y_i)\}_{i=1}^N$ and $y \in (0,1)$, the likelihood function $L(\beta)$ is the product of the probabilities of observing each data point:
+\[
+P(y_i \mid x_i, \beta)
+=
+\bigl(P(y = 1 \mid x_i)\bigr)^{y_i}
+\bigl(P(y = 0 \mid x_i)\bigr)^{1 - y_i}
+\]
+\[
+L(\beta)
+=
+\prod_{i=1}^N P(y_i \mid x_i, \beta)
+=
+\prod_{i=1}^N
+\bigl(\sigma(\beta^\top x_i)\bigr)^{y_i}
+\bigl(1 - \sigma(\beta^\top x_i)\bigr)^{1 - y_i}
+\]
+We work with the log-likelihood function
+\[
+\hat{L}(\beta) = \Sigma_{i = 1}^N \lb y_i\sigma(\beta^TX_i) + (1 - y_i)\log \lp 1 - \sigma(\beta^T X_i) \rp \rb,
+\]
+where \(\sigma\) is the sigmoid function.
+
+It is difficult to find a closed-form solution like the LDA, so gradient-descent etc. will be used.
+
+\clearpage
+
+\section*{Lecture 3}
+\addcontentsline{toc}{section}{Lecture 3}
+\stepcounter{section}
+\setcounter{section}{3}
+\setcounter{equation}{0}
+
+\subsection{Review And Summary of Lecture 2}
+
+\subsubsection{Bayes Decision Rule}
+
+Let \(y \in \{0,1\}\) denote the class label and \(\bm X\) the feature vector. The Bayes classifier is given by
+\[
+\hat{y}(\bm X)
+= \arg\max_{k} \, \mathbb{P}(y = k \mid \bm X),
+\]
+or using Bayes' theorem, this can be written as
+\[
+\hat{y}(\bm X)
+= \arg\max_{k} \, \mathbb{P}(\bm X \mid y = k)\,{\mathbb{P}(y = k)},
+\]
+where \(\mathbb{P}(\bm X \mid y = k)\) is the class-conditional likelihood and \(\mathbb{P}(y = k) = \Pi_k\) is the prior probability of class \(k\).
+
+\subsubsection{Linear Discriminant Analysis (LDA)}
+
+In Linear Discriminant Analysis (LDA), it is assumed that
+\[
+\mathbb{P}(\bm X \mid y = k)
+\]
+is Gaussian for each class \(k\), with all classes sharing a common covariance matrix.
+
+\subsubsection{Logistic Regression}
+
+The logistic regression
+\[
+\mathbb P(y = 1 \mid X) = \sigma(\bm \beta^T \bm X) = \frac{1}{1 + e^{-\bm \beta^T \bm X}}
+\]
+directly models the posterior probability and is typically used for binary classification problems with
+\[
+y \in \{0,1\},
+\]
+and labeled data
+\[
+\lc (\bm X_i, y_i) \rc_{i=1}^n.
+\]
+
+\subsubsection{Log-Likelihood and Loss Function}
+
+The likelihood formulation is
+\[
+L(\bm \beta)
+= \prod_{i=1}^{n}
+\bigl(\sigma(\bm \beta^T \bm X_i)\bigr)^{y_i}
+\bigl(1 - \sigma(\bm \beta^T \bm X_i)\bigr)^{1 - y_i}.
+\]
+We want to choose \(\bm \beta\) that maximizes the log-likelihood:
+\[
+\log L(\bm \beta)
+= \sum_{i=1}^{n}
+\Bigl(
+y_i \log \sigma(\bm \beta^T \bm X_i)
++ (1 - y_i)\log\bigl(1 - \sigma(\bm \beta^T \bm X_i)\bigr)
+\Bigr).
+\]
+Equivalently, we minimize the negative log-likelihood, which defines the
+binary cross-entropy loss
+\[
+J(\bm \beta) = - \log L(\bm \beta).
+\]
+The binary cross-entropy loss $J(\beta)$ has no closed-form solution. We therefore turn to iterative optimization methods. For this course, we use gradient descent. 
+
+\subsection{Gradient Descent}
+
+\subsubsection{General Update Rule}
+
+Suppose
+\[
+\min_{\beta \in \mathbb R^d} f(\bm \beta) \quad f: \mathbb R^d \to \mathbb R,
+\]
+where \(f\) is differentiable. We need to find \(\bm \beta^*\) such that
+\[
+\bm \nabla f(\bm \beta^*) = 0.
+\]
+The directional derivative is minimized when
+\[
+\hat{\bm u} = -\frac{\bm \nabla f(\bm \beta^*)}{\norm {\bm \nabla f (\bm \beta^*)}}.
+\]
+The basic idea is to use gradient descent to minimize the loss function
+\[
+f \left(\bm \beta^{(k)} + \Delta \bm \beta\right)
+\simeq
+f \left(\bm \beta^{(k)}\right)
++ \underbrace{\nabla f \left(\bm \beta^{(k)}\right)^T \Delta \bm \beta}_{< 0},
+\]
+where
+\[
+\Delta \bm \beta = -\eta \, \nabla f \left(\bm \beta^{(k)}\right).
+\]
+The parameter update rule is
+\begin{equation}
+\label{update rule}
+\bm \beta^{(k+1)} = \bm \beta^{(k)} - {\eta} \, \underbrace{\bm \nabla f \left(\bm \beta^{(k)}\right)}_{\equiv \bm \nabla J(\bm \beta)}.
+\end{equation}
+where \(\eta\) is the learning rate.
+
+\subsubsection{Gradient Descent for Logistic Regression}
+
+Applying \cref{update rule} to logistic regression requires computing the gradient of $J(\bm \beta)$ with respect to $\bm \beta$. We differentiate the binary cross-entropy loss term by term. We need
+\[
+\bm \nabla_{\bm \beta} J(\bm \beta)
+= - \sum_{i=1}^{n}
+\nabla_{\bm \beta}
+\Bigl[
+y_i \log \sigma(\bm \beta^{T} \bm X_i)
++ (1 - y_i)\log \bigl(1 - \sigma(\bm \beta^{T} \bm X_i)\bigr)
+\Bigr].
+\]
+Let
+\[z_i = \bm \beta^T \bm X_i,
+\quad
+\frac{d}{dz}\log \sigma(z) = 1 - \sigma(z),
+\quad
+\frac{d}{dz}\log \bigl(1 - \sigma(z)\bigr) = -\sigma(z),
+\quad
+\bm \nabla_{\bm \beta} z_i = \bm X_i,
+\]
+then,
+\begin{equation*}
+    \left.
+    \begin{array}{r}
+        \nabla_{\bm \beta} \bigl[y_i \log \sigma(z_i)\bigr] = y_i \bigl(1 - \sigma(z_i)\bigr) \bm X_i \\[4pt]
+        \nabla_{\bm \beta} \bigl[(1 - y_i)\log \bigl(1 - \sigma(z_i)\bigr)\bigr] = - (1 - y_i)\sigma(z_i) \bm X_i       
+    \end{array}
+    \right\}
+    \;\Longrightarrow \; \bm \nabla_{\bm \beta} J(\bm \beta) = \sum_{i=1}^{n} \bigl(\sigma(z_i) - y_i\bigr) \bm X_i.
+\end{equation*}
+Note that the update rule is now
+\[
+\bm \beta^{(k+1)} = \bm \beta^{(k)} - \eta \, \bm \nabla_{\bm \beta} J(\bm \beta^{(k)}).
+\]
+
+\subsection{Example: Ising Model}
+
+To illustrate classification in a physics context, consider the Ising model phase transition. Given a spin configuration, can we classify whether the system is above or below the critical temperature?
+
+The Hamiltonian of the system is
+\[
+H = -J \sum_{\langle i j\rangle} \sigma_i \sigma_j ,
+\]
+where \(\langle ij\rangle\) denotes nearest-neighbor pairs (2D lattice) and \(\sigma_i \in \{-1,+1\}\). For \(J=1\) in the 2D square-lattice Ising model: \(T_c \approx 2.269\).
+\begin{center}
+\begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+  % Parameters
+  \def\dx{0.8}      % spacing
+  \def\sep{5.0}     % separation between panels
+  \def\L{0.6}       % arrow length
+  \def\anchor{0.5}  
+  \def\xoff{0.4}    
+  \def\yoff{0.8}    
+  
+  % Titles / labels
+  \node at (1.2,3.8) {$T<T_c$};
+  \node at (1.2,-0.6) {Order};
+  \node at (\sep+1.2,3.8) {2D lattice $T>T_c$};
+  \node at (\sep+1.2,-0.6) {Disorder};
+  \node at (\sep/2+1.2,3.8) {$T_c$};
+  % Separator (phase boundary)
+  \draw (\sep/2+1.2,-0.1) -- (\sep/2+1.2,3.3);
+  
+  % --- LEFT panel: ordered (all down) ---
+  \begin{scope}[shift={(\xoff,\yoff)}]
+    \foreach \i in {0,...,2}{
+      \foreach \j in {0,...,2}{
+        \draw[->, line width=0.5pt, line cap=round]
+          (\i*\dx,\j*\dx+\anchor*\L) -- ++(0,-\L);
+      }
+    }
+  \end{scope}
+  
+  % --- RIGHT panel: disordered (mixed) ---
+  \begin{scope}[shift={(\sep+\xoff,\yoff)}]
+    % Up arrows
+    \foreach \i/\j in {0/0, 2/0, 1/1, 0/2, 1/2}{
+      \draw[->, line width=0.5pt, line cap=round]
+        (\i*\dx,\j*\dx-\anchor*\L) -- ++(0,\L);
+    }
+    % Down arrows
+    \foreach \i/\j in {1/0, 0/1, 2/1, 2/2}{
+      \draw[->, line width=0.5pt, line cap=round]
+        (\i*\dx,\j*\dx+\anchor*\L) -- ++(0,-\L);
+    }
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+In this setting, the feature vector $\bm X$ could consist of statistics computed from the spin configuration, such as the magnetization, energy, or spatial correlation functions. The label $y \in \{0,1\}$ indicates whether the configuration was sampled from the ordered phase ($T < T_c$) or the disordered phase ($T > T_c$). Logistic regression can then be trained on labeled configurations to predict the phase from the features.
+
+\subsection{Example: Prediction of Immunotherapy Response}
+
+We consider the problem of predicting patient response to immunotherapy using pre-treatment clinical data. This example is motivated by recent work on LORIS Immunotherapy, reported in
+Nature Cancer (2024).
+
+\emph{Question}: Can we predict, prior to treatment, the probability that a patient will respond to immunotherapy using measured clinical variables?
+
+We are given labeled clinical data consisting of six measured features per patient. Let
+\[
+\bm X \in \mathbb{R}^6
+\]
+denote the feature vector for a single patient, and let
+\[
+\{(\bm X_i, y_i)\}_{i=1}^n
+\]
+be the full dataset, where \(n\) is the number of data points and
+\[
+y_i \in \{0,1\}
+\]
+indicates whether patient \(i\) responds to immunotherapy. The goal is to model the probability of response given the clinical features.
+
+We use a logistic regression model to estimate the probability of response:
+\[
+\mathbb{P}(y = 1 \mid \bm X)
+= \sigma \left(\bm \beta^{T} \bm X\right)
+= \sigma \left(
+\beta_0 + \sum_{j=1}^{6} \beta_j X_j
+\right),
+\]
+where \(\beta_0\) is the bias (intercept) term. The quantity
+\[
+\mathbb{P}(y = 1 \mid \bm X)
+\]
+represents the predicted probability that a patient responds to immunotherapy given their pre-treatment clinical variables.
+
+\subsubsection{Log-Odds of Response Approach}
+
+An equivalent and often more interpretable form of logistic regression is obtained by considering the \emph{odds} and \emph{log-odds} of response. The odds of response given the clinical features \(\bm X\) are defined as
+\[
+\frac{\mathbb{P}(y = 1 \mid \bm X)}{\mathbb{P}(y = 0 \mid \bm X)}
+= \frac{\mathbb{P}(y = 1 \mid \bm X)}{1 - \mathbb{P}(y = 1 \mid \bm X)}.
+\]
+Using the logistic regression model
+\[
+\mathbb{P}(y = 1 \mid \bm X)
+= \sigma \left(\beta_0 + \sum_{j=1}^{6} \beta_j X_j \right),
+\]
+we obtain the log-odds:
+\begin{align}
+\log \frac{\mathbb{P}(y = 1 \mid \bm X)}{\mathbb{P}(y = 0 \mid \bm X)}
+&= \log \frac{\mathbb{P}(y = 1 \mid \bm X)}{1 - \mathbb{P}(y = 1 \mid \bm X)} \notag \\
+&= \beta_0 + \sum_{j=1}^{6} \beta_j X_j.
+\end{align}
+
+\clearpage
+
+\section*{Lecture 4}
+\addcontentsline{toc}{section}{Lecture 4}
+\stepcounter{section}
+\setcounter{section}{4}
+\setcounter{equation}{0}
+
+\subsection{Support Vector Machines}
+
+SVM is a form of supervised learning, we have labeled data
+\[
+\lc (\bm X_i, y_i) \rc^n_{i=1}.
+\]
+
+(FILL IN)
+
+We have a classifier
+\[
+f(x) = \omega^T \bm X + b
+\]
+that outputs
+\[
+\operatorname{sign}f(\bm X).
+\]
+We have a decision boundary
+\[
+\omega^T \bm X + b = 0.
+\]
+Note that
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \(\bm \omega\) is the normal vector to this decision boundary.
+    \item 
+\end{itemize}
+
+\end{document}
+
+% ---------- EXTRA COMMANDS ----------
+% LIST
+[nosep, leftmargin=*]
+[nosep, label=\tiny$\bullet$]
+
+% ENUMERATE LABEL TO ABC
+[label(breaking lable in cref)=(\alph*)]
+
+% INSERT MEDIA
+\includegraphics[width=\linewidth]{}
+
+% MINI PAGE 
+\begin{minipage}[t]{\linewidth}
+    \begin{center}
+    \adjustbox{valign=t}{
+    \includegraphics[width=0.5\linewidth]{q6b.jpeg}
+    }
+    \end{center}
+\end{minipage}

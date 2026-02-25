@@ -1,0 +1,537 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper, margin=0.8in]{geometry}
+
+% PACKAGES
+\usepackage{adjustbox}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{aliascnt}
+\usepackage{bm}
+\usepackage{braket}
+\usepackage{empheq}
+\usepackage{enumitem}
+\usepackage{esint}
+\usepackage{esvect}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{cleveref} % must be included after hyperref
+\usepackage{siunitx}
+
+% BRACKETS TYPESET
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+\newcommand{\lc}{\left\{}
+\newcommand{\rc}{\right\}}
+\newcommand{\lv}{\lvert}
+\newcommand{\rv}{\rvert}
+\newcommand{\lV}{\lVert}
+\newcommand{\rV}{\rVert}
+
+% DELIMITER
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+% SET SPACE
+\usepackage{setspace}
+\onehalfspacing
+
+% ---------- DOCUMENT ----------
+\begin{document}
+
+\newpage
+\section*{Question 1}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+For $\lambda$:
+\begin{itemize}[label=\tiny$\bullet$]
+    \item $\lambda < 0$: Let $\lambda = -k^2$ ($k>0$). $u(x) = c_1 \cosh(kx) + c_2 \sinh(kx)$.
+    \item $\lambda = 0$: $u(x) = c_1 x + c_2$.
+    \item $\lambda > 0$: Let $\lambda = k^2$ ($k>0$). $u(x) = c_1 \cos(kx) + c_2 \sin(kx)$.
+\end{itemize}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{BCs:} $u(0)=0, u(L)=0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda < 0$: $u(0)=c_1=0 \implies u(x)=c_2\sinh(kx)$. $u(L)=c_2\sinh(kL)=0 \implies c_2=0$ (since $\sinh(kL) \neq 0$). Trivial solution.
+        \item $\lambda = 0$: $u(0)=c_2=0 \implies u(x)=c_1x$. $u(L)=c_1L=0 \implies c_1=0$. Trivial solution.
+        \item $\lambda > 0$: $u(0)=c_1=0 \implies u(x)=c_2\sin(kx)$. $u(L)=c_2\sin(kL)=0$. For non-trivial solutions ($c_2 \neq 0$), $\sin(kL)=0 \implies kL = n\pi$.
+    \end{itemize}
+    \textbf{Eigenvalues:} $\lambda_n = \left(\frac{n\pi}{L}\right)^2, n=1,2,\dots$ \quad \textbf{Eigenfunctions:} $\sin\left(\frac{n\pi x}{L}\right)$.
+
+    \item \textbf{BCs:} $u'(0)=0, u'(L)=0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda < 0$: $u'(x) = c_1 k \sinh(kx) + c_2 k \cosh(kx)$. $u'(0)=c_2 k = 0 \implies c_2=0$. $u'(L)=c_1 k \sinh(kL)=0 \implies c_1=0$. Trivial.
+        \item $\lambda = 0$: $u'(x)=c_1$. $u'(0)=c_1=0 \implies u(x)=c_2$ (constant). This satisfies $u'(L)=0$. Non-trivial solution exists ($u=1$).
+        \item $\lambda > 0$: $u'(0)=c_2 k = 0 \implies c_2=0$. $u'(L)=-c_1 k \sin(kL)=0 \implies \sin(kL)=0 \implies kL=n\pi$.
+    \end{itemize}
+    \textbf{Eigenvalues:} $\lambda_n = \left(\frac{n\pi}{L}\right)^2, n=0,1,2,\dots$ \quad \textbf{Eigenfunctions:} $\cos\left(\frac{n\pi x}{L}\right)$.
+
+    \item \textbf{BCs:} $u(0)=0, u'(L)=0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u(x)=c_1x+c_2$. $u(0)=c_2=0 \implies u(x)=c_1x$. $u'(L)=c_1=0$. Trivial.
+        \item $\lambda < 0$: $u(x)=c_1 \cosh(kx) + c_2 \sinh(kx)$. $u(0)=c_1=0 \implies u(x)=c_2\sinh(kx)$.
+        $u'(L)=c_2 k \cosh(kL)=0$. Since $\cosh(kL) \neq 0$, $c_2=0$. Trivial.
+        \item $\lambda > 0$: $u(0)=c_1=0 \implies u(x)=c_2\sin(kx)$. $u'(L)=c_2 k \cos(kL)=0 \implies \cos(kL)=0$.
+        $kL = (n-1/2)\pi$ for $n=1,2,\dots$
+    \end{itemize}
+    \textbf{Eigenvalues:} $\lambda_n = \left(\frac{(n-1/2)\pi}{L}\right)^2$. \quad \textbf{Eigenfunctions:} $\sin\left(\frac{(n-1/2)\pi x}{L}\right)$.
+
+    \item \textbf{BCs:} $u'(0)=0, u(L)=0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u(x)=c_1x+c_2$. $u'(0)=c_1=0 \implies u(x)=c_2$. $u(L)=c_2=0$. Trivial.
+        \item $\lambda < 0$: $u(x)=c_1 \cosh(kx) + c_2 \sinh(kx)$. $u'(0)=c_2 k=0 \implies u(x)=c_1\cosh(kx)$.
+        $u(L)=c_1 \cosh(kL)=0 \implies c_1=0$. Trivial.
+        \item $\lambda > 0$: $u'(0)=c_2 k = 0 \implies c_2=0$. $u(L)=c_1 \cos(kL)=0 \implies \cos(kL)=0$.
+        $kL = (n-1/2)\pi$ for $n=1,2,\dots$
+    \end{itemize}
+    \textbf{Eigenvalues:} $\lambda_n = \left(\frac{(n-1/2)\pi}{L}\right)^2$. \quad \textbf{Eigenfunctions:} $\cos\left(\frac{(n-1/2)\pi x}{L}\right)$.
+
+    \item \textbf{BCs:} $u(0)=0, u(L) + \beta u'(L) = 0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u(x)=c_1x+c_2$. $u(0)=c_2=0 \implies u(x)=c_1x$. 
+        $u(L)+\beta u'(L) = c_1L + \beta c_1 = c_1(L+\beta)=0$. Since $L,\beta > 0$, $c_1=0$. Trivial.
+        \item $\lambda < 0$: Let $\lambda = -k^2$. $u(x)=c_1\cosh(kx)+c_2\sinh(kx)$. $u(0)=c_1=0 \implies u(x)=c_2\sinh(kx)$.
+        $u(L)+\beta u'(L) = c_2(\sinh(kL) + \beta k \cosh(kL)) = 0$. Since $\sinh, \cosh > 0$ for $k,L > 0$, $c_2=0$. Trivial.
+        \item $\lambda > 0$: $u(0)=0 \implies u(x)=c_2 \sin(kx)$. BC at $L$:
+        $c_2 \sin(kL) + \beta c_2 k \cos(kL) = 0 \implies \tan(kL) = -\beta k$.
+    \end{itemize}
+    \textbf{Relation:} $\tan(\sqrt{\lambda} L) = -\beta \sqrt{\lambda}$. \quad \textbf{Eigenfunction:} $\sin(\sqrt{\lambda} x)$.
+
+    \item \textbf{BCs:} $u(0) - \beta u'(0) = 0, u(L) = 0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u(x)=c_1x+c_2$. $u(0)-\beta u'(0) = c_2 - \beta c_1 = 0 \implies c_2 = \beta c_1$.
+        $u(L) = c_1L + \beta c_1 = c_1(L+\beta)=0 \implies c_1=0$. Trivial.
+        \item $\lambda < 0$: $u(x)=c_1\cosh(kx)+c_2\sinh(kx)$. $c_1 - \beta c_2 k = 0 \implies c_1 = \beta k c_2$.
+        $u(L) = c_2(\beta k \cosh(kL) + \sinh(kL)) = 0 \implies c_2=0$. Trivial.
+        \item $\lambda > 0$: $c_1 = \beta k c_2 \implies u(x) = c_2(\beta k \cos(kx) + \sin(kx))$.
+        $u(L) = \beta k \cos(kL) + \sin(kL) = 0 \implies \tan(kL) = -\beta k$.
+    \end{itemize}
+    \textbf{Relation:} $\tan(\sqrt{\lambda} L) = -\beta \sqrt{\lambda}$. \quad \textbf{Eigenfunction:} $\beta \sqrt{\lambda} \cos(\sqrt{\lambda} x) + \sin(\sqrt{\lambda} x)$.
+
+    \item \textbf{BCs:} $u'(0)=0, u(L) + \beta u'(L) = 0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u'(0)=c_1=0 \implies u(x)=c_2$. $u(L)+\beta u'(L) = c_2 + 0 = 0 \implies c_2=0$. Trivial.
+        \item $\lambda < 0$: $u'(0)=c_2 k = 0 \implies u(x)=c_1\cosh(kx)$.
+        $u(L)+\beta u'(L) = c_1(\cosh(kL) + \beta k \sinh(kL)) = 0 \implies c_1=0$. Trivial.
+        \item $\lambda > 0$: $u'(0)=0 \implies c_2=0 \implies u(x)=c_1 \cos(kx)$.
+        $c_1 \cos(kL) - \beta c_1 k \sin(kL) = 0 \implies \cot(kL) = \beta k$.
+    \end{itemize}
+    \textbf{Relation:} $\cot(\sqrt{\lambda} L) = \beta \sqrt{\lambda}$. \quad \textbf{Eigenfunction:} $\cos(\sqrt{\lambda} x)$.
+
+    \item \textbf{BCs:} $u(0) - \beta u'(0) = 0, u'(L) = 0$.
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item $\lambda = 0$: $u'(L)=c_1=0 \implies u(x)=c_2$. $u(0)-\beta u'(0) = c_2 - 0 = 0 \implies c_2=0$. Trivial.
+        \item $\lambda < 0$: $u'(L) = c_1 k \sinh(kL) + c_2 k \cosh(kL) = 0 \implies c_2 = -c_1 \tanh(kL)$.
+        $u(0)-\beta u'(0) = c_1(1 + \beta k \tanh(kL)) = 0 \implies c_1=0$. Trivial.
+        \item $\lambda > 0$: $c_1 = \beta k c_2$. $u'(L) = c_2(-\beta k^2 \sin(kL) + k \cos(kL)) = 0$.
+        $\cos(kL) = \beta k \sin(kL) \implies \cot(kL) = \beta k$.
+    \end{itemize}
+    \textbf{Relation:} $\cot(\sqrt{\lambda} L) = \beta \sqrt{\lambda}$. \quad \textbf{Eigenfunction:} $\beta \sqrt{\lambda} \cos(\sqrt{\lambda} x) + \sin(\sqrt{\lambda} x)$.
+\end{enumerate}
+
+\newpage
+\section*{Question 2}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+Assume $u(x, y) = M(x)N(y)$. Substituting into the PDE:
+\begin{gather*}
+M''(x)N(y) + M(x)N''(y) - aM(x)N(y) = 0 \\
+\frac{M''}{M} + \frac{N''}{N} - a = 0 \implies -\frac{M''}{M} = \frac{N''}{N} - a = \lambda.
+\end{gather*}
+The two ODEs are:
+\begin{gather*}
+    M'' + \lambda M = 0 \\
+    N'' - (a + \lambda)N = 0.
+\end{gather*}
+The boundary conditions imply $M'(0) = 0$ and $M'(L) = 0$. From the results in question 1(b), the eigenvalues and eigenfunctions:
+\[
+\lambda_n = \left(\frac{n\pi}{L}\right)^2, \quad M_n(x) = \cos\left(\frac{n\pi x}{L}\right), \quad n = 0, 1, 2, \dots
+\]
+Substitute $\lambda_n$ into the equation for $N$:
+\[
+N_n'' - \left(a + \left(\frac{n\pi}{L}\right)^2\right) N_n = 0.
+\]
+Let $\mu_n^2 = a + \left(\frac{n\pi}{L}\right)^2$. Given $a > 0$ and $\lambda_n \ge 0$, it follows that $\mu_n^2 > 0$. The general solution is:
+\[
+N_n(y) = A_n \cosh(\mu_n y) + B_n \sinh(\mu_n y).
+\]
+The general solution for the PDE is then:
+\[
+u(x, y) = \sum_{n=0}^{\infty} \cos\left(\frac{n\pi x}{L}\right) \left[ A_n \cosh(\mu_n y) + B_n \sinh(\mu_n y) \right].
+\]
+
+\newpage
+\section*{Question 3}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+The given Laplace's equation is:
+\[
+\frac{1}{r} \frac{\partial}{\partial r} \left( r \frac{\partial u}{\partial r} \right) + \frac{1}{r^2} \frac{\partial^2 u}{\partial \theta^2} = 0.
+\]
+Assume $u(r, \theta) = R(r)\Theta(\theta)$. Substitute into the PDE:
+\begin{gather*}  
+    \frac{1}{r} \frac{d}{dr} \left( r R' \Theta \right) + \frac{1}{r^2} R \Theta'' = 0 \\
+    \frac{\Theta}{r} (R' + rR'') + \frac{R}{r^2} \Theta'' = 0 \\
+    \frac{r(R' + rR'')}{R} + \frac{\Theta''}{\Theta} = 0 \\
+    \frac{r^2 R'' + r R'}{R} = -\frac{\Theta''}{\Theta} = \lambda.
+\end{gather*}
+The two ODEs are:
+\begin{gather*}
+    \Theta'' + \lambda \Theta = 0 \\
+    r^2 R'' + r R' - \lambda R = 0.
+\end{gather*}
+
+\newpage
+\section*{Question 4}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+The given Laplace's equation is:
+\[
+\frac{1}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial u}{\partial r} \right) + \frac{1}{r^2 \sin \phi} \frac{\partial}{\partial \phi} \left( \sin \phi \frac{\partial u}{\partial \phi} \right) = 0.
+\]
+Assume $u(r, \phi) = R(r)\Phi(\phi)$. Substitute into the PDE:
+\begin{gather*}
+    \frac{\Phi}{r^2} \frac{d}{dr} (r^2 R') + \frac{R}{r^2 \sin \phi} \frac{d}{d\phi} (\sin \phi \Phi') = 0 \\
+    \frac{1}{R} (r^2 R')' + \frac{1}{\Phi \sin \phi} (\sin \phi \Phi')' = 0 \\
+    \frac{(r^2 R')'}{R} = -\frac{1}{\Phi \sin \phi} (\sin \phi \Phi')' = \lambda.
+\end{gather*}
+The two ODEs are:
+\begin{gather*}
+    (r^2 R')' - \lambda R = 0 \implies r^2 R'' + 2r R' - \lambda R = 0 \\
+    \frac{1}{\sin \phi} \frac{d}{d\phi} \left( \sin \phi \frac{d\Phi}{d\phi} \right) + \lambda \Phi = 0.
+\end{gather*}
+
+\newpage
+\section*{Question 5}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Eigenvalue for $M_j(x, y) = 1$:
+    Taking derivatives:
+    \[ \frac{\partial M_j}{\partial x} = 0, \quad \frac{\partial^2 M_j}{\partial x^2} = 0, \quad \frac{\partial M_j}{\partial y} = 0, \quad \frac{\partial^2 M_j}{\partial y^2} = 0 \]
+    Substituting into the ODE:
+    \[ -(0 + 0) = \lambda_j (1) \implies \lambda_j = 0 \]
+    Since all first derivatives are zero, the gradient $\nabla M_j = \vec{0}$, so the boundary condition is satisfied everywhere.
+
+    \item Eigenvalue for $M_k(x, y) = \cos(\alpha \pi x) \cos(\beta \pi y)$:
+    Taking partial derivatives:
+    \begin{align*}
+        \frac{\partial M_k}{\partial x} &= -\alpha \pi \sin(\alpha \pi x) \cos(\beta \pi y) \\
+        \frac{\partial^2 M_k}{\partial x^2} &= -\alpha^2 \pi^2 \cos(\alpha \pi x) \cos(\beta \pi y) \\
+        \frac{\partial M_k}{\partial y} &= -\beta \pi \cos(\alpha \pi x) \sin(\beta \pi y) \\
+        \frac{\partial^2 M_k}{\partial y^2} &= -\beta^2 \pi^2 \cos(\alpha \pi x) \cos(\beta \pi y)
+    \end{align*}
+    Substituting into $-(M_{xx} + M_{yy})$:
+    \begin{gather*}
+        -[-\alpha^2 \pi^2 M_k - \beta^2 \pi^2 M_k] = \lambda_k M_k \\
+        (\alpha^2 + \beta^2) \pi^2 M_k = \lambda_k M_k
+    \end{gather*}
+    Thus, the eigenvalue is $\lambda_k = (\alpha^2 + \beta^2) \pi^2$. At $x=0$ and $x=1$: $\frac{\partial M_k}{\partial x} \propto \sin(\alpha \pi x)$. Since $\sin(0) = 0$ and $\sin(\alpha \pi) = 0$ for integer $\alpha$, the BC is satisfied. At $y=0$ and $y=1$: $\frac{\partial M_k}{\partial y} \propto \sin(\beta \pi y)$. Since $\sin(0) = 0$ and $\sin(\beta \pi) = 0$ for integer $\beta$, the BC is satisfied.
+
+    \item
+    \begin{align*}
+        (M_j, M_k) &= \int_0^1 \int_0^1 (1) \cdot \cos(\alpha \pi x) \cos(\beta \pi y) \, dx dy \\
+        &= \lp \int_0^1 \cos(\alpha \pi x) \, dx \rp \lp \int_0^1 \cos(\beta \pi y) \, dy \rp \\
+        &= \lb \frac{1}{\alpha \pi} \sin(\alpha \pi x) \rb_0^1 \cdot \lb \frac{1}{\beta \pi} \sin(\beta \pi y) \rb_0^1 \\
+        &= \lp \frac{\sin(\alpha \pi) - \sin(0)}{\alpha \pi} \rp \lp \frac{\sin(\beta \pi) - \sin(0)}{\beta \pi} \rp
+    \end{align*}
+    Since $\alpha, \beta$ are positive integers, $\sin(\alpha \pi) = 0$ and $\sin(\beta \pi) = 0$.
+    \[ (M_j, M_k) = 0 \cdot 0 = 0 \]
+    The eigenfunctions are orthogonal.
+\end{enumerate}
+
+\newpage
+\section*{Question 6}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Expanding the derivative in the Sturm-Liouville form $(*)$:
+    \[
+    -(p u')' + q u = -p u'' - p' u' + q u = \lambda \rho u.
+    \]
+    Multiplying the ODE by $r/a_0$:
+    \begin{gather*}
+        -\frac{r}{a_0} a_0 u'' - \frac{r a_1}{a_0} u' + \frac{r a_2}{a_0} u = \lambda \frac{r}{a_0} u \\
+        -r u'' - \frac{r a_1}{a_0} u' + \frac{r a_2}{a_0} u = \lambda \frac{r}{a_0} u.        
+    \end{gather*}
+    This gives $p = r$. Checking the derivative term:
+    \[
+    p' = r' = \frac{d}{dx} \exp\left(\int \frac{a_1}{a_0} dx\right) = \frac{a_1}{a_0} \exp\left(\int \frac{a_1}{a_0} dx\right) = \frac{a_1}{a_0} r.
+    \]
+    This matches the $u'$ coefficient. The terms are:
+    \[
+    p = r, \quad q = \frac{a_2 r}{a_0}, \quad \rho = \frac{r}{a_0}.
+    \]
+    Condition on $a_0$: We require $\rho = \frac{r}{a_0} > 0$. Since the exponential function $r(x)$ is strictly positive ($r > 0$), we must require:
+    \[ a_0(x) > 0 \]
+
+    Condition on $a_2$: We require $q = \frac{a_2 r}{a_0} \geq 0$. Since $r > 0$ and $a_0 > 0$, we require:
+    \[ a_2(x) \geq 0 \]
+
+    Condition on $a_1$: For the integrating factor $r(x)$ and the derivative $p'$ to be well-defined, the function $\frac{a_1}{a_0}$ must be integrable and continuous. Since $a_0 > 0$, this implies:
+    \[ a_1(x) \text{ must be a continuous function.} \]
+
+    \item For $-x^2 u'' - ax u' - bu = \lambda u$, we have:
+    \[
+    a_0 = x^2, \quad a_1 = ax, \quad a_2 = -b.
+    \]
+    The integrating factor is:
+    \[
+    r = \exp\left(\int \frac{ax}{x^2} dx\right) = \exp(a \ln x) = x^a.
+    \]
+    Substituting into the expressions from part (a):
+    \begin{align*}
+        p &= x^a \\
+        \rho &= \frac{x^a}{x^2} = x^{a-2} \\
+        q &= \frac{-b x^a}{x^2} = -b x^{a-2}
+    \end{align*}
+    The Sturm-Liouville form is:
+    \[
+    -(x^a u')' - b x^{a-2} u = \lambda x^{a-2} u.
+    \]
+\end{enumerate}
+
+\newpage
+\section*{Question 7}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item We rewrite the given equation $x^2 M'' + x M' + \lambda M = 0$ as:
+    \[
+    -x^2 M'' - x M' = \lambda M.
+    \]
+    Comparing this to question 6 part (b):
+    \[
+    a = 1, \quad b = 0.
+    \]
+    The Sturm-Liouville form is:
+    \[
+    -(x M')' = \lambda \frac{1}{x} M.
+    \]
+    The weight function is
+    \[\rho(x) = \frac{1}{x}.\]
+
+    \item Let $x = e^z$, then
+    \[z = \ln x \quad \text{and} \quad \frac{dz}{dx} = \frac{1}{x}.\]
+    The derivatives are:
+    \begin{align*}
+        M' &= \frac{dM}{dz} \frac{dz}{dx} = \frac{1}{x} \frac{dM}{dz} \\
+        x M' &= \frac{dM}{dz}
+    \end{align*}
+    and
+    \begin{align*}
+        M'' &= \frac{d}{dx} \left( \frac{1}{x} \frac{dM}{dz} \right) \\
+        &= -\frac{1}{x^2} \frac{dM}{dz} + \frac{1}{x} \frac{d}{dx} \left( \frac{dM}{dz} \right) \\
+        &= -\frac{1}{x^2} \frac{dM}{dz} + \frac{1}{x} \left( \frac{1}{x} \frac{d^2M}{dz^2} \right) \\
+        &= \frac{1}{x^2} \left( \frac{d^2M}{dz^2} - \frac{dM}{dz} \right) \\
+        x^2 M'' &= \frac{d^2M}{dz^2} - \frac{dM}{dz}.
+    \end{align*}
+    Substituting these into the ODE:
+    \begin{gather*}
+        \left( \frac{d^2M}{dz^2} - \frac{dM}{dz} \right) + \frac{dM}{dz} + \lambda M = 0 \\
+        \frac{d^2M}{dz^2} + \lambda M = 0.        
+    \end{gather*}
+    Since $\lambda \ge 0$, the general solutions for $M(z)$ are:
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item If $\lambda = 0$: $M(z) = c_1 z + c_2$.
+        \item If $\lambda > 0$: $M(z) = c_1 \cos(\sqrt{\lambda} z) + c_2 \sin(\sqrt{\lambda} z)$.
+    \end{itemize}
+
+    \item Substituting $z = \ln x$ back to find $M(x)$:
+    \begin{itemize}[label=\tiny$\bullet$]
+        \item If $\lambda = 0$: $M(x) = c_1 \ln x + c_2$.
+        \item If $\lambda > 0$: $M(x) = c_1 \cos(\sqrt{\lambda} \ln x) + c_2 \sin(\sqrt{\lambda} \ln x)$.
+    \end{itemize}
+    Then for:
+    \[
+    M(x) = c_1 \ln x + c_2,
+    \]
+    we apply boundary condition $M(1) = 0$:
+    \[
+    c_1 \ln(1) + c_2 = 0 \implies c_1(0) + c_2 = 0 \implies c_2 = 0.
+    \]
+    Apply the other boundary condition $M(L) = 0$:
+    \[
+    c_1 \ln L = 0.
+    \]
+    Since $L > 1$, we know that $\ln L \neq 0$. Therefore, we must have $c_1 = 0$. This is the trivial solution, so $\lambda = 0$ is not an eigenvalue.
+
+    For:
+    \[
+    M(x) = c_1 \cos(\sqrt{\lambda} \ln x) + c_2 \sin(\sqrt{\lambda} \ln x),
+    \]
+    we apply boundary condition $M(1) = 0$:
+    \[
+    c_1 \cos(0) + c_2 \sin(0) = c_1 = 0.
+    \]
+    Apply the other boundary condition $M(L) = 0$:
+    \[
+    c_2 \sin(\sqrt{\lambda} \ln L) = 0.
+    \]
+    For a non-trivial solution ($c_2 \neq 0$), we require:
+    \[
+    \sqrt{\lambda} \ln L = n\pi, \quad n = 1, 2, 3, \dots
+    \]
+    Solving for the eigenvalues $\lambda_n$:
+    \[
+    \lambda_n = \left( \frac{n\pi}{\ln L} \right)^2.
+    \]
+    The corresponding eigenfunctions are:
+    \[
+    M_n(x) = c_2 \sin\left( \frac{n\pi \ln x}{\ln L} \right).
+    \]
+
+    \item Using the weight function found in part (a):
+    \[
+    I = \int_1^L M_n(x) M_m(x) \rho(x) \, dx = \int_1^L \sin\left( \frac{n\pi \ln x}{\ln L} \right) \sin\left( \frac{m\pi \ln x}{\ln L} \right) \frac{1}{x} \, dx.
+    \]
+    Substituting $u = \ln x$, so $du = \frac{1}{x} dx$. Limits change from $[1, L]$ to $[0, \ln L]$:
+    \[
+    I = \int_0^{\ln L} \sin\left( \frac{n\pi u}{\ln L} \right) \sin\left( \frac{m\pi u}{\ln L} \right) \, du.
+    \]
+    Using $\sin A \sin B = \frac{1}{2}[\cos(A-B) - \cos(A+B)]$:
+    \[
+    I = \frac{1}{2} \int_0^{\ln L} \left[ \cos\left( \frac{(n-m)\pi u}{\ln L} \right) - \cos\left( \frac{(n+m)\pi u}{\ln L} \right) \right] \, du.
+    \]
+    Integrating:
+    \[
+    I = \frac{1}{2} \left[ \frac{\ln L}{(n-m)\pi} \sin\left( \frac{(n-m)\pi u}{\ln L} \right) - \frac{\ln L}{(n+m)\pi} \sin\left( \frac{(n+m)\pi u}{\ln L} \right) \right]_0^{\ln L}.
+    \]
+    At $u = \ln L$, the arguments become $(n-m)\pi$ and $(n+m)\pi$. Since sine of any integer multiple of $\pi$ is zero, and $\sin(0)=0$, the entire expression vanishes.
+    \[
+    I = 0.
+    \]
+    Thus, the eigenfunctions are orthogonal.
+\end{enumerate}
+
+\newpage
+\section*{Question 8}
+\stepcounter{section}
+\setcounter{equation}{0}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Let $u(x, t) = M(x)N(t)$. Substituting into the PDE:
+    \begin{gather*}
+    M N' = D M'' N - V_0 M' N \\
+    \frac{N'}{N} = \frac{D M'' - V_0 M'}{M} = \lambda.
+    \end{gather*}
+    This gives two ODEs:
+    \begin{gather*}
+        N'(t) - \lambda N(t) = 0 \\
+        D M''(x) - V_0 M'(x) - \lambda M(x) = 0.
+    \end{gather*}
+    Following question 6 again, we multiply by the integrating factor
+    \[p(x) = \exp\left(-\int \frac{V_0}{D} dx\right) = e^{-V_0 x/D}.\]
+    Then:
+    \[
+    e^{-V_0 x/D} (D M'' - V_0 M') - \lambda e^{-V_0 x/D} M = 0.
+    \]
+    By the product rule:
+    \[
+    D e^{-V_0 x/D} M'' - V_0 e^{-V_0 x/D} M' = \frac{d}{dx} \left( D e^{-V_0 x/D} M' \right).
+    \]
+    Thus:
+    \[
+    \left( D e^{-V_0 x/D} M' \right)' - \lambda e^{-V_0 x/D} M = 0,
+    \]
+    with:
+    \[
+    p(x) = D e^{-V_0 x/D}, \quad q(x) = 0, \quad w(x) = -e^{-V_0 x/D}.
+    \]
+
+    \item Since checking for signs of \(\lambda\) directly and determine the general solutions like we did for question 1 and 7 is difficult, to satisfy the boundary conditions $M(0)=0$ and $M(L)=0$, the solutions can only be oscillatory since exponential or linear solutions cannot return to zero without being zero everywhere. This means that the characteristic roots must be complex. The characteristic equation of the ODE is:
+    \[
+    D r^2 - V_0 r - \lambda = 0.
+    \]
+    Since we need oscillatory solutions, let the roots be $r = \alpha \pm i\omega$, where:
+    \[
+    \alpha = \frac{V_0}{2D}, \quad \omega = \frac{\sqrt{-(V_0^2 + 4D\lambda)}}{2D}.
+    \]
+    The general solution is:
+    \[
+    M(x) = e^{\alpha x} [A \cos(\omega x) + B \sin(\omega x)].
+    \]
+    Applying $M(0) = 0$:
+    \[
+    1 \cdot (A + 0) = 0 \implies A = 0.
+    \]
+    Applying $M(L) = 0$:
+    \[
+    B e^{\alpha L} \sin(\omega L) = 0.
+    \]
+    For a non-trivial solution ($B \neq 0$), we require $\sin(\omega L) = 0$, which implies:
+    \[
+    \omega_n = \frac{n\pi}{L}, \quad n = 1, 2, 3, \dots
+    \]
+    Substituting back to find $\lambda_n$:
+    \[
+    \omega_n^2 = \frac{-(V_0^2 + 4D\lambda_n)}{4D^2} \implies \lambda_n = -\frac{V_0^2}{4D} - D \left(\frac{n\pi}{L}\right)^2.
+    \]
+    The eigenfunctions for $M(x)$ are:
+    \[
+    M_n(x) = e^{\frac{V_0 x}{2D}} \sin\left(\frac{n\pi x}{L}\right).
+    \]
+    The solution to $N' - \lambda_n N = 0$ is:
+    \[
+    N_n(t) = e^{\lambda_n t} = \exp\left[ -\left( \frac{V_0^2}{4D} + \frac{D n^2 \pi^2}{L^2} \right) t \right].
+    \]
+
+    \item Similar to part (b), to satisfy the boundary conditions $\frac{\partial u}{\partial x}(0, t) = 0$ and $\frac{\partial u}{\partial x}(L, t) = 0$ (which imply $M'(0)=0$ and $M'(L)=0$), the solutions can only be oscillatory since exponential or linear solutions cannot have derivatives that return to zero without being zero everywhere. This means that the characteristic roots must be complex. The characteristic equation of the ODE is:
+    \[
+    D r^2 - V_0 r - \lambda = 0.
+    \]
+    Since we need oscillatory solutions, let the roots be $r = \alpha \pm i\omega$, where:
+    \[
+    \alpha = \frac{V_0}{2D}, \quad \omega = \frac{\sqrt{-(V_0^2 + 4D\lambda)}}{2D}.
+    \]
+    The general solution is:
+    \[
+    M(x) = e^{\alpha x} [A \cos(\omega x) + B \sin(\omega x)].
+    \]
+    We need the derivative $M'(x)$ to apply the boundary conditions:
+    \[
+    M'(x) = e^{\alpha x} [ (\alpha A + \omega B)\cos(\omega x) + (\alpha B - \omega A)\sin(\omega x) ].
+    \]
+    Applying $M'(0) = 0$:
+    \[
+    1 \cdot [ (\alpha A + \omega B) \cdot 1 + 0 ] = 0 \implies B = -A \frac{\alpha}{\omega}.
+    \]
+    Applying $M'(L) = 0$:
+    \[
+    e^{\alpha L} [ (\alpha A + \omega B)\cos(\omega L) + (\alpha B - \omega A)\sin(\omega L) ] = 0.
+    \]
+    The first term is zero from the first condition. Then:
+    \[
+    (\alpha B - \omega A) \sin(\omega L) = 0.
+    \]
+    For a non-trivial solution ($A \neq 0$), we require $\sin(\omega L) = 0$, which implies:
+    \[
+    \omega_n = \frac{n\pi}{L}, \quad n = 1, 2, 3, \dots
+    \]
+    Substituting back to find $\lambda_n$:
+    \[
+    \omega_n^2 = \frac{-(V_0^2 + 4D\lambda_n)}{4D^2} \implies \lambda_n = -\frac{V_0^2}{4D} - D \left(\frac{n\pi}{L}\right)^2.
+    \]
+    The eigenfunctions for $M(x)$ are found by substituting $B = -A \frac{\alpha}{\omega_n}$ back into the general solution:
+    \[
+    M_n(x) = e^{\frac{V_0 x}{2D}} \left[ \cos\left(\frac{n\pi x}{L}\right) - \frac{V_0 L}{2 D n \pi} \sin\left(\frac{n\pi x}{L}\right) \right].
+    \]
+    The solution to $N' - \lambda_n N = 0$ is:
+    \[
+    N_n(t) = e^{\lambda_n t} = \exp\left[ -\left( \frac{V_0^2}{4D} + \frac{D n^2 \pi^2}{L^2} \right) t \right].
+    \]
+\end{enumerate}
+
+\end{document}
