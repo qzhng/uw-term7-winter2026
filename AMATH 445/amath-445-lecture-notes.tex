@@ -526,105 +526,166 @@ The key elements of reinforcement learning are:
 
 \subsubsection{Semi-supervised and Self-supervised Learning}
 
+\begin{definition}[Semi-supervised Learning]
+  In semi-supervised learning, the model is trained on a small set of labeled data
+  \begin{equation}
+    \{(\bm{X}_i,\, y_i)\}_{i=1}^{N_l},
+  \end{equation}
+  combined with a large set of unlabeled data
+  \begin{equation}
+    \{\bm{X}_j\}_{j=1}^{N_u}, \quad N_u \gg N_l.
+  \end{equation}
+  The model leverages the labeled data to learn initial patterns and then uses the unlabeled data to refine its understanding and improve generalization and performance.
+\end{definition}
 
-\subsubsection{Integrating Mechanistic Models with ML}
+\begin{definition}[Self-supervised Learning]
+  Self-supervised learning is a type of unsupervised learning in which the model generates its own pseudo-labels from the input data via a \emph{pretext task}. Given an unlabeled dataset
+  \begin{equation}
+    \{\bm{X}_i\}_{i=1}^N,
+  \end{equation}
+  the pretext task automatically constructs labeled training pairs $\{(\tilde{\bm{X}}_i,\, \hat{y}_i)\}_{i=1}^N$ by augmenting, masking, or transforming the original data, where $\hat{y}_i$ is the pseudo-label. The model then trains on these pairs in a supervised fashion, learning useful internal representations without requiring manual annotations.
+\end{definition}
 
-The goal is to integrate physical laws into the ML model.
+\begin{note}[Pretext Task]
+  A pretext task is an artificial task designed to generate pseudo-labels from unlabeled data. The model does not ultimately care about solving the pretext task itself, the goal is to learn rich internal representations that can be transferred to downstream tasks. Common approaches include:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Masking:} Hide part of the input and train the model to predict the missing piece (e.g., masked language modeling in BERT).
+    \item \textbf{Transformation prediction:} Apply a known transformation (e.g., rotation by $0^\circ, 90^\circ, 180^\circ, 270^\circ$) and train the model to predict which transformation was applied.
+    \item \textbf{Next-token prediction:} Train the model to predict the next element in a sequence given all previous elements (e.g., GPT).
+  \end{itemize}
+\end{note}
+
+\begin{note}[Self-supervised Learning vs.\ Unsupervised Learning]
+  Both self-supervised and unsupervised learning operate on unlabeled data $\{\bm{X}_i\}_{i=1}^N$, but they differ in mechanism:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Unsupervised learning} discovers structure directly from the data distribution $p(\bm{X})$ without any labels (e.g., clustering, dimensionality reduction).
+    \item \textbf{Self-supervised learning} manufactures pseudo-labels via a pretext task and then trains in a supervised fashion on the resulting (input, pseudo-label) pairs.
+  \end{itemize}
+  In other words, unsupervised learning finds patterns without labels, while self-supervised learning creates its own labels and uses the supervised learning framework to learn representations.
+\end{note}
+
+\begin{note}[Integrating Mechanistic Models with ML]
+  Integrating Mechanistic Models with Machine Learning: Using physical laws or domain knowledge to inform and constrain machine learning models, enhancing their interpretability and reliability.
+\end{note}
 
 \subsection{Supervised Learning and Classification}
 
 \subsubsection{The Problem Statement of Classification}
 
-The input (feature vectors) is \(X \in \mathbb{R}^d\), the output is the class label is a discrete variable \(y \in \{1, 2, 3, \dots, k\}\). Given a new \(X\), the model should predict which class it belongs to.
+The input (feature vector) is $\bm{X} \in \mathbb{R}^d$, the output (class label) is a discrete variable $y \in \{1, 2, 3, \dots, K\}$. Given a new $\bm{X}_\text{new}$, the model should predict which class it belongs to, $y_\text{new}$.
 
 \subsubsection{A Probabilistic View of Classification}
 
 \begin{definition}[Posterior Probability]
 \label{Posterior Probability}
     The posterior probability is defined as
-    \[
-    P(y = k \mid X),
-    \]
-    where \(y = k\) is the hypothesis and \(X\) is the data.
+    \begin{equation}
+      P(y = k \mid \bm{X}),
+    \end{equation}
+    where $y = k$ is the hypothesis and $\bm{X}$ is the data.
 \end{definition}
 
-The distinction is between conditional and posterior probability is not mathematical—it is conceptual. Posterior emphasizes learning from data, while conditional is a neutral probabilistic relationship.
+\begin{insight}[Posterior Probability vs. Conditional Probability]
+  The distinction between conditional and posterior probability is not mathematical, it is conceptual. Posterior emphasizes learning from data, while conditional is a neutral probabilistic relationship.
+\end{insight}
 
 We want to minimize the probability of misclassifications.
 
 \begin{theorem}[Bayes Decision Rule]
 \label{Bayes Decision Rule}
-    The Bayes classifier assigns an input \(X\) to the class with largest posterior probability.
-    \[
-    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(y = k \mid X)
-    \]
+    The Bayes classifier assigns an input $\bm{X}$ to the class with largest posterior probability
+    \begin{equation}
+      \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(y = k \mid \bm{X}).
+    \end{equation}
 \end{theorem}
 
 \begin{theorem}[Bayes Theorem]
 \label{bayes theorem}
     The Bayes theorem is
-    \[
-    P(y = k \mid X) = \frac{P(X \mid y = k) P (y = k)}{P(X)}.
-    \]
+    \begin{equation}
+      P(y = k \mid \bm{X}) = \frac{P(\bm{X} \mid y = k)\, P(y = k)}{P(\bm{X})}.
+    \end{equation}
+    It flip which variable is being conditioned on.
 \end{theorem}
 
-Using \cref{bayes theorem}, \cref{Bayes Decision Rule}, since the denominator is \(k\) independent, the Bayes decision rule is implied to be
+\begin{definition}
+  The conditional probabilit is given by
+  \begin{equation}
+    P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
+  \end{equation}
+\end{definition}
+
+\begin{note}[Posterior, Likelihood, and Conditional Probability]
+  All three are conditional probabilities $P(A \mid B)$, but differ in context:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Conditional probability:} The general mathematical concept $P(A \mid B)$, with no particular interpretation attached.
+    \item \textbf{Posterior probability} $P(y = k \mid \bm{X})$\textbf{:} A conditional probability where we condition on \emph{data} to learn about a \emph{hypothesis}. ``Posterior'' means \emph{after} --- it is our belief about the class \emph{after} observing the evidence.
+    \item \textbf{Likelihood} $P(\bm{X} \mid y = k)$\textbf{:} A conditional probability where we condition on a \emph{hypothesis} to evaluate how well it explains the \emph{data}.
+    \item \textbf{Prior probability} $P(y = k)$\textbf{:} Our belief about the class \emph{before} observing any data.
+  \end{itemize}
+  The distinction is conceptual, not mathematical. Bayes Theorem connects them:
+  \[
+    \underbrace{P(y = k \mid \bm{X})}_{\text{posterior}} = \frac{\overbrace{P(\bm{X} \mid y = k)}^{\text{likelihood}} \cdot \overbrace{P(y = k)}^{\text{prior}}}{\underbrace{P(\bm{X})}_{\text{evidence}}}.
+  \]
+\end{note}
+
+Using \cref{Bayes Decision Rule} and \cref{bayes theorem}, since the denominator is $k$ independent, the Bayes decision rule is implied to be
 \begin{equation}
 \label{bayes classifier with bayes theorem}
-\hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(X \mid y = k) P (y = k),
+\hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(\bm{X} \mid y = k)\, P(y = k),
 \end{equation}
-where \(P(X \mid y = k)\) is the class-condition and \(P (y = k)\) is the prior probability of class \(k\).
+where $P(\bm{X} \mid y = k)$ is the class-conditional likelihood and $P(y = k)$ is the prior probability of class $k$.
 
 \subsubsection{Linear Discriminant Analysis (LDA)}
 
 LDA is based on the following assumptions:
 \begin{itemize}[nosep, label=\tiny$\bullet$]
-    \item \(P(X \mid y = k) = N(X|\mu_k, \Sigma_k)\), a multivariate Gaussian.
-    \item All classes share the same covariance matrix \(\Sigma_k = \Sigma\).
-    \item \(\Pi_k = P(y = k)\), the prior probability.
-    \item \(\mu_k\) is the mean vector of class \(k\).
+    \item $P(\bm{X} \mid y = k) = \mathcal{N}(\bm{X} \mid \bm{\mu}_k, \Sigma)$, a multivariate Gaussian.
+    \item All classes share the same covariance matrix $\Sigma_k = \Sigma$.
+    \item $\Pi_k = P(y = k)$, the prior probability.
+    \item $\bm{\mu}_k \in \mathbb{R}^d$ is the mean vector of class $k$.
 \end{itemize}
 
 Therefore
 \begin{equation}
-    P(X \mid y = k) P(y = k) = P(X \mid y = k)\Pi_k,
+    P(\bm{X} \mid y = k)\, P(y = k) = P(\bm{X} \mid y = k)\,\Pi_k,
 \end{equation}
 so that \cref{bayes classifier with bayes theorem} is
 \begin{equation}
 \label{bayes classifier with LDA}
-    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} P(X \mid y = k)\Pi_k.
+    \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(\bm{X} \mid y = k)\,\Pi_k.
 \end{equation}
 Taking the log of \cref{bayes classifier with LDA}
 \begin{equation}
-    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} \lp \log P(X \mid y = k) + \log \Pi_k \rp.
+    \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} \lp \log P(\bm{X} \mid y = k) + \log \Pi_k \rp.
 \end{equation}
 Given that
 \[
-P(X \mid  y=k) = \frac{1}{(2\pi)^{d} |\Sigma|^{1/2}} \exp\left( -\frac{1}{2} (X - \mu_k)^T \Sigma^{-1} (X - \mu_k) \right).
+P(\bm{X} \mid y=k) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\!\left( -\frac{1}{2} (\bm{X} - \bm{\mu}_k)^\top \Sigma^{-1} (\bm{X} - \bm{\mu}_k) \right).
 \]
-Calculate \(\log P(X \mid y = k)\) to get
+Calculate $\log P(\bm{X} \mid y = k)$ to get
 \begin{equation}
 \label{log of posterior of X y=k}
-    \log P(X \mid y = k)
+    \log P(\bm{X} \mid y = k)
     =
-    \frac{1}{2} X^{\top}\Sigma^{-1} X
-    + X^{\top}\Sigma^{-1}\mu_k
-    - \frac{1}{2}\mu_k^{\top}\Sigma^{-1}\mu_k
+    -\frac{1}{2} \bm{X}^{\top}\Sigma^{-1} \bm{X}
+    + \bm{X}^{\top}\Sigma^{-1}\bm{\mu}_k
+    - \frac{1}{2}\bm{\mu}_k^{\top}\Sigma^{-1}\bm{\mu}_k
     - \frac{1}{2}\log|\Sigma|
     -\frac{d}{2}\log(2\pi).
 \end{equation}
-Substitute into \(\hat{y}(X)\) and drop terms that are independent of \(k\) to obtain the LDA
+Substitute into $\hat{y}(\bm{X})$ and drop terms that are independent of $k$ to obtain the LDA
 \[
-\hat{y}(X)
+\hat{y}(\bm{X})
 =
-\arg\max_k \, \delta_k(X)
+\arg\max_k \, \delta_k(\bm{X})
 \]
 where
 \[
-\delta_k(X)
+\delta_k(\bm{X})
 =
-X^{\top}\Sigma^{-1}\mu_k
-- \frac{1}{2}\mu_k^{\top}\Sigma^{-1}\mu_k
+\bm{X}^{\top}\Sigma^{-1}\bm{\mu}_k
+- \frac{1}{2}\bm{\mu}_k^{\top}\Sigma^{-1}\bm{\mu}_k
 + \log \Pi_k.
 \]
 
@@ -632,51 +693,51 @@ X^{\top}\Sigma^{-1}\mu_k
 \label{lda}
     The LDA is defined as
     \[
-    \hat{y}(X) = {\operatorname{arg} \max}_{k \in \{ 1, 2, \dots , k\}} \delta_k(X),
+    \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} \delta_k(\bm{X}),
     \]
-    where \(\delta_k\) is defined as
+    where $\delta_k$ is defined as
     \[
-    \delta_k(X) = X^T \Sigma^{-1} \mu_k - \frac{1}{2}\mu_k^T \Sigma^{-1} \mu_k + \log \Pi_k.
+    \delta_k(\bm{X}) = \bm{X}^\top \Sigma^{-1} \bm{\mu}_k - \frac{1}{2}\bm{\mu}_k^\top \Sigma^{-1} \bm{\mu}_k + \log \Pi_k.
     \]
 \end{definition}
 
-Suppose we have a case where \(k = 2\), i.e., two classes
+Suppose we have a case where $K = 2$, i.e., two classes
 \[
-\delta_1(X) - \delta_2(X) \ge 0.
+\delta_1(\bm{X}) - \delta_2(\bm{X}) \ge 0.
 \]
 Substitute from
 \[
-\delta_k(X) \;\Longrightarrow\; W^\top X + b \ge 0
+\delta_k(\bm{X}) \;\Longrightarrow\; \bm{W}^\top \bm{X} + b \ge 0
 \]
 Then
 \[
-W = \Sigma^{-1}(\mu_1 - \mu_2),
+\bm{W} = \Sigma^{-1}(\bm{\mu}_1 - \bm{\mu}_2),
 \quad
 b = -\frac{1}{2}
 \left(
-\mu_1^\top \Sigma^{-1} \mu_1
+\bm{\mu}_1^\top \Sigma^{-1} \bm{\mu}_1
 -
-\mu_2^\top \Sigma^{-1} \mu_2
+\bm{\mu}_2^\top \Sigma^{-1} \bm{\mu}_2
 \right)
 + \log\frac{\Pi_1}{\Pi_2}
 \]
 
 \subsubsection{Logistic Regression}
 
-Logistic Regression is a supervised algorithm for classification. We approximate the posterior probability \(P(y = k \mid X)\).
+Logistic Regression is a supervised algorithm for classification. We approximate the posterior probability $P(y = k \mid \bm{X})$.
 
-The problem we solve is a binary classification. We have features \(X \in \mathbb{R}^d\) and \(y = \{0, 1\}\) as outputs. The goal is to model the probability that an observation belongs to class \(1\), given its features, i.e., we need
+The problem we solve is a binary classification. We have features $\bm{X} \in \mathbb{R}^d$ and $y \in \{0, 1\}$ as outputs. The goal is to model the probability that an observation belongs to class $1$, given its features, i.e., we need
 \[
-P(y = 1 \mid X).
+P(y = 1 \mid \bm{X}).
 \]
 
 Recall in linear regression, we try to fit a line to data or hyperplane to higher dimension data with
 \[
-\beta^TX, \quad \beta_0+\beta_1x_1 + \dots + \beta_{d-1} x_d, \quad \beta \in \mathbb{R}^d
+\bm{\beta}^\top \bm{X}, \quad \beta_0+\beta_1 x_1 + \dots + \beta_{d-1} x_d, \quad \bm{\beta} \in \mathbb{R}^d
 \]
 for
 \[
-X =
+\bm{X} =
 \begin{bmatrix}
     1 \\
     x_1 \\
@@ -684,9 +745,9 @@ X =
     x_d
 \end{bmatrix}.
 \]
-To obtain results as probability, we need to transform \(\beta\) with a sigmoid function
+To obtain results as probability, we need to transform with a sigmoid function
 \[
-\beta^TX \rightarrow \sigma\lp \beta^T X \rp = \frac{1}{1 + e^{-\beta^T X}}.
+\bm{\beta}^\top \bm{X} \rightarrow \sigma\lp \bm{\beta}^\top \bm{X} \rp = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}}.
 \]
 
 \begin{center}
@@ -715,35 +776,34 @@ To obtain results as probability, we need to transform \(\beta\) with a sigmoid 
 The new probability after the sigmoid transformation is
 \[
 \begin{cases}
-    P(y = 1 \mid X) = \frac{1}{1 + e^{-\beta^T X}} \\
-    P(y = 0 \mid X) = 1 - P(y = 1 \mid X).
+    P(y = 1 \mid \bm{X}) = \dfrac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}} \\[6pt]
+    P(y = 0 \mid \bm{X}) = 1 - P(y = 1 \mid \bm{X}).
 \end{cases}
 \]
 Likelihood function:
-Given the dataset $\{(x_i, y_i)\}_{i=1}^N$ and $y \in (0,1)$, the likelihood function $L(\beta)$ is the product of the probabilities of observing each data point:
+Given the dataset $\{(\bm{X}_i, y_i)\}_{i=1}^N$ and $y \in \{0,1\}$, the likelihood function $L(\bm{\beta})$ is the product of the probabilities of observing each data point:
 \[
-P(y_i \mid x_i, \beta)
+P(y_i \mid \bm{X}_i, \bm{\beta})
 =
-\bigl(P(y = 1 \mid x_i)\bigr)^{y_i}
-\bigl(P(y = 0 \mid x_i)\bigr)^{1 - y_i}
+\bigl(P(y = 1 \mid \bm{X}_i)\bigr)^{y_i}
+\bigl(P(y = 0 \mid \bm{X}_i)\bigr)^{1 - y_i}
 \]
 \[
-L(\beta)
+L(\bm{\beta})
 =
-\prod_{i=1}^N P(y_i \mid x_i, \beta)
+\prod_{i=1}^N P(y_i \mid \bm{X}_i, \bm{\beta})
 =
 \prod_{i=1}^N
-\bigl(\sigma(\beta^\top x_i)\bigr)^{y_i}
-\bigl(1 - \sigma(\beta^\top x_i)\bigr)^{1 - y_i}
+\bigl(\sigma(\bm{\beta}^\top \bm{X}_i)\bigr)^{y_i}
+\bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr)^{1 - y_i}
 \]
 We work with the log-likelihood function
 \[
-\hat{L}(\beta) = \Sigma_{i = 1}^N \lb y_i\sigma(\beta^TX_i) + (1 - y_i)\log \lp 1 - \sigma(\beta^T X_i) \rp \rb,
+\hat{L}(\bm{\beta}) = \sum_{i = 1}^N \lb y_i \log \sigma(\bm{\beta}^\top \bm{X}_i) + (1 - y_i)\log \lp 1 - \sigma(\bm{\beta}^\top \bm{X}_i) \rp \rb,
 \]
-where \(\sigma\) is the sigmoid function.
+where $\sigma$ is the sigmoid function.
 
 It is difficult to find a closed-form solution like the LDA, so gradient-descent etc. will be used.
-
 \clearpage
 
 \section*{Lecture 3}
@@ -944,7 +1004,7 @@ In this setting, the feature vector $\bm X$ could consist of statistics computed
 
 \subsection{Example: Prediction of Immunotherapy Response}
 
-We consider the problem of predicting patient response to immunotherapy using pre-treatment clinical data. This example is motivated by recent work on LORIS Immunotherapy, reported in
+Consider the problem of predicting patient response to immunotherapy with pre-treatment clinical data. This example is motivated by recent work on LORIS Immunotherapy, reported in
 Nature Cancer (2024).
 
 \emph{Question}: Can we predict, prior to treatment, the probability that a patient will respond to immunotherapy using measured clinical variables?

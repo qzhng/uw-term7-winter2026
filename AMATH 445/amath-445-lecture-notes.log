@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  25 FEB 2026 12:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.3.8)  26 FEB 2026 11:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -952,24 +952,23 @@ File: uesvect.fd
 
 [11]
 
-[12
-
-]
+[12]
 
 [13]
 
-[14]
-Overfull \hbox (4.74005pt too wide) in paragraph at lines 947--949
-\OT1/cmr/m/n/12 We con-sider the prob-lem of pre-dict-ing pa-tient re-sponse to im-munother-apy us-ing pre-treatment
- []
+[14
 
-
+]
 
 [15]
 
 [16]
 
-[17
+[17]
+
+[18]
+
+[19
 
 ] (./amath-445-lecture-notes.aux)
  ***********
@@ -977,21 +976,21 @@ LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `amath-445-lecture-notes.out' has not changed.
-(rerunfilecheck)             Checksum: FF2708296A7ADC809A716E9C1E61E6C3;6874.
+(rerunfilecheck)             Checksum: 8F2596160631E52871290D52DCE660C0;6604.
  ) 
 Here is how much of TeX's memory you used:
- 47351 strings out of 473190
- 1145509 string characters out of 5715801
- 1649084 words of memory out of 5000000
- 69797 multiletter control sequences out of 15000+600000
+ 47376 strings out of 473190
+ 1145836 string characters out of 5715801
+ 1650120 words of memory out of 5000000
+ 69807 multiletter control sequences out of 15000+600000
  572599 words of font info for 93 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,11n,96p,750b,1275s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 86i,11n,96p,750b,1434s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmbsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on amath-445-lecture-notes.pdf (20 pages, 273134 bytes).
+Output written on amath-445-lecture-notes.pdf (22 pages, 285261 bytes).
 PDF statistics:
- 478 PDF objects out of 1000 (max. 8388607)
- 390 compressed objects within 4 object streams
- 96 named destinations out of 1000 (max. 500000)
- 453 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 500 PDF objects out of 1000 (max. 8388607)
+ 409 compressed objects within 5 object streams
+ 111 named destinations out of 1000 (max. 500000)
+ 445 words of extra memory for PDF output out of 10000 (max. 10000000)
 
