@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1772053232.59671 "phys-234-lecture-notes.tex" "phys-234-lecture-notes.pdf" "phys-234-lecture-notes" 1772053235.86621 0
+["pdflatex"] 1772053795.91176 "phys-234-lecture-notes.tex" "phys-234-lecture-notes.pdf" "phys-234-lecture-notes" 1772053799.35392 0
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -298,10 +298,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1770087946 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "phys-234-lecture-notes.aux" 1772053235.77013 8103 e64826ba11569b99034fb4330b9d5537 "pdflatex"
-  "phys-234-lecture-notes.out" 1772053235.77142 7376 a32c904d33827afc67b5a0b601e852a4 "pdflatex"
-  "phys-234-lecture-notes.tex" 1772053231.46324 73552 f2f4830ab4f3438fbedc16e9e8d8cfd2 ""
-  "phys-234-lecture-notes.toc" 1772053235.77167 3472 09b86d9a15a4d76c5150edaf866df833 "pdflatex"
+  "phys-234-lecture-notes.aux" 1772053799.25755 8103 e64826ba11569b99034fb4330b9d5537 "pdflatex"
+  "phys-234-lecture-notes.out" 1772053799.25876 7376 a32c904d33827afc67b5a0b601e852a4 "pdflatex"
+  "phys-234-lecture-notes.tex" 1772053794.91674 73510 ebb702cba369e96ae13144ece52ef740 ""
+  "phys-234-lecture-notes.toc" 1772053799.25916 3472 09b86d9a15a4d76c5150edaf866df833 "pdflatex"
   (generated)
   "phys-234-lecture-notes.aux"
   "phys-234-lecture-notes.log"
