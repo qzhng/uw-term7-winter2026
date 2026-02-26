@@ -61,3 +61,14 @@
 \contentsline {subsubsection}{\numberline {12.2.2}Eulerian Strain Tensor}{58}{subsubsection.12.2.2}%
 \contentsline {subsection}{\numberline {12.3}Strain in Terms of Displacements}{59}{subsection.12.3}%
 \contentsline {subsection}{\numberline {12.4}Linear Elasticity Theory}{60}{subsection.12.4}%
+\contentsline {section}{Lecture 14}{62}{section*.13}%
+\contentsline {subsection}{\numberline {14.1}Linear Elastic Theory (Continued)}{62}{subsection.14.1}%
+\contentsline {subsubsection}{\numberline {14.1.1}Interpretation of the Strain Tensor}{62}{subsubsection.14.1.1}%
+\contentsline {subsection}{\numberline {14.2}Equations of Motion for Linear Elasticity}{64}{subsection.14.2}%
+\contentsline {subsubsection}{\numberline {14.2.1}Governing Equations}{64}{subsubsection.14.2.1}%
+\contentsline {subsubsection}{\numberline {14.2.2}Constitutive Theory}{65}{subsubsection.14.2.2}%
+\contentsline {subsubsection}{\numberline {14.2.3}Derivation of the Navier Equation}{66}{subsubsection.14.2.3}%
+\contentsline {subsection}{\numberline {14.3}Waves in Elastic Solids}{67}{subsection.14.3}%
+\contentsline {subsubsection}{\numberline {14.3.1}Longitudinal Vibrations in a Bar}{67}{subsubsection.14.3.1}%
+\contentsline {subsubsection}{\numberline {14.3.2}Transverse Waves on a Bar}{68}{subsubsection.14.3.2}%
+\contentsline {subsubsection}{\numberline {14.3.3}General Elastic Waves in Unbounded Media}{69}{subsubsection.14.3.3}%

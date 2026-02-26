@@ -3096,6 +3096,344 @@ If we compute the derivative with respect to time, we obtain the strain rate ten
 \frac{d E_{jk}}{dt} \approx \frac{d e_{jk}}{dt} \approx \frac{1}{2} \lp \frac{\partial u_j}{\partial x_k} + \frac{\partial u_k}{\partial x_j} \rp \quad (\text{fluids}).
 \end{equation}
 \end{note}
+\clearpage
+
+\section*{Lecture 14}
+\addcontentsline{toc}{section}{Lecture 14}
+\stepcounter{section}
+\setcounter{section}{14}
+\setcounter{equation}{0}
+
+\subsection{Linear Elastic Theory (Continued)}
+
+Last time, we showed that
+\begin{equation}
+dS^2 - dS_0^2 = 2 E_{jk}\, da_j\, da_k,
+\end{equation}
+where the strain tensor in terms of displacements is
+\begin{equation}
+E_{jk} = \frac{1}{2} \lp \frac{\partial q_j}{\partial x_k} + \frac{\partial q_k}{\partial x_j} \rp,
+\end{equation}
+where $ q_i = x_i - a_i.$
+The strain tensor is a symmetric \(3 \times 3\) matrix:
+\begin{equation}
+\underline{\underline{E}} = \begin{pmatrix} E_{11} & E_{12} & E_{13} \\ E_{21} & E_{22} & E_{23} \\ E_{31} & E_{32} & E_{33} \end{pmatrix}.
+\end{equation}
+
+\begin{note}
+The strain tensor is symmetric by construction: since \(E_{jk} = \frac{1}{2}(\partial q_j / \partial x_k + \partial q_k / \partial x_j)\), we have \(E_{jk} = E_{kj}\). This means there are only 6 independent components. Each diagonal element \(E_{ii}\) tells us how much stretching or compression occurs in the \(x_i\) direction, while the off-diagonal elements \(E_{ij}\) (\(i \neq j\)) describe shear deformations.
+\end{note}
+
+\subsubsection{Interpretation of the Strain Tensor}
+
+\begin{example}[Stretching in the \(x_1\) Direction]
+Consider a material element that is stretched in the \(x_1\) direction only. The initial element has length \(dS_0 = da_1\) and the deformed element has length \(dS\).
+
+The mapping is
+\begin{equation}
+x_1 = a_1 + \alpha(a_1), \quad x_2 = a_2, \quad x_3 = a_3,
+\end{equation}
+so the displacement is
+\begin{equation}
+q_1 = x_1 - a_1 = \alpha(a_1), \quad q_2 = x_2 - a_2 = 0, \quad q_3 = x_3 - a_3 = 0.
+\end{equation}
+Since \(E_{jk} = 0\) for all \(j, k\) not both equal to 1, the only nonzero component is
+\begin{equation}
+E_{11} = \frac{\partial q_1}{\partial a_1} = \frac{d\alpha}{da_1}.
+\end{equation}
+If \(\frac{d\alpha}{da_1} > 0\), then \(E_{11} > 0\) (stretching). If \(\frac{d\alpha}{da_1} < 0\), then \(E_{11} < 0\) (compression). If \(\frac{d\alpha}{da_1} = 0\), then \(E_{11} = 0\) (no deformation).
+
+\begin{note}
+More generally, we can diagonalize the strain tensor. The eigenvalues give the principal strains, and the eigenvectors give the principal directions. Each element along the diagonal of the diagonalized strain tensor tells how much stretching or compression occurs in each principal direction. This is analogous to diagonalizing the stress tensor to find principal stresses.
+\end{note}
+
+\end{example}
+
+To generalize, consider displacements of the form
+\begin{equation}
+q_1 = \alpha(a_1), \quad q_2 = \beta(a_2), \quad q_3 = \gamma(a_3).
+\end{equation}
+Then the strain tensor is diagonal:
+\begin{equation}
+\underline{\underline{E}} = \begin{pmatrix} \dfrac{d\alpha}{da_1} & 0 & 0 \\[6pt] 0 & \dfrac{d\beta}{da_2} & 0 \\[6pt] 0 & 0 & \dfrac{d\gamma}{da_3} \end{pmatrix}.
+\end{equation}
+Each element along the diagonal tells how much stretching or compression occurs in each principal direction. More generally, we can always diagonalize the strain tensor; the eigenvalues give the principal strains, and the eigenvectors give the principal directions.
+
+\begin{example}[Shear Deformation in the \(x_1\) Direction]
+Consider a shear deformation where material in the \(x_1\) direction is displaced proportionally to \(a_2\) (or equivalently \(x_2\)):
+
+This can be written as
+\begin{align}
+\bm{x}(\bm{a}) &= \bm{a} + \alpha(a_2, 0, 0), \\
+\bm{a}(\bm{x}) &= \bm{x} - \alpha(x_2, 0, 0).
+\end{align}
+The displacement is
+\begin{equation}
+\bm{q} = \bm{x} - \bm{a} = \alpha(a_2, 0, 0) = \alpha(x_2, 0, 0).
+\end{equation}
+
+The strain tensor is (assuming small strain and neglecting quadratic terms):
+\begin{equation}
+\underline{\underline{E}} = \begin{pmatrix} 0 & \frac{\alpha}{2} & 0 \\ \frac{\alpha}{2} & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}. \quad (\text{small strain, } \alpha \ll 1)
+\end{equation}
+
+To verify this: since \(q_1 = \alpha a_2\) and \(q_2 = q_3 = 0\), the only nonzero displacement gradient is \(\frac{\partial q_1}{\partial a_2} = \alpha\).
+Then:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+  \item \(E_{12} = E_{21} = \frac{1}{2}\lp \frac{\partial q_1}{\partial x_2} + \frac{\partial q_2}{\partial x_1}\rp = \frac{1}{2}(\alpha + 0) = \frac{\alpha}{2}\).
+  \item All diagonal entries are zero since \(\frac{\partial q_i}{\partial x_i} = 0\) for each \(i\).
+\end{itemize}
+If we use the full (nonlinear) Lagrangian strain tensor, we get \(E_{22} = \frac{\alpha^2}{2}\), but this is second-order in \(\alpha\) and is neglected in the linear theory.
+
+For fun, we can also compute the full strain tensor (including quadratic terms):
+\begin{equation}
+E_{jk}^{\text{full}} = \frac{1}{2} \lb \frac{\partial q_j}{\partial a_k} + \frac{\partial q_k}{\partial a_j} + \frac{\partial q_i}{\partial a_j}\frac{\partial q_i}{\partial a_k} \rb \implies \underline{\underline{E}}^{\text{full}} = \begin{pmatrix} 0 & \frac{\alpha}{2} & 0 \\ \frac{\alpha}{2} & \frac{\alpha^2}{2} & 0 \\ 0 & 0 & 0 \end{pmatrix}.
+\end{equation}
+Similarly, from the Eulerian strain tensor:
+\begin{equation}
+\underline{\underline{e}} = \begin{pmatrix} 0 & \frac{\alpha}{2} & 0 \\ \frac{\alpha}{2} & -\frac{\alpha^2}{2} & 0 \\ 0 & 0 & 0 \end{pmatrix}.
+\end{equation}
+The only difference between the two tensors is the sign of the quadratic term. The terms linear in \(\alpha\) are identical, confirming that \(E_{jk} \approx e_{jk}\) for small strains.
+\end{example}
+
+\subsection{Equations of Motion for Linear Elasticity}
+
+\subsubsection{Governing Equations}
+
+Recall the governing equations from the conservation laws:
+\begin{gather}
+\label{mass_eqn} \frac{D\rho}{Dt} + \rho \nabla \cdot \bm u = 0 \\[6pt]
+\label{momentum_eqn} \rho \frac{D \bm u}{Dt} = -\rho \nabla \Pi + \nabla \cdot \underline{\underline{\tau}}
+\end{gather}
+
+We specialize these equations for a \textbf{linear elastic solid} with the following assumptions:
+\begin{enumerate}[nosep]
+    \item \textbf{Small strain.}
+    \item \textbf{Constant density:} \(\rho = \rho_0\), which yields \(\nabla \cdot \bm u \approx 0\) from \cref{mass_eqn}.
+    \item \textbf{Small velocity} (\(|\bm u| \ll 1\)): Since
+    \begin{equation}
+    \frac{D\bm u}{Dt} = \frac{\partial \bm u}{\partial t} + (\bm u \cdot \nabla)\bm u \approx \frac{\partial \bm u}{\partial t},
+    \end{equation}
+    the advective term \((\bm u \cdot \nabla)\bm u\) is negligible.
+
+    Furthermore, \(\bm u = \frac{\partial \bm{q}}{\partial t}\), so
+    \begin{equation}
+    \frac{D \bm u}{Dt} \approx \frac{\partial \bm u}{\partial t} = \frac{\partial^2 \bm{q}}{\partial t^2}.
+    \end{equation}
+    \item \textbf{Specify \(\underline{\underline{\tau}}\)}, the stress tensor (constitutive relation).
+\end{enumerate}
+
+\begin{note}
+More precisely, this follows from a scaling argument. If \(U\) is a typical velocity, \(L\) a typical length, and \(T\) a typical time, then
+\begin{equation}
+    \frac{\partial \bm u}{\partial t} \sim \frac{U}{T}
+\end{equation}
+and
+\begin{equation}
+    (\bm u \cdot \nabla) \bm u \sim \frac{U^2}{L} = \frac{U}{T} \cdot \frac{UT}{L}
+\end{equation}
+We want \(U\) to be small enough that \(\frac{UT}{L} \ll 1\), i.e., the displacement over one period is much smaller than the length scale.
+\end{note}
+
+With these assumptions, the momentum equation becomes:
+\begin{equation}
+\label{linear_momentum_eqn}
+\boxed{\rho_0 \frac{\partial^2 \bm{q}}{\partial t^2} = -\rho_0 \nabla \Pi + \nabla \cdot \underline{\underline{\tau}}}
+\end{equation}
+
+\subsubsection{Constitutive Theory}
+
+Experiments on solids show that the stress tensor for a solid, \(\underline{\underline{\tau}}\), depends on the \textbf{strain tensor}. This is because the restoring force depends on the deformation itself (not on the rate of deformation, as it does for Newtonian fluids).
+
+The simplest relation possible is a generalization of \textbf{Hooke's law}. Assuming the medium is isotropic and using the symmetry of \(\underline{\underline{\tau}}\):
+\begin{equation}
+\label{hookes_law}
+\boxed{\tau_{ij} = 2\mu\, e_{ij} + \lambda\, e_{kk}\, \delta_{ij}}
+\end{equation}
+where \(\mu\) and \(\lambda\) are the \textbf{Lam\'{e} constants}.
+
+\begin{note}
+This constitutive relation has the same form as the one for a Newtonian fluid, except that here \(e_{ij}\) is the \emph{strain tensor} (measuring deformation), not the strain \emph{rate} tensor (measuring rate of deformation). For a Newtonian fluid, \(\tau_{ij} = 2\mu\, \dot{e}_{ij} + \lambda\, \dot{e}_{kk}\, \delta_{ij}\), where the dot denotes a time derivative. The physical difference is fundamental: in a fluid, stress depends on how fast the material is deforming, while in a solid, stress depends on how much it has deformed.
+\end{note}
+
+Alternatively, we can use the \textbf{Young's modulus} \(E\) and \textbf{Poisson's ratio} \(\nu\):
+\begin{gather}
+E = \frac{\mu(3\lambda + 2\mu)}{\lambda + \mu} \quad (\text{Young's modulus}), \\
+\nu = \frac{\lambda}{2(\lambda + \mu)} \quad (\text{Poisson's ratio}).
+\end{gather}
+
+On Assignment~3, we will show that:
+\begin{equation}
+\label{tau_E_nu}
+\tau_{ij} = \frac{E}{1 + \nu} \lp e_{ij} + \frac{\nu}{1 - 2\nu}\, e_{kk}\, \delta_{ij} \rp,
+\end{equation}
+which can be solved to express the strain in terms of the stress:
+\begin{equation}
+e_{ij} = \frac{1 + \nu}{E}\, \tau_{ij} - \frac{\nu}{E}\, \tau_{kk}\, \delta_{ij}.
+\end{equation}
+
+\subsubsection{Derivation of the Navier Equation}
+
+With these assumptions, the momentum equation \cref{linear_momentum_eqn} becomes:
+\begin{equation}
+\rho_0 \frac{\partial^2 q_i}{\partial t^2} = -\rho_0 \frac{\partial \Pi}{\partial x_i} + \frac{\partial}{\partial x_j} \tau_{ji},
+\end{equation}
+but
+\begin{equation}
+\frac{\partial}{\partial x_j} \tau_{ji} = \frac{\partial}{\partial x_j} \lp 2\mu\, e_{ji} + \lambda\, e_{kk}\, \delta_{ji} \rp,
+\end{equation}
+where
+\begin{equation}
+    e_{ji} = \frac{1}{2}\lp \frac{\partial q_j}{\partial x_i} + \frac{\partial q_i}{\partial x_j} \rp
+\end{equation}
+and
+\begin{equation}
+    e_{kk} = \nabla \cdot \vec{q}.
+\end{equation}
+Expanding:
+\begin{equation}
+\rho_0 \frac{\partial^2 q_i}{\partial t^2} = -\rho_0 \frac{\partial \Pi}{\partial x_i} + \frac{\partial}{\partial x_j} \lb \mu \lp \frac{\partial q_j}{\partial x_i} + \frac{\partial q_i}{\partial x_j} \rp + \lambda (\nabla \cdot \vec{q})\, \delta_{ji} \rb.
+\end{equation}
+We differentiate each of the three terms separately:
+\begin{align}
+\mu \frac{\partial}{\partial x_j}\frac{\partial q_j}{\partial x_i} &= \mu \frac{\partial}{\partial x_i}\lp \frac{\partial q_j}{\partial x_j} \rp = \mu \frac{\partial}{\partial x_i}(\nabla \cdot \vec{q}), \\[6pt]
+\mu \frac{\partial}{\partial x_j}\frac{\partial q_i}{\partial x_j} &= \mu \nabla^2 q_i, \\[6pt]
+\lambda \frac{\partial}{\partial x_j}\lb (\nabla \cdot \vec{q})\, \delta_{ji} \rb &= \lambda \frac{\partial}{\partial x_i}(\nabla \cdot \vec{q}).
+\end{align}
+
+Combining all three contributions gives us the \textbf{Navier equation}.
+
+\begin{definition}[Navier-Cauchy Equation]
+    The Navier--Cauchy equation for linear elasticity is:
+    \begin{equation}
+    \label{navier_eqn}
+    \rho_0 \frac{\partial^2 \bm{q}}{\partial t^2} = -\rho_0 \nabla \Pi + \mu \nabla^2 \bm{q} + (\mu + \lambda)\, \nabla(\nabla \cdot \bm{q})
+    \end{equation}
+    This is a system of 3 coupled PDEs for the 3 unknowns \(q_1, q_2, q_3\).
+\end{definition}
+
+\subsection{Waves in Elastic Solids}
+
+\subsubsection{Longitudinal Vibrations in a Bar}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, line cap=round, line join=round, scale=1]
+  % --- Bar ---
+  \fill[gray!15] (0,-0.5) rectangle (6,0.5);
+  \draw[thick] (0,-0.5) rectangle (6,0.5);
+  % hatching on left wall
+  \fill[pattern=north east lines] (-0.3,-0.7) rectangle (0,0.7);
+  \draw[thick] (0,-0.7) -- (0,0.7);
+  % axes
+  \draw[->] (0,-1.2) -- (7,-1.2) node[right] {$x_1$};
+  \draw[->] (-0.5,-0.8) -- (-0.5,1.2) node[above] {$x_2$};
+  % displacement arrow
+  \draw[->, very thick] (3,-1.2) -- (4.5,-1.2) node[midway, below] {$q_1(x_1, t)$};
+\end{tikzpicture}
+\end{center}
+
+Consider longitudinal vibrations in a bar. The displacement has the form
+\begin{equation}
+    \bm{q} = (q_1(x_1, t), 0, 0).
+\end{equation}
+Ignoring gravity (\(\Pi = 0\)), the Navier equation \cref{navier_eqn} becomes:
+\begin{equation}
+\rho_0 \frac{\partial^2 q_1}{\partial t^2} = \mu \frac{\partial^2 q_1}{\partial x_1^2} + (\mu + \lambda) \frac{\partial^2 q_1}{\partial x_1^2}.
+\end{equation}
+This simplifies to the longitudinal wave equation:
+\begin{equation}
+\label{longitudinal_wave}
+\frac{\partial^2 q_1}{\partial t^2} = \frac{2\mu + \lambda}{\rho_0} \frac{\partial^2 q_1}{\partial x_1^2}
+\end{equation}
+where the longitudinal wave speed is
+\begin{equation}
+C_D^2 = \frac{2\mu + \lambda}{\rho_0}.
+\end{equation}
+
+\begin{note}
+This is a standard 1D wave equation. Longitudinal waves are also called \textbf{compression waves} or \textbf{P-waves} (primary waves) in seismology. The particle motion is in the same direction as the wave propagation. These are the sound waves in the solid; for steel, \(C_D \approx 6 \times 10^3\) m/s.
+\end{note}
+
+\subsubsection{Transverse Waves on a Bar}
+
+\begin{center}
+\begin{tikzpicture}[>=Stealth, line cap=round, line join=round, scale=1]
+  % --- Bar with transverse displacement ---
+  \fill[gray!15] plot[smooth, tension=0.5] coordinates {(0,0.5) (1.5,0.8) (3,0.3) (4.5,0.7) (6,0.5)} --
+    plot[smooth, tension=0.5] coordinates {(6,-0.5) (4.5,-0.3) (3,-0.7) (1.5,-0.2) (0,-0.5)} -- cycle;
+  \draw[thick] plot[smooth, tension=0.5] coordinates {(0,0.5) (1.5,0.8) (3,0.3) (4.5,0.7) (6,0.5)};
+  \draw[thick] plot[smooth, tension=0.5] coordinates {(0,-0.5) (1.5,-0.2) (3,-0.7) (4.5,-0.3) (6,-0.5)};
+  % hatching on left wall
+  \fill[pattern=north east lines] (-0.3,-0.7) rectangle (0,0.7);
+  \draw[thick] (0,-0.7) -- (0,0.7);
+  % axes
+  \draw[->] (0,-1.2) -- (7,-1.2) node[right] {$x_1$};
+  \draw[->] (-0.5,-0.8) -- (-0.5,1.5) node[above] {$x_3$};
+  % displacement arrow
+  \draw[->, very thick] (3,-0.7) -- (3,1.3) node[right] {$q_3(x_1, t)$};
+\end{tikzpicture}
+\end{center}
+
+Now imagine the displacement in the bar has the form \(\bm{q} = (0, 0, q_3(x_1, t))\). Our equation for \(q_3\) is:
+\begin{equation}
+\rho_0 \frac{\partial^2 q_3}{\partial t^2} = \mu \frac{\partial^2 q_3}{\partial x_1^2},
+\end{equation}
+since \(\nabla \cdot \bm{q} = 0\) (the displacement is perpendicular to the direction of variation). This gives the transverse wave equation:
+\begin{equation}
+\label{transverse_wave}
+\frac{\partial^2 q_3}{\partial t^2} = \frac{\mu}{\rho_0} \frac{\partial^2 q_3}{\partial x_1^2}
+\end{equation}
+where the transverse wave speed is
+\begin{equation}
+C_T^2 = \frac{\mu}{\rho_0}.
+\end{equation}
+
+Since \(\mu > 0\) and \(\lambda > 0\) for typical materials, we have
+\begin{equation}
+C_T^2 = \frac{\mu}{\rho_0} < \frac{2\mu + \lambda}{\rho_0} = C_D^2,
+\end{equation}
+so \textbf{transverse waves travel slower than longitudinal waves}. Transverse waves are also called \textbf{shear waves} or \textbf{S-waves} (secondary waves) in seismology.
+
+\begin{note}
+This is why, during an earthquake, the P-wave (longitudinal) arrives first and the S-wave (transverse) arrives later. The time difference between the two arrivals can be used to estimate the distance to the earthquake epicenter.
+\end{note}
+
+\subsubsection{General Elastic Waves in Unbounded Media}
+
+Starting from the Navier equation \cref{navier_eqn} (ignoring body forces):
+\begin{equation}
+\label{navier_no_body}
+\rho_0 \frac{\partial^2 \bm{q}}{\partial t^2} = \mu \nabla^2 \bm{q} + (\mu + \lambda)\, \nabla(\nabla \cdot \bm{q}), \tag{$\star$}
+\end{equation}
+we can derive wave equations for two types of waves.
+
+\textbf{Dilatational (P) waves:} Taking the divergence of \cref{navier_no_body}:
+\begin{equation}
+\rho_0 \frac{\partial^2}{\partial t^2}(\nabla \cdot \bm{q}) = \mu \nabla^2 (\nabla \cdot \bm{q}) + (\mu + \lambda) \nabla^2 (\nabla \cdot \bm{q}),
+\end{equation}
+which gives:
+\begin{equation}
+\boxed{\frac{\partial^2}{\partial t^2}(\nabla \cdot \bm{q}) = \frac{2\mu + \lambda}{\rho_0}\, \nabla^2 (\nabla \cdot \bm{q})}
+\end{equation}
+This is a 3D wave equation for the \textbf{dilation} \(\nabla \cdot \bm{q}\), propagating at speed \(C_D\).
+
+\begin{note}
+To see this, note that \(\nabla \cdot (\nabla^2 \bm{q}) = \nabla^2 (\nabla \cdot \bm{q})\) (since the divergence and Laplacian commute for sufficiently smooth fields), and \(\nabla \cdot [\nabla(\nabla \cdot \bm{q})] = \nabla^2(\nabla \cdot \bm{q})\).
+\end{note}
+
+\textbf{Rotational (S) waves:} Computing the curl of \cref{navier_no_body}: since \(\nabla \times \nabla(\nabla \cdot \bm{q}) = \bm 0\) (the curl of a gradient is always zero), we get:
+\begin{equation}
+\boxed{\frac{\partial^2 \omega_{ij}}{\partial t^2} = \frac{\mu}{\rho_0}\, \nabla^2 \omega_{ij}} \quad \text{where } \omega_{ij} = \frac{\partial q_i}{\partial x_j} - \frac{\partial q_j}{\partial x_i}.
+\end{equation}
+This is a 3D wave equation for the \textbf{rotation tensor} \(\omega_{ij}\), propagating at speed \(C_T\).
+
+\begin{note}
+To derive this more explicitly: take the partial derivative of the \(i\)-th component of \cref{navier_no_body} with respect to \(x_j\), then take the partial derivative of the \(j\)-th component with respect to \(x_i\), and subtract. The \((\mu+\lambda)\) terms cancel because
+\begin{equation}
+    \frac{\partial^2}{\partial x_i \partial x_j}(\nabla \cdot \bm{q}) - \frac{\partial^2}{\partial x_j \partial x_i}(\nabla \cdot \bm{q}) = 0
+\end{equation}
+by equality of mixed partials.
+\end{note}
 
 \end{document}
 
