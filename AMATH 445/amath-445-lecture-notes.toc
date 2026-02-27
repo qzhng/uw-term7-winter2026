@@ -17,20 +17,32 @@
 \contentsline {subsubsection}{\numberline {2.1.4}Semi-supervised and Self-supervised Learning}{7}{subsubsection.2.1.4}%
 \contentsline {subsection}{\numberline {2.2}Supervised Learning and Classification}{8}{subsection.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.1}The Problem Statement of Classification}{8}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}A Probabilistic View of Classification}{9}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}Linear Discriminant Analysis (LDA)}{10}{subsubsection.2.2.3}%
-\contentsline {subsubsection}{\numberline {2.2.4}Logistic Regression}{11}{subsubsection.2.2.4}%
-\contentsline {section}{Lecture 3}{14}{section*.4}%
-\contentsline {subsection}{\numberline {3.1}Review And Summary of Lecture 2}{14}{subsection.3.1}%
-\contentsline {subsubsection}{\numberline {3.1.1}Bayes Decision Rule}{14}{subsubsection.3.1.1}%
-\contentsline {subsubsection}{\numberline {3.1.2}Linear Discriminant Analysis (LDA)}{14}{subsubsection.3.1.2}%
-\contentsline {subsubsection}{\numberline {3.1.3}Logistic Regression}{14}{subsubsection.3.1.3}%
-\contentsline {subsubsection}{\numberline {3.1.4}Log-Likelihood and Loss Function}{15}{subsubsection.3.1.4}%
-\contentsline {subsection}{\numberline {3.2}Gradient Descent}{15}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}General Update Rule}{15}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Gradient Descent for Logistic Regression}{16}{subsubsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.3}Example: Ising Model}{16}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Example: Prediction of Immunotherapy Response}{17}{subsection.3.4}%
-\contentsline {subsubsection}{\numberline {3.4.1}Log-Odds of Response Approach}{18}{subsubsection.3.4.1}%
-\contentsline {section}{Lecture 4}{19}{section*.5}%
-\contentsline {subsection}{\numberline {4.1}Support Vector Machines}{19}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}A Probabilistic View of Classification}{8}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Linear Discriminant Analysis (LDA)}{11}{subsubsection.2.2.3}%
+\contentsline {paragraph}{Deriving the LDA decision rule.}{13}{section*.4}%
+\contentsline {paragraph}{Special case: two classes ($K = 2$).}{14}{section*.5}%
+\contentsline {subsubsection}{\numberline {2.2.4}Logistic Regression}{15}{subsubsection.2.2.4}%
+\contentsline {paragraph}{Problem setup.}{15}{section*.6}%
+\contentsline {paragraph}{From linear model to probabilities.}{16}{section*.7}%
+\contentsline {paragraph}{The logistic regression model.}{17}{section*.8}%
+\contentsline {paragraph}{Estimating $\bm {\beta }$: the likelihood function.}{17}{section*.9}%
+\contentsline {paragraph}{The log-likelihood.}{18}{section*.10}%
+\contentsline {section}{Lecture 3}{20}{section*.11}%
+\contentsline {subsection}{\numberline {3.1}Review and Summary of Lecture 2}{20}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Bayes Decision Rule}{20}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Linear Discriminant Analysis (LDA)}{20}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}Logistic Regression}{20}{subsubsection.3.1.3}%
+\contentsline {subsubsection}{\numberline {3.1.4}Log-Likelihood and Loss Function}{20}{subsubsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.2}Gradient Descent}{21}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Deriving the Gradient for Logistic Regression}{22}{subsubsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.3}Example: Ising Model}{23}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Example: Prediction of Immunotherapy Response}{24}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Log-Odds of Response Approach}{24}{subsubsection.3.4.1}%
+\contentsline {section}{Appendix}{26}{note.3.9}%
+\contentsline {section}{\numberline {A}Background: Linear Regression and Logistic Regression}{27}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Linear Regression}{27}{subsection.A.1}%
+\contentsline {subsection}{\numberline {A.2}Why Linear Regression Fails for Classification}{27}{subsection.A.2}%
+\contentsline {subsection}{\numberline {A.3}From Linear Regression to Logistic Regression}{28}{subsection.A.3}%
+\contentsline {subsection}{\numberline {A.4}Beyond Binary: Multinomial Logistic Regression}{28}{subsection.A.4}%
+\contentsline {subsection}{\numberline {A.5}Connection to LDA}{29}{subsection.A.5}%
+\contentsline {subsection}{\numberline {A.6}Historical Context}{29}{subsection.A.6}%

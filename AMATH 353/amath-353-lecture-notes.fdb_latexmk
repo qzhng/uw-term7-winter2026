@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1772052260.38934 "amath-353-lecture-notes.tex" "amath-353-lecture-notes.pdf" "amath-353-lecture-notes" 1772052264.00656 0
+["pdflatex"] 1772166670.03132 "amath-353-lecture-notes.tex" "amath-353-lecture-notes.pdf" "amath-353-lecture-notes" 1772166673.77449 0
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -296,10 +296,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1770087946 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "amath-353-lecture-notes.aux" 1772052263.90746 21269 1b257c05b9dd2c07231a366d9e23dabc "pdflatex"
-  "amath-353-lecture-notes.out" 1772052263.9097 19315 d96c24b34a327a96f2327be6c8dc9c71 "pdflatex"
-  "amath-353-lecture-notes.tex" 1772052258.85356 154705 ce5c00e03058bb59afd336ec093269ae ""
-  "amath-353-lecture-notes.toc" 1772052263.90997 10059 496e2ca7687aa7b4d349e6b165ef7e12 "pdflatex"
+  "amath-353-lecture-notes.aux" 1772166673.66853 21269 1b257c05b9dd2c07231a366d9e23dabc "pdflatex"
+  "amath-353-lecture-notes.out" 1772166673.67078 19315 d96c24b34a327a96f2327be6c8dc9c71 "pdflatex"
+  "amath-353-lecture-notes.tex" 1772166669.80289 154704 6abeac030bfeb94d14d2a74f3edf302c ""
+  "amath-353-lecture-notes.toc" 1772166673.6711 10059 496e2ca7687aa7b4d349e6b165ef7e12 "pdflatex"
   (generated)
   "amath-353-lecture-notes.aux"
   "amath-353-lecture-notes.log"

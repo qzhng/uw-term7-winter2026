@@ -22,37 +22,141 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.4}Semi-supervised and Self-supervised Learning}{7}{subsubsection.2.1.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Supervised Learning and Classification}{8}{subsection.2.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}The Problem Statement of Classification}{8}{subsubsection.2.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}A Probabilistic View of Classification}{9}{subsubsection.2.2.2}\protected@file@percent }
-\newlabel{Posterior Probability}{{2.10}{9}{Posterior Probability}{definition.2.10}{}}
-\newlabel{Posterior Probability@cref}{{[definition][10][2]2.10}{[1][8][]9}{}{}{}}
-\newlabel{Bayes Decision Rule}{{2.11}{9}{Bayes Decision Rule}{theorem.2.11}{}}
-\newlabel{Bayes Decision Rule@cref}{{[theorem][11][2]2.11}{[1][9][]9}{}{}{}}
-\newlabel{bayes theorem}{{2.12}{9}{Bayes Theorem}{theorem.2.12}{}}
-\newlabel{bayes theorem@cref}{{[theorem][12][2]2.12}{[1][9][]9}{}{}{}}
-\newlabel{bayes classifier with bayes theorem}{{2.14}{10}{A Probabilistic View of Classification}{equation.2.14}{}}
-\newlabel{bayes classifier with bayes theorem@cref}{{[equation][14][2]2.14}{[1][10][]10}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Linear Discriminant Analysis (LDA)}{10}{subsubsection.2.2.3}\protected@file@percent }
-\newlabel{bayes classifier with LDA}{{2.16}{10}{Linear Discriminant Analysis (LDA)}{equation.2.16}{}}
-\newlabel{bayes classifier with LDA@cref}{{[equation][16][2]2.16}{[1][10][]10}{}{}{}}
-\newlabel{log of posterior of X y=k}{{2.18}{11}{Linear Discriminant Analysis (LDA)}{equation.2.18}{}}
-\newlabel{log of posterior of X y=k@cref}{{[equation][18][2]2.18}{[1][11][]11}{}{}{}}
-\newlabel{lda}{{2.15}{11}{LDA}{definition.2.15}{}}
-\newlabel{lda@cref}{{[definition][15][2]2.15}{[1][11][]11}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Logistic Regression}{11}{subsubsection.2.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{Lecture 3}{14}{section*.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Review And Summary of Lecture 2}{14}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Bayes Decision Rule}{14}{subsubsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Linear Discriminant Analysis (LDA)}{14}{subsubsection.3.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Logistic Regression}{14}{subsubsection.3.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Log-Likelihood and Loss Function}{15}{subsubsection.3.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Gradient Descent}{15}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}General Update Rule}{15}{subsubsection.3.2.1}\protected@file@percent }
-\newlabel{update rule}{{3.1}{16}{General Update Rule}{equation.3.1}{}}
-\newlabel{update rule@cref}{{[equation][1][3]3.1}{[1][15][]16}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Gradient Descent for Logistic Regression}{16}{subsubsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Example: Ising Model}{16}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Example: Prediction of Immunotherapy Response}{17}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Log-Odds of Response Approach}{18}{subsubsection.3.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{Lecture 4}{19}{section*.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Support Vector Machines}{19}{subsection.4.1}\protected@file@percent }
-\gdef \@abspage@last{22}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.2}A Probabilistic View of Classification}{8}{subsubsection.2.2.2}\protected@file@percent }
+\newlabel{conditional probability}{{2.9}{9}{Conditional Probability}{definition.2.9}{}}
+\newlabel{conditional probability@cref}{{[definition][9][2]2.9}{[1][8][]9}{}{}{}}
+\newlabel{bayes theorem}{{2.10}{9}{Bayes Theorem}{theorem.2.10}{}}
+\newlabel{bayes theorem@cref}{{[theorem][10][2]2.10}{[1][9][]9}{}{}{}}
+\newlabel{bayes for classification}{{2.13}{9}{A Probabilistic View of Classification}{equation.2.13}{}}
+\newlabel{bayes for classification@cref}{{[equation][13][2]2.13}{[1][9][]9}{}{}{}}
+\newlabel{Bayes Decision Rule}{{2.13}{11}{Bayes Decision Rule}{theorem.2.13}{}}
+\newlabel{Bayes Decision Rule@cref}{{[theorem][13][2]2.13}{[1][10][]11}{}{}{}}
+\newlabel{bayes classifier with bayes theorem}{{2.17}{11}{Bayes Classifier}{equation.2.17}{}}
+\newlabel{bayes classifier with bayes theorem@cref}{{[equation][17][2]2.17}{[1][11][]11}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.3}Linear Discriminant Analysis (LDA)}{11}{subsubsection.2.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Deriving the LDA decision rule.}{13}{section*.4}\protected@file@percent }
+\newlabel{bayes classifier with LDA}{{2.20}{13}{Deriving the LDA decision rule}{equation.2.20}{}}
+\newlabel{bayes classifier with LDA@cref}{{[equation][20][2]2.20}{[1][13][]13}{}{}{}}
+\newlabel{log of posterior of X y=k}{{2.23}{13}{Deriving the LDA decision rule}{equation.2.23}{}}
+\newlabel{log of posterior of X y=k@cref}{{[equation][23][2]2.23}{[1][13][]13}{}{}{}}
+\newlabel{lda}{{2.16}{14}{LDA}{definition.2.16}{}}
+\newlabel{lda@cref}{{[definition][16][2]2.16}{[1][14][]14}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Special case: two classes ($K = 2$).}{14}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.4}Logistic Regression}{15}{subsubsection.2.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Problem setup.}{15}{section*.6}\protected@file@percent }
+\newlabel{logistic goal}{{2.30}{15}{Problem setup}{equation.2.30}{}}
+\newlabel{logistic goal@cref}{{[equation][30][2]2.30}{[1][15][]15}{}{}{}}
+\newlabel{beta vector}{{2.31}{15}{What Is $\bm {\beta }$?}{equation.2.31}{}}
+\newlabel{beta vector@cref}{{[equation][31][2]2.31}{[1][15][]15}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{From linear model to probabilities.}{16}{section*.7}\protected@file@percent }
+\newlabel{linear model}{{2.32}{16}{From linear model to probabilities}{equation.2.32}{}}
+\newlabel{linear model@cref}{{[equation][32][2]2.32}{[1][15][]16}{}{}{}}
+\newlabel{feature vector with intercept}{{2.33}{16}{From linear model to probabilities}{equation.2.33}{}}
+\newlabel{feature vector with intercept@cref}{{[equation][33][2]2.33}{[1][16][]16}{}{}{}}
+\newlabel{sigmoid transformation}{{2.34}{16}{From linear model to probabilities}{equation.2.34}{}}
+\newlabel{sigmoid transformation@cref}{{[equation][34][2]2.34}{[1][16][]16}{}{}{}}
+\newlabel{sigmoid definition}{{2.35}{16}{The Sigmoid Function $\sigma (z)$}{equation.2.35}{}}
+\newlabel{sigmoid definition@cref}{{[equation][35][2]2.35}{[1][16][]16}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{The logistic regression model.}{17}{section*.8}\protected@file@percent }
+\newlabel{logistic model class 1}{{2.36}{17}{The logistic regression model}{equation.2.36}{}}
+\newlabel{logistic model class 1@cref}{{[equation][36][2]2.36}{[1][17][]17}{}{}{}}
+\newlabel{logistic model class 0}{{2.37}{17}{The logistic regression model}{equation.2.37}{}}
+\newlabel{logistic model class 0@cref}{{[equation][37][2]2.37}{[1][17][]17}{}{}{}}
+\newlabel{log-odds}{{2.38}{17}{The logistic regression model}{equation.2.38}{}}
+\newlabel{log-odds@cref}{{[equation][38][2]2.38}{[1][17][]17}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{Estimating $\bm  {\beta }$: the likelihood function.}{17}{section*.9}\protected@file@percent }
+\newlabel{single point probability}{{2.39}{17}{Estimating $\bm {\beta }$: the likelihood function}{equation.2.39}{}}
+\newlabel{single point probability@cref}{{[equation][39][2]2.39}{[1][17][]17}{}{}{}}
+\newlabel{logistic likelihood}{{2.40}{18}{Estimating $\bm {\beta }$: the likelihood function}{equation.2.40}{}}
+\newlabel{logistic likelihood@cref}{{[equation][40][2]2.40}{[1][18][]18}{}{}{}}
+\@writefile{toc}{\contentsline {paragraph}{The log-likelihood.}{18}{section*.10}\protected@file@percent }
+\newlabel{logistic log-likelihood}{{2.41}{18}{The log-likelihood}{equation.2.41}{}}
+\newlabel{logistic log-likelihood@cref}{{[equation][41][2]2.41}{[1][18][]18}{}{}{}}
+\@writefile{toc}{\contentsline {section}{Lecture 3}{20}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Review and Summary of Lecture 2}{20}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Bayes Decision Rule}{20}{subsubsection.3.1.1}\protected@file@percent }
+\newlabel{lec3 bayes rule}{{3.1}{20}{Bayes Decision Rule}{equation.3.1}{}}
+\newlabel{lec3 bayes rule@cref}{{[equation][1][3]3.1}{[1][20][]20}{}{}{}}
+\newlabel{lec3 bayes expanded}{{3.2}{20}{Bayes Decision Rule}{equation.3.2}{}}
+\newlabel{lec3 bayes expanded@cref}{{[equation][2][3]3.2}{[1][20][]20}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Linear Discriminant Analysis (LDA)}{20}{subsubsection.3.1.2}\protected@file@percent }
+\newlabel{lec3 lda assumption}{{3.3}{20}{Linear Discriminant Analysis (LDA)}{equation.3.3}{}}
+\newlabel{lec3 lda assumption@cref}{{[equation][3][3]3.3}{[1][20][]20}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.3}Logistic Regression}{20}{subsubsection.3.1.3}\protected@file@percent }
+\newlabel{lec3 logistic model}{{3.4}{20}{Logistic Regression}{equation.3.4}{}}
+\newlabel{lec3 logistic model@cref}{{[equation][4][3]3.4}{[1][20][]20}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.4}Log-Likelihood and Loss Function}{20}{subsubsection.3.1.4}\protected@file@percent }
+\newlabel{lec3 likelihood}{{3.5}{20}{Log-Likelihood and Loss Function}{equation.3.5}{}}
+\newlabel{lec3 likelihood@cref}{{[equation][5][3]3.5}{[1][20][]20}{}{}{}}
+\newlabel{lec3 log-likelihood}{{3.6}{21}{Log-Likelihood and Loss Function}{equation.3.6}{}}
+\newlabel{lec3 log-likelihood@cref}{{[equation][6][3]3.6}{[1][20][]21}{}{}{}}
+\newlabel{binary cross-entropy}{{3.1}{21}{Binary Cross-Entropy Loss}{definition.3.1}{}}
+\newlabel{binary cross-entropy@cref}{{[definition][1][3]3.1}{[1][21][]21}{}{}{}}
+\newlabel{lec3 bce loss}{{3.7}{21}{Binary Cross-Entropy Loss}{equation.3.7}{}}
+\newlabel{lec3 bce loss@cref}{{[equation][7][3]3.7}{[1][21][]21}{}{}{}}
+\newlabel{lec3 optimization}{{3.8}{21}{Binary Cross-Entropy Loss}{equation.3.8}{}}
+\newlabel{lec3 optimization@cref}{{[equation][8][3]3.8}{[1][21][]21}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Gradient Descent}{21}{subsection.3.2}\protected@file@percent }
+\newlabel{gradient descent definition}{{3.3}{21}{Gradient Descent}{definition.3.3}{}}
+\newlabel{gradient descent definition@cref}{{[definition][3][3]3.3}{[1][21][]21}{}{}{}}
+\newlabel{lec3 update rule}{{3.9}{21}{Gradient Descent}{equation.3.9}{}}
+\newlabel{lec3 update rule@cref}{{[equation][9][3]3.9}{[1][21][]21}{}{}{}}
+\newlabel{lec3 taylor}{{3.10}{22}{Why Does This Guarantee Decrease?}{equation.3.10}{}}
+\newlabel{lec3 taylor@cref}{{[equation][10][3]3.10}{[1][21][]22}{}{}{}}
+\newlabel{lec3 decrease}{{3.11}{22}{Why Does This Guarantee Decrease?}{equation.3.11}{}}
+\newlabel{lec3 decrease@cref}{{[equation][11][3]3.11}{[1][21][]22}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Deriving the Gradient for Logistic Regression}{22}{subsubsection.3.2.1}\protected@file@percent }
+\newlabel{lec3 gradient goal}{{3.12}{22}{Deriving the Gradient for Logistic Regression}{equation.3.12}{}}
+\newlabel{lec3 gradient goal@cref}{{[equation][12][3]3.12}{[1][22][]22}{}{}{}}
+\newlabel{lec3 sigmoid derivatives}{{3.13}{22}{Deriving the Gradient for Logistic Regression}{equation.3.13}{}}
+\newlabel{lec3 sigmoid derivatives@cref}{{[equation][13][3]3.13}{[1][22][]22}{}{}{}}
+\newlabel{lec3 term 1 gradient}{{3.16}{22}{Deriving the Gradient for Logistic Regression}{equation.3.16}{}}
+\newlabel{lec3 term 1 gradient@cref}{{[equation][16][3]3.16}{[1][22][]22}{}{}{}}
+\newlabel{lec3 term 2 gradient}{{3.17}{22}{Deriving the Gradient for Logistic Regression}{equation.3.17}{}}
+\newlabel{lec3 term 2 gradient@cref}{{[equation][17][3]3.17}{[1][22][]22}{}{}{}}
+\newlabel{lec3 full gradient}{{3.18}{22}{Deriving the Gradient for Logistic Regression}{equation.3.18}{}}
+\newlabel{lec3 full gradient@cref}{{[equation][18][3]3.18}{[1][22][]22}{}{}{}}
+\newlabel{lec3 logistic update}{{3.19}{23}{Gradient Descent Update Rule: Logistic Regression}{equation.3.19}{}}
+\newlabel{lec3 logistic update@cref}{{[equation][19][3]3.19}{[1][23][]23}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Example: Ising Model}{23}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Example: Prediction of Immunotherapy Response}{24}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Log-Odds of Response Approach}{24}{subsubsection.3.4.1}\protected@file@percent }
+\newlabel{odds definition}{{3.26}{25}{Odds}{equation.3.26}{}}
+\newlabel{odds definition@cref}{{[equation][26][3]3.26}{[1][24][]25}{}{}{}}
+\newlabel{odds of response}{{3.27}{25}{Log-Odds of Response Approach}{equation.3.27}{}}
+\newlabel{odds of response@cref}{{[equation][27][3]3.27}{[1][25][]25}{}{}{}}
+\newlabel{logistic model immunotherapy}{{3.28}{25}{Log-Odds of Response Approach}{equation.3.28}{}}
+\newlabel{logistic model immunotherapy@cref}{{[equation][28][3]3.28}{[1][25][]25}{}{}{}}
+\newlabel{one minus sigmoid}{{3.29}{25}{Log-Odds of Response Approach}{equation.3.29}{}}
+\newlabel{one minus sigmoid@cref}{{[equation][29][3]3.29}{[1][25][]25}{}{}{}}
+\newlabel{odds sigmoid ratio}{{3.30}{25}{Log-Odds of Response Approach}{equation.3.30}{}}
+\newlabel{odds sigmoid ratio@cref}{{[equation][30][3]3.30}{[1][25][]25}{}{}{}}
+\newlabel{log-odds immunotherapy}{{3.31}{25}{Log-Odds of Response Approach}{equation.3.31}{}}
+\newlabel{log-odds immunotherapy@cref}{{[equation][31][3]3.31}{[1][25][]25}{}{}{}}
+\@writefile{toc}{\contentsline {section}{Appendix}{26}{note.3.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Background: Linear Regression and Logistic Regression}{27}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Linear Regression}{27}{subsection.A.1}\protected@file@percent }
+\newlabel{linear regression model}{{A.1}{27}{Linear Regression}{equation.A.1}{}}
+\newlabel{linear regression model@cref}{{[equation][1][1]A.1}{[1][27][]27}{}{}{}}
+\newlabel{least squares}{{A.2}{27}{Linear Regression}{equation.A.2}{}}
+\newlabel{least squares@cref}{{[equation][2][1]A.2}{[1][27][]27}{}{}{}}
+\newlabel{normal equation}{{A.3}{27}{Linear Regression}{equation.A.3}{}}
+\newlabel{normal equation@cref}{{[equation][3][1]A.3}{[1][27][]27}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Why Linear Regression Fails for Classification}{27}{subsection.A.2}\protected@file@percent }
+\newlabel{linear classification attempt}{{A.4}{27}{Why Linear Regression Fails for Classification}{equation.A.4}{}}
+\newlabel{linear classification attempt@cref}{{[equation][4][1]A.4}{[1][27][]27}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.3}From Linear Regression to Logistic Regression}{28}{subsection.A.3}\protected@file@percent }
+\newlabel{logistic from linear}{{A.5}{28}{From Linear Regression to Logistic Regression}{equation.A.5}{}}
+\newlabel{logistic from linear@cref}{{[equation][5][1]A.5}{[1][27][]28}{}{}{}}
+\newlabel{log-odds appendix}{{A.6}{28}{From Linear Regression to Logistic Regression}{equation.A.6}{}}
+\newlabel{log-odds appendix@cref}{{[equation][6][1]A.6}{[1][28][]28}{}{}{}}
+\newlabel{sigmoid derivation appendix}{{A.7}{28}{From Linear Regression to Logistic Regression}{equation.A.7}{}}
+\newlabel{sigmoid derivation appendix@cref}{{[equation][7][1]A.7}{[1][28][]28}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.4}Beyond Binary: Multinomial Logistic Regression}{28}{subsection.A.4}\protected@file@percent }
+\newlabel{softmax}{{A.8}{28}{Beyond Binary: Multinomial Logistic Regression}{equation.A.8}{}}
+\newlabel{softmax@cref}{{[equation][8][1]A.8}{[1][28][]28}{}{}{}}
+\newlabel{softmax to sigmoid}{{A.9}{28}{Sigmoid Is a Special Case of Softmax}{equation.A.9}{}}
+\newlabel{softmax to sigmoid@cref}{{[equation][9][1]A.9}{[1][28][]28}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.5}Connection to LDA}{29}{subsection.A.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.6}Historical Context}{29}{subsection.A.6}\protected@file@percent }
+\gdef \@abspage@last{32}

@@ -503,26 +503,23 @@ The key elements of reinforcement learning are:
   where $\gamma \in [0,1]$ is a discount factor controlling the importance of future rewards.
 \end{definition}
 
-\begin{note}[State and Action Space]
-  The state space $\mathcal{S}$ is the set of all possible situations the agent can 
-  observe. For example, in a chess game $\mathcal{S}$ is the set of all possible board 
-  configurations, while in a self-driving car $\mathcal{S}$ might encode the car's 
-  position, speed, and surrounding obstacles.
+The state space $\mathcal{S}$ is the set of all possible situations the agent can 
+observe. For example, in a chess game $\mathcal{S}$ is the set of all possible board 
+configurations, while in a self-driving car $\mathcal{S}$ might encode the car's 
+position, speed, and surrounding obstacles.
 
-  The action space $\mathcal{A}$ is the set of all possible actions the agent can take.
-  The action space can be:
-  \begin{itemize}[nosep, label=\tiny$\bullet$]
-    \item \textbf{Discrete:} a finite set of distinct actions, 
-    $\mathcal{A} = \{a_1, a_2, \ldots, a_K\}$. For example, in a chess game 
-    $\mathcal{A}$ is the set of all legal moves.
-    \item \textbf{Continuous:} an infinite range of actions, 
-    $\mathcal{A} \subseteq \mathbb{R}^k$. For example, in a robot arm 
-    $\mathcal{A}$ might be the set of all possible joint rotation angles.
-  \end{itemize}
-  Together, they define the full decision-making problem --- the policy 
-  $\pi : \mathcal{S} \to \mathcal{A}$ maps each observed state to an action.
-\end{note}
-
+The action space $\mathcal{A}$ is the set of all possible actions the agent can take.
+The action space can be:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+  \item \textbf{Discrete:} a finite set of distinct actions, 
+  $\mathcal{A} = \{a_1, a_2, \ldots, a_K\}$. For example, in a chess game 
+  $\mathcal{A}$ is the set of all legal moves.
+  \item \textbf{Continuous:} an infinite range of actions, 
+  $\mathcal{A} \subseteq \mathbb{R}^k$. For example, in a robot arm 
+  $\mathcal{A}$ might be the set of all possible joint rotation angles.
+\end{itemize}
+Together, they define the full decision-making problem --- the policy 
+$\pi : \mathcal{S} \to \mathcal{A}$ maps each observed state to an action.
 
 \subsubsection{Semi-supervised and Self-supervised Learning}
 
@@ -576,167 +573,263 @@ The input (feature vector) is $\bm{X} \in \mathbb{R}^d$, the output (class label
 
 \subsubsection{A Probabilistic View of Classification}
 
-\begin{definition}[Posterior Probability]
-\label{Posterior Probability}
-    The posterior probability is defined as
+We want to model $P(y = k \mid \bm{X})$, the probability of each class label given the input features, and classify by picking the most probable class. This requires tools from probability theory.
+
+\begin{definition}[Conditional Probability]
+\label{conditional probability}
+    The conditional probability of $A$ given $B$ is
     \begin{equation}
-      P(y = k \mid \bm{X}),
+      P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
     \end{equation}
-    where $y = k$ is the hypothesis and $\bm{X}$ is the data.
 \end{definition}
 
-\begin{insight}[Posterior Probability vs. Conditional Probability]
-  The distinction between conditional and posterior probability is not mathematical, it is conceptual. Posterior emphasizes learning from data, while conditional is a neutral probabilistic relationship.
+\begin{theorem}[Bayes Theorem]
+\label{bayes theorem}
+    Since the joint probability can be written two ways,
+    \begin{equation}
+      P(A \cap B) = P(A \mid B)\,P(B) = P(B \mid A)\,P(A),
+    \end{equation}
+    we can flip which variable is being conditioned on:
+    \begin{equation}
+      P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B)}.
+    \end{equation}
+\end{theorem}
+
+Applied to classification, where $A$ is the class $y = k$ and $B$ is the observed features $\bm{X}$, \cref{bayes theorem} gives
+\begin{equation}
+\label{bayes for classification}
+  P(y = k \mid \bm{X}) = \frac{P(\bm{X} \mid y = k)\, P(y = k)}{P(\bm{X})}.
+\end{equation}
+Each term in \cref{bayes for classification} has a name in the Bayesian vocabulary:
+\begin{equation}
+  \underbrace{P(y = k \mid \bm{X})}_{\text{posterior}} = \frac{\overbrace{P(\bm{X} \mid y = k)}^{\text{class-conditional likelihood}} \cdot \overbrace{P(y = k)}^{\text{prior}}}{\underbrace{P(\bm{X})}_{\text{evidence}}}.
+\end{equation}
+
+\begin{note}[On Bayesian Vocabulary in Classification]
+  The mathematics in this section, conditional probability and Bayes Theorem are universal and belongs to neither the Bayesian nor frequentist school of thought. Both camps agree on the formula $P(A \mid B) = P(A \cap B) / P(B)$. What is Bayesian is the \emph{vocabulary} and \emph{reasoning pattern} applied to it:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item The \textbf{math} (conditional probability, Bayes Theorem) is universal.
+    \item The \textbf{vocabulary} (prior, posterior, likelihood) is Bayesian terminology borrowed for the classification setting.
+    \item The \textbf{looseness} is only in calling $P(\bm{X} \mid y = k)$ a ``likelihood'', since $y = k$ is a class label, not a model parameter in the strict statistical sense. This is flagged explicitly in the Bayesian Vocabulary note below.
+  \end{itemize}
+\end{note}
+
+\begin{note}[Bayesian Vocabulary]
+  The terms posterior, likelihood, and prior are all conditional probabilities $P(A \mid B)$, but named by the role they play:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Posterior} $P(y = k \mid \bm{X})$\textbf{:} The class is unknown, the features $\bm{X}$ are observed. ``Posterior'' means \emph{after}: our belief about the class \emph{after} seeing the evidence. This is what we want for classification.
+    \item \textbf{Class-conditional likelihood} $P(\bm{X} \mid y = k)$\textbf{:} Assumes a class $k$ and asks how well $\bm{X}$ fits that class's distribution. It is called a ``likelihood'' because it plays the same role as a likelihood function: evaluating how plausible each hypothesis is given fixed data, even though $y = k$ is a class label rather than a model parameter in the strict statistical sense.
+    \item \textbf{Prior} $P(y = k)$\textbf{:} The probability of class $k$ \emph{before} observing any features. Outside of the Bayesian context, this is just the marginal class probability --- the name ``prior'' only has meaning in contrast with the posterior.
+    \item \textbf{Evidence} $P(\bm{X})$\textbf{:} A normalizing constant that ensures the posterior sums to 1 over all classes. Since it is independent of $k$, it can be ignored when classifying.
+  \end{itemize}
+\end{note}
+
+\begin{insight}[Likelihood vs.\ Probability in STATISTICS]
+  In statistics, \textbf{probability} and \textbf{likelihood} are the same mathematical expression viewed from opposite directions:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Probability} is \emph{forward-looking}: fix the model parameters and ask ``what outcomes might I see?'' It is a distribution over outcomes and sums to 1.
+    \item \textbf{Likelihood} is \emph{backward-looking}: fix the observed data and ask ``which parameters (or hypotheses) best explain what I saw?'' It measures plausibility, not probability, and does \emph{not} sum to 1.
+  \end{itemize}
+  Formally, both involve $P(\text{data} \mid \theta)$, but they differ in what is treated as the variable:
+  \begin{equation}
+    \underbrace{P(\text{data} \mid \theta)}_{\text{probability: fix }\theta,\ \text{vary data}}
+    \quad=\quad
+    \underbrace{L(\theta\,;\,\text{data})}_{\text{likelihood: fix data, vary }\theta}
+  \end{equation}
 \end{insight}
 
-We want to minimize the probability of misclassifications.
+\begin{insight}[Likelihood is Bayesian Classification]
+  In the Bayesian classification context, $P(\bm{X} \mid y = k)$ is called a likelihood because $\bm{X}$ is fixed and we compare across classes $k$ --- the same reasoning pattern, even though $k$ is a class label rather than a model parameter. In logistic regression, $L(\bm{\beta})$ is a likelihood in the strict sense --- $\bm{\beta}$ is an actual model parameter.
+\end{insight}
 
 \begin{theorem}[Bayes Decision Rule]
 \label{Bayes Decision Rule}
-    The Bayes classifier assigns an input $\bm{X}$ to the class with largest posterior probability
+    The Bayes classifier assigns an input $\bm{X}$ to the class with the largest posterior probability:
     \begin{equation}
       \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(y = k \mid \bm{X}).
     \end{equation}
 \end{theorem}
 
-\begin{theorem}[Bayes Theorem]
-\label{bayes theorem}
-    The Bayes theorem is
-    \begin{equation}
-      P(y = k \mid \bm{X}) = \frac{P(\bm{X} \mid y = k)\, P(y = k)}{P(\bm{X})}.
-    \end{equation}
-    It flip which variable is being conditioned on.
-\end{theorem}
-
-\begin{definition}
-  The conditional probabilit is given by
+Since the evidence $P(\bm{X})$ is independent of $k$, combining \cref{Bayes Decision Rule} and \cref{bayes for classification} gives the following result:
+\begin{corollary}[Bayes Classifier]
+  The Bayes classifier can also be expressed as
   \begin{equation}
-    P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
+  \label{bayes classifier with bayes theorem}
+  \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(\bm{X} \mid y = k)\, P(y = k),
   \end{equation}
-\end{definition}
+  where $P(\bm{X} \mid y = k)$ is the class-conditional likelihood and $P(y = k)$ is the prior.
+\end{corollary}
 
-\begin{note}[Posterior, Likelihood, and Conditional Probability]
-  All three are conditional probabilities $P(A \mid B)$, but differ in context:
+\begin{insight}[From Bayesian Classification to Practical Models]
+  The Bayes Classifier (\cref{bayes classifier with bayes theorem}) tells us \emph{what} to compute, but not \emph{how}. To use it, we need to know $P(\bm{X} \mid y = k)$ and $P(y = k)$, which are unknown in practice. The rest of this section presents two fundamentally different strategies for making the Bayes Classifier practical:
   \begin{itemize}[nosep, label=\tiny$\bullet$]
-    \item \textbf{Conditional probability:} The general mathematical concept $P(A \mid B)$, with no particular interpretation attached.
-    \item \textbf{Posterior probability} $P(y = k \mid \bm{X})$\textbf{:} A conditional probability where we condition on \emph{data} to learn about a \emph{hypothesis}. ``Posterior'' means \emph{after} --- it is our belief about the class \emph{after} observing the evidence.
-    \item \textbf{Likelihood} $P(\bm{X} \mid y = k)$\textbf{:} A conditional probability where we condition on a \emph{hypothesis} to evaluate how well it explains the \emph{data}.
-    \item \textbf{Prior probability} $P(y = k)$\textbf{:} Our belief about the class \emph{before} observing any data.
+    \item \textbf{Generative approach (LDA):} Explicitly model the class-conditional likelihood $P(\bm{X} \mid y = k)$ by assuming each class generates data from a Gaussian distribution, estimate $P(y = k)$ from the training data, and plug both into Bayes Theorem. This is called \emph{generative} because it models how each class generates data.
+    \item \textbf{Discriminative approach (Logistic Regression):} Skip the intermediate step and model the posterior $P(y = k \mid \bm{X})$ directly using a sigmoid function. This is called \emph{discriminative} because it learns the decision boundary between classes directly, without modelling each class's distribution.
   \end{itemize}
-  The distinction is conceptual, not mathematical. Bayes Theorem connects them:
-  \[
-    \underbrace{P(y = k \mid \bm{X})}_{\text{posterior}} = \frac{\overbrace{P(\bm{X} \mid y = k)}^{\text{likelihood}} \cdot \overbrace{P(y = k)}^{\text{prior}}}{\underbrace{P(\bm{X})}_{\text{evidence}}}.
-  \]
-\end{note}
-
-Using \cref{Bayes Decision Rule} and \cref{bayes theorem}, since the denominator is $k$ independent, the Bayes decision rule is implied to be
-\begin{equation}
-\label{bayes classifier with bayes theorem}
-\hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(\bm{X} \mid y = k)\, P(y = k),
-\end{equation}
-where $P(\bm{X} \mid y = k)$ is the class-conditional likelihood and $P(y = k)$ is the prior probability of class $k$.
+\end{insight}
 
 \subsubsection{Linear Discriminant Analysis (LDA)}
 
-LDA is based on the following assumptions:
+LDA is the generative approach: it explicitly models the class-conditional likelihood $P(\bm{X} \mid y = k)$ as a Gaussian, estimates the prior $P(y = k)$ from the training data, and plugs both into the Bayes Classifier (\cref{bayes classifier with bayes theorem}).
+
+\begin{insight}[Why LDA Assumes a Gaussian]
+  To use the Bayes Classifier, we need $P(\bm{X} \mid y = k)$ --- the distribution of features within each class. But this distribution is unknown. We need to \emph{assume} a specific form for it, and the Gaussian is the most natural choice:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item Many real-world measurements are approximately Gaussian (by the Central Limit Theorem).
+    \item It is fully characterized by just two parameters: $\bm{\mu}_k$ (mean) and $\Sigma$ (covariance), both of which can be estimated from the training data.
+    \item The resulting math simplifies to a \emph{linear} decision boundary, which is where the name ``Linear Discriminant Analysis'' comes from.
+  \end{itemize}
+\end{insight}
+
+Before stating the LDA assumptions, we recall the multivariate Gaussian distribution that underlies them.
+
+\begin{note}[Multivariate Gaussian Distribution]
+  In one dimension, a Gaussian (normal) distribution $\mathcal{N}(\mu, \sigma^2)$ has the density
+  \begin{equation}
+    p(x) = \frac{1}{\sqrt{2\pi}\,\sigma} \exp\!\left( -\frac{(x - \mu)^2}{2\sigma^2} \right),
+  \end{equation}
+  where $\mu$ is the mean (center of the bell curve) and $\sigma^2$ is the variance (how spread out it is).
+
+  The \textbf{multivariate Gaussian} $\mathcal{N}(\bm{\mu}, \Sigma)$ generalizes this to $d$ dimensions. For a feature vector $\bm{X} \in \mathbb{R}^d$:
+  \begin{equation}
+    p(\bm{X}) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\!\left( -\frac{1}{2} (\bm{X} - \bm{\mu})^\top \Sigma^{-1} (\bm{X} - \bm{\mu}) \right),
+  \end{equation}
+  where:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $\bm{\mu} \in \mathbb{R}^d$ is the \textbf{mean vector}: the center of the distribution in $d$-dimensional space.
+    \item $\Sigma \in \mathbb{R}^{d \times d}$ is the \textbf{covariance matrix}: a symmetric positive-definite matrix that encodes both the spread (variance) along each axis and the correlations between features. The diagonal entries $\Sigma_{ii}$ are the variances of each feature, and the off-diagonal entries $\Sigma_{ij}$ capture how features $i$ and $j$ co-vary.
+    \item $|\Sigma|$ is the \textbf{determinant} of the covariance matrix --- it scales the normalization so the density integrates to 1.
+    \item $\Sigma^{-1}$ is the \textbf{inverse covariance} (precision) matrix.
+    \item $(\bm{X} - \bm{\mu})^\top \Sigma^{-1} (\bm{X} - \bm{\mu})$ is the \textbf{Mahalanobis distance} --- a generalization of the squared Euclidean distance that accounts for correlations between features. It measures how far $\bm{X}$ is from the mean $\bm{\mu}$, scaled by the covariance structure.
+  \end{itemize}
+  In 1D, the covariance matrix reduces to the scalar variance $\sigma^2$, and the Mahalanobis distance becomes $(x - \mu)^2 / \sigma^2$.
+\end{note}
+
+With this background, LDA is built on the following assumptions:
 \begin{itemize}[nosep, label=\tiny$\bullet$]
-    \item $P(\bm{X} \mid y = k) = \mathcal{N}(\bm{X} \mid \bm{\mu}_k, \Sigma)$, a multivariate Gaussian.
+    \item $P(\bm{X} \mid y = k) = \mathcal{N}(\bm{X} \mid \bm{\mu}_k, \Sigma)$, a multivariate Gaussian for each class.
     \item All classes share the same covariance matrix $\Sigma_k = \Sigma$.
-    \item $\Pi_k = P(y = k)$, the prior probability.
+    \item $\Pi_k = P(y = k)$, the prior probability of class $k$.
     \item $\bm{\mu}_k \in \mathbb{R}^d$ is the mean vector of class $k$.
 \end{itemize}
 
-Therefore
-\begin{equation}
-    P(\bm{X} \mid y = k)\, P(y = k) = P(\bm{X} \mid y = k)\,\Pi_k,
-\end{equation}
-so that \cref{bayes classifier with bayes theorem} is
+\begin{insight}[Why Share the Covariance Matrix?]
+  The shared covariance assumption $\Sigma_k = \Sigma$ is what makes the decision boundary \emph{linear}. If each class had its own covariance $\Sigma_k$, the quadratic term $-\frac{1}{2}\bm{X}^\top \Sigma_k^{-1} \bm{X}$ in the log-likelihood would depend on $k$ and could not be dropped, resulting in a \emph{quadratic} decision boundary. That variant is called Quadratic Discriminant Analysis (QDA).
+\end{insight}
+
+\paragraph{Deriving the LDA decision rule.} Substituting the prior notation $\Pi_k = P(y = k)$ into \cref{bayes classifier with bayes theorem}:
 \begin{equation}
 \label{bayes classifier with LDA}
     \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} P(\bm{X} \mid y = k)\,\Pi_k.
 \end{equation}
-Taking the log of \cref{bayes classifier with LDA}
+Since $\log$ is monotonic, the $\operatorname*{arg\,max}$ is unchanged if we take the log (this turns products into sums, which are easier to work with):
 \begin{equation}
     \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} \lp \log P(\bm{X} \mid y = k) + \log \Pi_k \rp.
 \end{equation}
-Given that
-\[
+Now we plug in the multivariate Gaussian assumption. Since $P(\bm{X} \mid y = k) = \mathcal{N}(\bm{X} \mid \bm{\mu}_k, \Sigma)$:
+\begin{equation}
 P(\bm{X} \mid y=k) = \frac{1}{(2\pi)^{d/2} |\Sigma|^{1/2}} \exp\!\left( -\frac{1}{2} (\bm{X} - \bm{\mu}_k)^\top \Sigma^{-1} (\bm{X} - \bm{\mu}_k) \right).
-\]
-Calculate $\log P(\bm{X} \mid y = k)$ to get
+\end{equation}
+Taking the log and expanding the quadratic form:
 \begin{equation}
 \label{log of posterior of X y=k}
     \log P(\bm{X} \mid y = k)
     =
-    -\frac{1}{2} \bm{X}^{\top}\Sigma^{-1} \bm{X}
+    \underbrace{-\frac{1}{2} \bm{X}^{\top}\Sigma^{-1} \bm{X}}_{\text{same for all }k}
     + \bm{X}^{\top}\Sigma^{-1}\bm{\mu}_k
     - \frac{1}{2}\bm{\mu}_k^{\top}\Sigma^{-1}\bm{\mu}_k
-    - \frac{1}{2}\log|\Sigma|
-    -\frac{d}{2}\log(2\pi).
+    \underbrace{- \frac{1}{2}\log|\Sigma|
+    -\frac{d}{2}\log(2\pi)}_{\text{same for all }k}.
 \end{equation}
-Substitute into $\hat{y}(\bm{X})$ and drop terms that are independent of $k$ to obtain the LDA
-\[
-\hat{y}(\bm{X})
-=
-\arg\max_k \, \delta_k(\bm{X})
-\]
-where
-\[
+The terms marked ``same for all $k$'' do not affect which class wins the $\operatorname*{arg\,max}$, so we drop them. The first term $-\frac{1}{2}\bm{X}^\top \Sigma^{-1} \bm{X}$ drops out precisely \emph{because} $\Sigma$ is shared across all classes --- this is where the shared covariance assumption pays off. What remains is the \textbf{discriminant function}:
+\begin{equation}
 \delta_k(\bm{X})
 =
 \bm{X}^{\top}\Sigma^{-1}\bm{\mu}_k
 - \frac{1}{2}\bm{\mu}_k^{\top}\Sigma^{-1}\bm{\mu}_k
 + \log \Pi_k.
-\]
+\end{equation}
+Note that $\delta_k(\bm{X})$ is \emph{linear} in $\bm{X}$: there are no $\bm{X}^\top (\cdots) \bm{X}$ terms left.
 
 \begin{definition}[LDA]
 \label{lda}
-    The LDA is defined as
-    \[
+    The Linear Discriminant Analysis classifier is
+    \begin{equation}
     \hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k \in \{ 1, 2, \dots , K\}} \delta_k(\bm{X}),
-    \]
-    where $\delta_k$ is defined as
-    \[
+    \end{equation}
+    where the discriminant function for class $k$ is
+    \begin{equation}
     \delta_k(\bm{X}) = \bm{X}^\top \Sigma^{-1} \bm{\mu}_k - \frac{1}{2}\bm{\mu}_k^\top \Sigma^{-1} \bm{\mu}_k + \log \Pi_k.
-    \]
+    \end{equation}
 \end{definition}
 
-Suppose we have a case where $K = 2$, i.e., two classes
-\[
-\delta_1(\bm{X}) - \delta_2(\bm{X}) \ge 0.
-\]
-Substitute from
-\[
-\delta_k(\bm{X}) \;\Longrightarrow\; \bm{W}^\top \bm{X} + b \ge 0
-\]
-Then
-\[
-\bm{W} = \Sigma^{-1}(\bm{\mu}_1 - \bm{\mu}_2),
-\quad
+\paragraph{Special case: two classes ($K = 2$).} For binary classification, we assign class 1 when $\delta_1(\bm{X}) - \delta_2(\bm{X}) \ge 0$. Substituting the definition of $\delta_k$ and simplifying, this reduces to
+\begin{equation}
+\bm{W}^\top \bm{X} + b \ge 0,
+\end{equation}
+where
+\begin{gather}
+\bm{W} = \Sigma^{-1}(\bm{\mu}_1 - \bm{\mu}_2), \\
 b = -\frac{1}{2}
 \left(
 \bm{\mu}_1^\top \Sigma^{-1} \bm{\mu}_1
 -
 \bm{\mu}_2^\top \Sigma^{-1} \bm{\mu}_2
 \right)
-+ \log\frac{\Pi_1}{\Pi_2}
-\]
++ \log\frac{\Pi_1}{\Pi_2}.
+\end{gather}
+
+\begin{note}[Geometric Meaning of $\bm{W}^\top \bm{X} + b \ge 0$]
+  In the binary case, classification reduces to checking which side of a \emph{hyperplane} $\bm{X}$ falls on:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $\bm{W} = \Sigma^{-1}(\bm{\mu}_1 - \bm{\mu}_2)$ is the normal vector to the decision boundary: it points in the direction that best separates the two class means, adjusted for the covariance structure.
+    \item $b$ is the bias (offset), which shifts the boundary based on the priors $\Pi_1, \Pi_2$ and the class means.
+    \item If $\bm{W}^\top \bm{X} + b \ge 0$, classify as class 1; otherwise, classify as class 2.
+  \end{itemize}
+  The decision boundary of LDA is a flat hyperplane in $\mathbb{R}^d$, not a curve.
+\end{note}
 
 \subsubsection{Logistic Regression}
 
-Logistic Regression is a supervised algorithm for classification. We approximate the posterior probability $P(y = k \mid \bm{X})$.
+Logistic Regression is the \textbf{discriminative} counterpart to LDA: instead of modelling the class-conditional density $P(\bm{X} \mid y = k)$ and applying Bayes Theorem (as LDA does), it models the posterior $P(y = k \mid \bm{X})$ \emph{directly} using a parametric function. This bypasses the need to assume any distribution for the features within each class.
 
-The problem we solve is a binary classification. We have features $\bm{X} \in \mathbb{R}^d$ and $y \in \{0, 1\}$ as outputs. The goal is to model the probability that an observation belongs to class $1$, given its features, i.e., we need
-\[
+\paragraph{Problem setup.}
+We consider binary classification: features $\bm{X} \in \mathbb{R}^d$ and label $y \in \{0, 1\}$. The goal is to model the probability that an observation belongs to class~1, given its features:
+\begin{equation}
+\label{logistic goal}
 P(y = 1 \mid \bm{X}).
-\]
+\end{equation}
 
-Recall in linear regression, we try to fit a line to data or hyperplane to higher dimension data with
-\[
-\bm{\beta}^\top \bm{X}, \quad \beta_0+\beta_1 x_1 + \dots + \beta_{d-1} x_d, \quad \bm{\beta} \in \mathbb{R}^d
-\]
-for
-\[
+\begin{insight}[Why Not Just Use Linear Regression?]
+  A natural first idea is to use a linear model $f(\bm{X}) = \bm{\beta}^\top \bm{X}$ and interpret the output as a probability. The problem is that $\bm{\beta}^\top \bm{X}$ can produce \emph{any} real number: it might output $-3.7$ or $45$, which are not valid probabilities. We need a function that takes any real number and squashes it into the interval $(0,\,1)$. That function is the \textbf{sigmoid}.
+\end{insight}
+
+\begin{note}[What Is $\bm{\beta}$?]
+  The parameter vector $\bm{\beta} \in \mathbb{R}^d$ is what the model learns from data. Each component has a concrete role:
+  \begin{equation}
+  \label{beta vector}
+  \bm{\beta} =
+  \begin{pmatrix}
+    \beta_0 \\
+    \beta_1 \\
+    \vdots \\
+    \beta_{d-1}
+  \end{pmatrix},
+  \end{equation}
+  where $\beta_j$ is the \textbf{weight} for feature $x_j$. A large positive $\beta_j$ means that feature pushes the prediction toward class~1; a large negative $\beta_j$ pushes toward class~0. The first component $\beta_0$ is the \textbf{intercept} (bias), which shifts the decision boundary independently of any feature. This is why we prepend a $1$ to $\bm{X}$ in \cref{feature vector with intercept}.
+
+  In LDA, the equivalent role was played by $\bm{W} = \Sigma^{-1}(\bm{\mu}_1 - \bm{\mu}_2)$ and $b$, which were computed from sample statistics. In logistic regression, $\bm{\beta}$ is found by maximizing the likelihood (covered below).
+\end{note}
+
+\paragraph{From linear model to probabilities.}
+Recall that in linear regression, we model the output as a linear combination of features:
+\begin{equation}
+\label{linear model}
+\bm{\beta}^\top \bm{X} = \beta_0 + \beta_1 x_1 + \dots + \beta_{d-1} x_d, \quad \bm{\beta} \in \mathbb{R}^d,
+\end{equation}
+where the feature vector includes a leading $1$ for the intercept:
+\begin{equation}
+\label{feature vector with intercept}
 \bm{X} =
 \begin{bmatrix}
     1 \\
@@ -744,66 +837,133 @@ for
     \vdots \\
     x_d
 \end{bmatrix}.
-\]
-To obtain results as probability, we need to transform with a sigmoid function
-\[
-\bm{\beta}^\top \bm{X} \rightarrow \sigma\lp \bm{\beta}^\top \bm{X} \rp = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}}.
-\]
+\end{equation}
+The output $\bm{\beta}^\top \bm{X}$ is called the \textbf{log-odds} or \textbf{logit} (we will see why shortly). To convert it into a probability, we pass it through the \textbf{sigmoid function}:
+\begin{equation}
+\label{sigmoid transformation}
+\bm{\beta}^\top \bm{X} \;\longrightarrow\; \sigma\!\lp \bm{\beta}^\top \bm{X} \rp = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}}.
+\end{equation}
+
+\begin{note}[The Sigmoid Function $\sigma(z)$]
+  The sigmoid (also called the \emph{logistic} function) is defined as
+  \begin{equation}
+  \label{sigmoid definition}
+  \sigma(z) = \frac{1}{1 + e^{-z}}.
+  \end{equation}
+  Key properties:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item $\sigma(z) \in (0, 1)$ for all $z \in \mathbb{R}$, so the output is always a valid probability.
+    \item $\sigma(0) = \tfrac{1}{2}$: when the linear model outputs exactly zero, the model is equally uncertain about both classes.
+    \item $\sigma(z) \to 1$ as $z \to +\infty$ and $\sigma(z) \to 0$ as $z \to -\infty$: large positive scores give high confidence for class~1, large negative scores give high confidence for class~0.
+    \item Symmetry: $\sigma(-z) = 1 - \sigma(z)$.
+    \item The derivative has a clean form: $\sigma'(z) = \sigma(z)\bigl(1 - \sigma(z)\bigr)$, which is convenient for gradient computations.
+  \end{itemize}
+\end{note}
 
 \begin{center}
     \begin{tikzpicture}[scale=1.1]
       % Axes
       \draw[->] (-4.2,0) -- (4.5,0) node[below right] {$z$};
       \draw[->] (0,-0.2) -- (0,3.2) node[above left] {$\sigma(z)$};
-    
+
       % Sigmoid curve: y = 3/(1+e^{-z}) so it asymptotes to 3 (nice for drawing)
       \draw[thick, smooth, domain=-4:4, samples=200]
         plot (\x,{3/(1+exp(-\x))});
-    
+
       % Dashed asymptote at 1 (in the board it's at the top; here we draw it at y=3 then label "1")
       \draw[dashed] (-4.2,3) -- (4.2,3);
       \node[left] at (0,3) {$1$};
-    
+
       % Mark sigma(0)=1/2
       \fill (0,1.5) circle (1.2pt);
       \node[left] at (0,1.8) {$\tfrac{1}{2}$};
-    
+
       % Origin label
       \node[below left] at (0,0) {$0$};
     \end{tikzpicture}
 \end{center}
 
-The new probability after the sigmoid transformation is
-\[
-\begin{cases}
-    P(y = 1 \mid \bm{X}) = \dfrac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}} \\[6pt]
-    P(y = 0 \mid \bm{X}) = 1 - P(y = 1 \mid \bm{X}).
-\end{cases}
-\]
-Likelihood function:
-Given the dataset $\{(\bm{X}_i, y_i)\}_{i=1}^N$ and $y \in \{0,1\}$, the likelihood function $L(\bm{\beta})$ is the product of the probabilities of observing each data point:
-\[
-P(y_i \mid \bm{X}_i, \bm{\beta})
+\paragraph{The logistic regression model.}
+Applying the sigmoid to the linear model gives the logistic regression model:
+\begin{equation}
+\label{logistic model class 1}
+P(y = 1 \mid \bm{X}) = \sigma(\bm{\beta}^\top \bm{X}) = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}},
+\end{equation}
+\begin{equation}
+\label{logistic model class 0}
+P(y = 0 \mid \bm{X}) = 1 - \sigma(\bm{\beta}^\top \bm{X}).
+\end{equation}
+
+\begin{insight}[Why ``Logistic'' Regression? The Log-Odds Connection]
+  Take the ratio of the two class probabilities:
+  \begin{equation}
+  \label{log-odds}
+  \log \frac{P(y = 1 \mid \bm{X})}{P(y = 0 \mid \bm{X})}
+  = \log \frac{\sigma(\bm{\beta}^\top \bm{X})}{1 - \sigma(\bm{\beta}^\top \bm{X})}
+  = \bm{\beta}^\top \bm{X}.
+  \end{equation}
+  This quantity is called the \textbf{log-odds} (or \textbf{logit}). The logistic regression model is saying: the log-odds of belonging to class~1 is a \emph{linear} function of the features. The sigmoid is simply the inverse of the logit function, which is why it maps the linear output back to a probability. This also explains the name ``logistic'' regression: it is a regression on the logit (log-odds).
+\end{insight}
+
+\paragraph{Estimating $\bm{\beta}$: the likelihood function.}
+Unlike LDA, where we estimated parameters ($\bm{\mu}_k$, $\Sigma$, $\Pi_k$) by computing sample statistics, logistic regression has no such shortcut. We need to find $\bm{\beta}$ using \textbf{maximum likelihood estimation} (MLE): choose the $\bm{\beta}$ that makes the observed data most probable.
+
+Given the training set $\{(\bm{X}_i, y_i)\}_{i=1}^N$ with $y_i \in \{0,1\}$, the probability of observing one data point is
+\begin{equation}
+\label{single point probability}
+P(y_i \mid \bm{X}_i,\, \bm{\beta})
 =
-\bigl(P(y = 1 \mid \bm{X}_i)\bigr)^{y_i}
-\bigl(P(y = 0 \mid \bm{X}_i)\bigr)^{1 - y_i}
-\]
-\[
+\bigl[\sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{y_i}
+\;\bigl[1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{1 - y_i}.
+\end{equation}
+
+\begin{note}[Why Does \Cref{single point probability} Work?]
+  This is a compact way of writing ``pick the right probability depending on the label'':
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item If $y_i = 1$: the expression becomes $\bigl[\sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^1 \cdot \bigl[1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^0 = \sigma(\bm{\beta}^\top \bm{X}_i) = P(y=1 \mid \bm{X}_i)$. \checkmark
+    \item If $y_i = 0$: the expression becomes $\bigl[\sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^0 \cdot \bigl[1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^1 = 1 - \sigma(\bm{\beta}^\top \bm{X}_i) = P(y=0 \mid \bm{X}_i)$. \checkmark
+  \end{itemize}
+  The exponents $y_i$ and $1-y_i$ act as a ``switch'' that selects the correct class probability. This trick works because $y_i \in \{0,1\}$.
+\end{note}
+
+Assuming all data points are independent, the likelihood of the entire dataset is the product over all $N$ points:
+\begin{equation}
+\label{logistic likelihood}
 L(\bm{\beta})
 =
-\prod_{i=1}^N P(y_i \mid \bm{X}_i, \bm{\beta})
+\prod_{i=1}^N P(y_i \mid \bm{X}_i,\, \bm{\beta})
 =
 \prod_{i=1}^N
-\bigl(\sigma(\bm{\beta}^\top \bm{X}_i)\bigr)^{y_i}
-\bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr)^{1 - y_i}
-\]
-We work with the log-likelihood function
-\[
-\hat{L}(\bm{\beta}) = \sum_{i = 1}^N \lb y_i \log \sigma(\bm{\beta}^\top \bm{X}_i) + (1 - y_i)\log \lp 1 - \sigma(\bm{\beta}^\top \bm{X}_i) \rp \rb,
-\]
-where $\sigma$ is the sigmoid function.
+\bigl[\sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{y_i}
+\bigl[1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{1 - y_i}.
+\end{equation}
 
-It is difficult to find a closed-form solution like the LDA, so gradient-descent etc. will be used.
+\begin{note}[Why a Product?]
+  If the data points are independent (which we assume), then the probability of observing \emph{all} of them is the product of the individual probabilities, just like flipping $N$ independent coins. The likelihood $L(\bm{\beta})$ answers: ``given this choice of $\bm{\beta}$, how probable is the dataset I actually observed?''
+\end{note}
+
+\paragraph{The log-likelihood.}
+Products of many small numbers are numerically unstable and hard to differentiate. Taking the logarithm converts the product into a sum (since $\log(ab) = \log a + \log b$) without changing which $\bm{\beta}$ maximizes it (since $\log$ is monotonically increasing):
+\begin{equation}
+\label{logistic log-likelihood}
+\ell(\bm{\beta})
+= \log L(\bm{\beta})
+= \sum_{i=1}^N \Bigl[ y_i \log \sigma(\bm{\beta}^\top \bm{X}_i) + (1 - y_i)\log \bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr) \Bigr].
+\end{equation}
+The goal is to find the $\bm{\beta}$ that maximizes $\ell(\bm{\beta})$.
+
+\begin{note}[Why Is There No Closed-Form Solution?]
+  In LDA, we could compute $\bm{\mu}_k$ and $\Sigma$ directly from sample means and covariances. Here, the sigmoid function inside the $\log$ makes \cref{logistic log-likelihood} a nonlinear function of $\bm{\beta}$. Setting $\nabla_{\bm{\beta}}\, \ell(\bm{\beta}) = \bm{0}$ does not yield a nice algebraic solution. Instead, we use \textbf{gradient descent} (covered in the next section) to iteratively search for the optimal $\bm{\beta}$.
+\end{note}
+
+\begin{insight}[Logistic Regression vs.\ LDA: Two Roads to the Same Goal]
+  Both logistic regression and LDA aim to classify $\bm{X}$ into one of $K$ classes, but they take opposite approaches:
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{LDA (generative):} models \emph{how each class generates data}, $P(\bm{X} \mid y = k)$, using a Gaussian assumption. Then it applies Bayes Theorem to get $P(y = k \mid \bm{X})$. Parameters are estimated by computing sample statistics (means, covariance, class proportions). Has a closed-form solution.
+    \item \textbf{Logistic regression (discriminative):} it models $P(y = k \mid \bm{X})$ \emph{directly} via the sigmoid. Makes no assumption about what the features look like within each class. Parameters are estimated by maximizing the likelihood numerically (gradient descent). No closed-form solution.
+  \end{itemize}
+  Interestingly, both produce a \emph{linear} decision boundary $\bm{W}^\top \bm{X} + b = 0$. The difference is in how $\bm{W}$ and $b$ are obtained. LDA derives them from the Gaussian parameters; logistic regression learns them directly from the data.
+\end{insight}
 \clearpage
 
 \section*{Lecture 3}
@@ -812,148 +972,171 @@ It is difficult to find a closed-form solution like the LDA, so gradient-descent
 \setcounter{section}{3}
 \setcounter{equation}{0}
 
-\subsection{Review And Summary of Lecture 2}
+\subsection{Review and Summary of Lecture 2}
 
 \subsubsection{Bayes Decision Rule}
 
-Let \(y \in \{0,1\}\) denote the class label and \(\bm X\) the feature vector. The Bayes classifier is given by
-\[
-\hat{y}(\bm X)
-= \arg\max_{k} \, \mathbb{P}(y = k \mid \bm X),
-\]
-or using Bayes' theorem, this can be written as
-\[
-\hat{y}(\bm X)
-= \arg\max_{k} \, \mathbb{P}(\bm X \mid y = k)\,{\mathbb{P}(y = k)},
-\]
-where \(\mathbb{P}(\bm X \mid y = k)\) is the class-conditional likelihood and \(\mathbb{P}(y = k) = \Pi_k\) is the prior probability of class \(k\).
+Let $y \in \{0,1\}$ denote the class label and $\bm{X}$ the feature vector. The Bayes classifier assigns the input to the class with the highest posterior probability:
+\begin{equation}
+\label{lec3 bayes rule}
+\hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k}\, P(y = k \mid \bm{X}).
+\end{equation}
+Using Bayes Theorem, this can be rewritten as
+\begin{equation}
+\label{lec3 bayes expanded}
+\hat{y}(\bm{X}) = \operatorname*{arg\,max}_{k}\, P(\bm{X} \mid y = k)\, P(y = k),
+\end{equation}
+where $P(\bm{X} \mid y = k)$ is the class-conditional likelihood and $P(y = k) = \Pi_k$ is the prior probability of class $k$.
 
 \subsubsection{Linear Discriminant Analysis (LDA)}
 
-In Linear Discriminant Analysis (LDA), it is assumed that
-\[
-\mathbb{P}(\bm X \mid y = k)
-\]
-is Gaussian for each class \(k\), with all classes sharing a common covariance matrix.
+LDA is the \textbf{generative} approach. It assumes that the class-conditional density
+\begin{equation}
+\label{lec3 lda assumption}
+P(\bm{X} \mid y = k) = \mathcal{N}(\bm{X} \mid \bm{\mu}_k,\, \Sigma)
+\end{equation}
+is multivariate Gaussian for each class $k$, with all classes sharing a common covariance matrix $\Sigma$. This leads to a linear discriminant function $\delta_k(\bm{X})$ and a linear decision boundary.
 
 \subsubsection{Logistic Regression}
 
-The logistic regression
-\[
-\mathbb P(y = 1 \mid X) = \sigma(\bm \beta^T \bm X) = \frac{1}{1 + e^{-\bm \beta^T \bm X}}
-\]
-directly models the posterior probability and is typically used for binary classification problems with
-\[
-y \in \{0,1\},
-\]
-and labeled data
-\[
-\lc (\bm X_i, y_i) \rc_{i=1}^n.
-\]
+Logistic regression is the \textbf{discriminative} approach. It directly models the posterior probability:
+\begin{equation}
+\label{lec3 logistic model}
+P(y = 1 \mid \bm{X}) = \sigma(\bm{\beta}^\top \bm{X}) = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}},
+\end{equation}
+for binary classification with $y \in \{0,1\}$ and labeled data $\{(\bm{X}_i, y_i)\}_{i=1}^N$.
 
 \subsubsection{Log-Likelihood and Loss Function}
 
-The likelihood formulation is
-\[
-L(\bm \beta)
-= \prod_{i=1}^{n}
-\bigl(\sigma(\bm \beta^T \bm X_i)\bigr)^{y_i}
-\bigl(1 - \sigma(\bm \beta^T \bm X_i)\bigr)^{1 - y_i}.
-\]
-We want to choose \(\bm \beta\) that maximizes the log-likelihood:
-\[
-\log L(\bm \beta)
-= \sum_{i=1}^{n}
-\Bigl(
-y_i \log \sigma(\bm \beta^T \bm X_i)
-+ (1 - y_i)\log\bigl(1 - \sigma(\bm \beta^T \bm X_i)\bigr)
-\Bigr).
-\]
-Equivalently, we minimize the negative log-likelihood, which defines the
-binary cross-entropy loss
-\[
-J(\bm \beta) = - \log L(\bm \beta).
-\]
-The binary cross-entropy loss $J(\beta)$ has no closed-form solution. We therefore turn to iterative optimization methods. For this course, we use gradient descent. 
+The likelihood of the training data under the logistic model is
+\begin{equation}
+\label{lec3 likelihood}
+L(\bm{\beta})
+= \prod_{i=1}^{N}
+\bigl[\sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{y_i}
+\bigl[1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr]^{1 - y_i}.
+\end{equation}
+Taking the logarithm gives the log-likelihood:
+\begin{equation}
+\label{lec3 log-likelihood}
+\ell(\bm{\beta}) = \log L(\bm{\beta})
+= \sum_{i=1}^{N} \Bigl[ y_i \log \sigma(\bm{\beta}^\top \bm{X}_i) + (1 - y_i)\log \bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr) \Bigr].
+\end{equation}
+
+\begin{definition}[Binary Cross-Entropy Loss]
+\label{binary cross-entropy}
+Maximizing the log-likelihood is equivalent to minimizing the negative log-likelihood. We define the \textbf{binary cross-entropy loss} (cost function) as
+\begin{equation}
+\label{lec3 bce loss}
+J(\bm{\beta}) = -\ell(\bm{\beta}) = -\sum_{i=1}^{N} \Bigl[ y_i \log \sigma(\bm{\beta}^\top \bm{X}_i) + (1 - y_i)\log \bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr) \Bigr].
+\end{equation}
+Our optimization problem is
+\begin{equation}
+\label{lec3 optimization}
+\min_{\bm{\beta}} \; J(\bm{\beta}).
+\end{equation}
+\end{definition}
+
+\begin{note}[Why Minimize the Negative Log-Likelihood?]
+  Since $J(\bm{\beta})$ is nonlinear in $\bm{\beta}$, there is no closed-form solution. We must use \textbf{iterative optimization methods}. For this course, we use gradient descent.
+\end{note}
 
 \subsection{Gradient Descent}
 
-\subsubsection{General Update Rule}
-
-Suppose
-\[
-\min_{\beta \in \mathbb R^d} f(\bm \beta) \quad f: \mathbb R^d \to \mathbb R,
-\]
-where \(f\) is differentiable. We need to find \(\bm \beta^*\) such that
-\[
-\bm \nabla f(\bm \beta^*) = 0.
-\]
-The directional derivative is minimized when
-\[
-\hat{\bm u} = -\frac{\bm \nabla f(\bm \beta^*)}{\norm {\bm \nabla f (\bm \beta^*)}}.
-\]
-The basic idea is to use gradient descent to minimize the loss function
-\[
-f \left(\bm \beta^{(k)} + \Delta \bm \beta\right)
-\simeq
-f \left(\bm \beta^{(k)}\right)
-+ \underbrace{\nabla f \left(\bm \beta^{(k)}\right)^T \Delta \bm \beta}_{< 0},
-\]
-where
-\[
-\Delta \bm \beta = -\eta \, \nabla f \left(\bm \beta^{(k)}\right).
-\]
-The parameter update rule is
+\begin{definition}[Gradient Descent]
+\label{gradient descent definition}
+Gradient descent is an iterative optimization algorithm for finding a local minimum of a differentiable function $f : \mathbb{R}^d \to \mathbb{R}$. Starting from an initial guess $\bm{\beta}^{(0)}$, we repeatedly update:
 \begin{equation}
-\label{update rule}
-\bm \beta^{(k+1)} = \bm \beta^{(k)} - {\eta} \, \underbrace{\bm \nabla f \left(\bm \beta^{(k)}\right)}_{\equiv \bm \nabla J(\bm \beta)}.
+\label{lec3 update rule}
+\bm{\beta}^{(k+1)} = \bm{\beta}^{(k)} - \eta \, \nabla f\!\left(\bm{\beta}^{(k)}\right),
 \end{equation}
-where \(\eta\) is the learning rate.
+where:
+\begin{itemize}[nosep, label=\tiny$\bullet$]
+  \item $\bm{\beta}^{(k)}$ is the parameter vector at step $k$.
+  \item $\eta > 0$ is the \textbf{learning rate} (step size), which can be fixed or adaptive.
+  \item $\nabla f\!\left(\bm{\beta}^{(k)}\right)$ is the gradient of the loss function at the current step.
+\end{itemize}
+We stop when $\nabla f(\bm{\beta}^{(k)}) \approx \bm{0}$ (i.e., we have reached a minimum).
+\end{definition}
 
-\subsubsection{Gradient Descent for Logistic Regression}
+\begin{note}[Why the Negative Gradient?]
+  $\nabla f(\bm{\beta})$ points in the direction of steepest \textbf{increase}. Negating it gives the direction of steepest \textbf{decrease}, so each update in \cref{lec3 update rule} moves $\bm{\beta}$ downhill.
+\end{note}
 
-Applying \cref{update rule} to logistic regression requires computing the gradient of $J(\bm \beta)$ with respect to $\bm \beta$. We differentiate the binary cross-entropy loss term by term. We need
-\[
-\bm \nabla_{\bm \beta} J(\bm \beta)
-= - \sum_{i=1}^{n}
-\nabla_{\bm \beta}
+\begin{note}[Why Does This Guarantee Decrease?]
+  By the first-order Taylor expansion,
+  \begin{equation}
+  \label{lec3 taylor}
+  f\!\left(\bm{\beta}^{(k)} + \Delta \bm{\beta}\right)
+  \approx
+  f\!\left(\bm{\beta}^{(k)}\right)
+  + \nabla f\!\left(\bm{\beta}^{(k)}\right)^\top \Delta \bm{\beta}.
+  \end{equation}
+  Choosing $\Delta \bm{\beta} = -\eta \, \nabla f\!\left(\bm{\beta}^{(k)}\right)$ gives
+  \begin{equation}
+  \label{lec3 decrease}
+  \nabla f\!\left(\bm{\beta}^{(k)}\right)^\top \Delta \bm{\beta} = -\eta \, \bigl\lVert \nabla f\!\left(\bm{\beta}^{(k)}\right) \bigr\rVert^2 < 0,
+  \end{equation}
+  so $f$ decreases at each step (provided $\eta$ is small enough).
+\end{note}
+
+
+\subsubsection{Deriving the Gradient for Logistic Regression}
+
+Applying \cref{lec3 update rule} to logistic regression requires computing the gradient of $J(\bm{\beta})$ with respect to $\bm{\beta}$. We differentiate the binary cross-entropy loss term by term. We need
+\begin{equation}
+\label{lec3 gradient goal}
+\nabla_{\bm{\beta}} J(\bm{\beta})
+= - \sum_{i=1}^{N}
+\nabla_{\bm{\beta}}
 \Bigl[
-y_i \log \sigma(\bm \beta^{T} \bm X_i)
-+ (1 - y_i)\log \bigl(1 - \sigma(\bm \beta^{T} \bm X_i)\bigr)
+y_i \log \sigma(\bm{\beta}^\top \bm{X}_i)
++ (1 - y_i)\log \bigl(1 - \sigma(\bm{\beta}^\top \bm{X}_i)\bigr)
 \Bigr].
-\]
-Let
-\[z_i = \bm \beta^T \bm X_i,
-\quad
-\frac{d}{dz}\log \sigma(z) = 1 - \sigma(z),
-\quad
-\frac{d}{dz}\log \bigl(1 - \sigma(z)\bigr) = -\sigma(z),
-\quad
-\bm \nabla_{\bm \beta} z_i = \bm X_i,
-\]
-then,
-\begin{equation*}
-    \left.
-    \begin{array}{r}
-        \nabla_{\bm \beta} \bigl[y_i \log \sigma(z_i)\bigr] = y_i \bigl(1 - \sigma(z_i)\bigr) \bm X_i \\[4pt]
-        \nabla_{\bm \beta} \bigl[(1 - y_i)\log \bigl(1 - \sigma(z_i)\bigr)\bigr] = - (1 - y_i)\sigma(z_i) \bm X_i       
-    \end{array}
-    \right\}
-    \;\Longrightarrow \; \bm \nabla_{\bm \beta} J(\bm \beta) = \sum_{i=1}^{n} \bigl(\sigma(z_i) - y_i\bigr) \bm X_i.
-\end{equation*}
-Note that the update rule is now
-\[
-\bm \beta^{(k+1)} = \bm \beta^{(k)} - \eta \, \bm \nabla_{\bm \beta} J(\bm \beta^{(k)}).
-\]
+\end{equation}
+Let $z_i = \bm{\beta}^\top \bm{X}_i$. We use the following properties of the sigmoid derivative:
+\begin{align}
+\label{lec3 sigmoid derivatives}
+\frac{d}{dz}\log \sigma(z) &= 1 - \sigma(z), \\
+\frac{d}{dz}\log \bigl(1 - \sigma(z)\bigr) &= -\sigma(z), \\
+\nabla_{\bm{\beta}}\, z_i &= \bm{X}_i. 
+\end{align}
+Applying the chain rule to each term:
+\begin{equation}
+\label{lec3 term 1 gradient}
+\nabla_{\bm{\beta}} \bigl[y_i \log \sigma(z_i)\bigr] = y_i \bigl(1 - \sigma(z_i)\bigr) \bm{X}_i,
+\end{equation}
+\begin{equation}
+\label{lec3 term 2 gradient}
+\nabla_{\bm{\beta}} \bigl[(1 - y_i)\log \bigl(1 - \sigma(z_i)\bigr)\bigr] = -(1 - y_i)\,\sigma(z_i)\, \bm{X}_i.
+\end{equation}
+Summing these up and simplifying:
+\begin{equation}
+\label{lec3 full gradient}
+\nabla_{\bm{\beta}} J(\bm{\beta})
+= \sum_{i=1}^{N} \bigl(\sigma(\bm{\beta}^\top \bm{X}_i) - y_i\bigr)\, \bm{X}_i.
+\end{equation}
+
+\begin{note}[Intuition for the Gradient]
+  The gradient in \cref{lec3 full gradient} has a clean interpretation: the term $\sigma(\bm{\beta}^\top \bm{X}_i) - y_i$ is the \textbf{prediction error} for data point $i$ (predicted probability minus actual label). Each data point contributes to the gradient in proportion to its error, weighted by its feature vector $\bm{X}_i$. When the prediction is perfect ($\sigma(\bm{\beta}^\top \bm{X}_i) = y_i$), that data point contributes zero to the gradient.
+\end{note}
+
+\begin{corollary}[Gradient Descent Update Rule: Logistic Regression]
+  The gradient descent update rule for logistic regression is:
+  \begin{equation}
+  \label{lec3 logistic update}
+  \bm{\beta}^{(k+1)} = \bm{\beta}^{(k)} - \eta \sum_{i=1}^{N} \bigl(\sigma(\bm{\beta}^{(k)\top} \bm{X}_i) - y_i\bigr)\, \bm{X}_i.
+  \end{equation}
+\end{corollary}
 
 \subsection{Example: Ising Model}
 
 To illustrate classification in a physics context, consider the Ising model phase transition. Given a spin configuration, can we classify whether the system is above or below the critical temperature?
 
 The Hamiltonian of the system is
-\[
+\begin{equation}
 H = -J \sum_{\langle i j\rangle} \sigma_i \sigma_j ,
-\]
+\end{equation}
 where \(\langle ij\rangle\) denotes nearest-neighbor pairs (2D lattice) and \(\sigma_i \in \{-1,+1\}\). For \(J=1\) in the 2D square-lattice Ising model: \(T_c \approx 2.269\).
 \begin{center}
 \begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
@@ -1004,91 +1187,194 @@ In this setting, the feature vector $\bm X$ could consist of statistics computed
 
 \subsection{Example: Prediction of Immunotherapy Response}
 
-Consider the problem of predicting patient response to immunotherapy with pre-treatment clinical data. This example is motivated by recent work on LORIS Immunotherapy, reported in
-Nature Cancer (2024).
-
-\emph{Question}: Can we predict, prior to treatment, the probability that a patient will respond to immunotherapy using measured clinical variables?
-
-We are given labeled clinical data consisting of six measured features per patient. Let
-\[
+Consider the problem of predicting patient response to immunotherapy with pre-treatment clinical data. Can we predict, prior to treatment, the probability that a patient will respond to immunotherapy using measured clinical variables? We are given labeled clinical data consisting of six measured features per patient. Let
+\begin{equation}
 \bm X \in \mathbb{R}^6
-\]
+\end{equation}
 denote the feature vector for a single patient, and let
-\[
+\begin{equation}
 \{(\bm X_i, y_i)\}_{i=1}^n
-\]
+\end{equation}
 be the full dataset, where \(n\) is the number of data points and
-\[
+\begin{equation}
 y_i \in \{0,1\}
-\]
+\end{equation}
 indicates whether patient \(i\) responds to immunotherapy. The goal is to model the probability of response given the clinical features.
 
 We use a logistic regression model to estimate the probability of response:
-\[
+\begin{equation}
 \mathbb{P}(y = 1 \mid \bm X)
 = \sigma \left(\bm \beta^{T} \bm X\right)
 = \sigma \left(
 \beta_0 + \sum_{j=1}^{6} \beta_j X_j
 \right),
-\]
+\end{equation}
 where \(\beta_0\) is the bias (intercept) term. The quantity
-\[
+\begin{equation}
 \mathbb{P}(y = 1 \mid \bm X)
-\]
+\end{equation}
 represents the predicted probability that a patient responds to immunotherapy given their pre-treatment clinical variables.
 
 \subsubsection{Log-Odds of Response Approach}
 
-An equivalent and often more interpretable form of logistic regression is obtained by considering the \emph{odds} and \emph{log-odds} of response. The odds of response given the clinical features \(\bm X\) are defined as
-\[
+An equivalent and often more interpretable form of logistic regression is obtained by considering the \emph{odds} and \emph{log-odds} of response.
+
+\begin{definition}[Odds]
+The \textbf{odds} of an event is the ratio of the probability it occurs to the probability it does not:
+\begin{equation}
+\label{odds definition}
+\text{odds} = \frac{\mathbb{P}(\text{event})}{\mathbb{P}(\text{not event})} = \frac{\mathbb{P}(\text{event})}{1 - \mathbb{P}(\text{event})}.
+\end{equation}
+\end{definition}
+
+For example, if $\mathbb{P}(y = 1 \mid \bm X) = 0.75$, then the odds of response are $\frac{0.75}{0.25} = 3$, meaning response is 3 times more likely than non-response.
+
+The odds of response given the clinical features $\bm X$ are
+\begin{equation}
+\label{odds of response}
 \frac{\mathbb{P}(y = 1 \mid \bm X)}{\mathbb{P}(y = 0 \mid \bm X)}
 = \frac{\mathbb{P}(y = 1 \mid \bm X)}{1 - \mathbb{P}(y = 1 \mid \bm X)}.
-\]
+\end{equation}
 Using the logistic regression model
-\[
+\begin{equation}
+\label{logistic model immunotherapy}
 \mathbb{P}(y = 1 \mid \bm X)
 = \sigma \left(\beta_0 + \sum_{j=1}^{6} \beta_j X_j \right),
-\]
-we obtain the log-odds:
+\end{equation}
+write $z = \beta_0 + \sum_{j=1}^{6} \beta_j X_j$ for shorthand. Since $\sigma(z) = \frac{1}{1 + e^{-z}}$:
+\begin{equation}
+\label{one minus sigmoid}
+1 - \sigma(z) = 1 - \frac{1}{1 + e^{-z}} = \frac{e^{-z}}{1 + e^{-z}}.
+\end{equation}
+The odds become
+\begin{equation}
+\label{odds sigmoid ratio}
+\frac{\sigma(z)}{1 - \sigma(z)}
+= \frac{1/(1 + e^{-z})}{e^{-z}/(1 + e^{-z})}
+= \frac{1}{e^{-z}}
+= e^{z}.
+\end{equation}
+Taking the logarithm of both sides gives the \textbf{log-odds}:
 \begin{align}
+\label{log-odds immunotherapy}
 \log \frac{\mathbb{P}(y = 1 \mid \bm X)}{\mathbb{P}(y = 0 \mid \bm X)}
-&= \log \frac{\mathbb{P}(y = 1 \mid \bm X)}{1 - \mathbb{P}(y = 1 \mid \bm X)} \notag \\
+&= \log\, e^{z} = z \\
 &= \beta_0 + \sum_{j=1}^{6} \beta_j X_j.
 \end{align}
 
+\begin{note}[Why Rewrite the Model This Way?]
+The sigmoid form and the log-odds form are the same model. The sigmoid form is what we optimize during training (it plugs into the likelihood). The log-odds form is for interpretation after training: each $\beta_j$ is the additive change in log-odds per unit increase in feature $X_j$, regardless of the current probability. Equivalently, increasing $X_j$ by one unit multiplies the odds by $e^{\beta_j}$.
+\end{note}
+
 \clearpage
 
-\section*{Lecture 4}
-\addcontentsline{toc}{section}{Lecture 4}
-\stepcounter{section}
-\setcounter{section}{4}
+\appendix
+
+\thispagestyle{empty}
+\addcontentsline{toc}{section}{Appendix}
+\vspace*{0pt}
+\begin{center}
+  {\Large \textbf{Appendix}}
+\end{center}
+
+\clearpage
+
+\section{Background: Linear Regression and Logistic Regression}
+
 \setcounter{equation}{0}
 
-\subsection{Support Vector Machines}
+This appendix provides background on linear regression and how logistic regression extends it. These ideas underpin the discriminative classification approach in \S2.2.4.
 
-SVM is a form of supervised learning, we have labeled data
-\[
-\lc (\bm X_i, y_i) \rc^n_{i=1}.
-\]
+\subsection{Linear Regression}
 
-(FILL IN)
+Linear regression is the simplest predictive model. Given features $\bm{X} \in \mathbb{R}^d$ and a \textbf{continuous} output $y \in \mathbb{R}$ (not a class label, but an actual number like temperature or price), we assume the relationship is linear:
+\begin{equation}
+\label{linear regression model}
+y = \bm{\beta}^\top \bm{X} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \dots + \beta_{d-1} x_d.
+\end{equation}
+Geometrically, this fits a straight line (in 1D), a plane (in 2D), or a hyperplane (in higher dimensions) through the data. The parameter vector $\bm{\beta}$ is chosen to minimize the sum of squared errors:
+\begin{equation}
+\label{least squares}
+\min_{\bm{\beta}} \sum_{i=1}^N \bigl(y_i - \bm{\beta}^\top \bm{X}_i\bigr)^2.
+\end{equation}
+Unlike logistic regression, \cref{least squares} has a \textbf{closed-form solution}: setting the gradient to zero and solving gives
+\begin{equation}
+\label{normal equation}
+\hat{\bm{\beta}} = (\bm{X}^\top \bm{X})^{-1} \bm{X}^\top \bm{y},
+\end{equation}
+where $\bm{X}$ is the $N \times d$ data matrix and $\bm{y}$ is the vector of outputs. This is known as the \textbf{normal equation}.
 
-We have a classifier
-\[
-f(x) = \omega^T \bm X + b
-\]
-that outputs
-\[
-\operatorname{sign}f(\bm X).
-\]
-We have a decision boundary
-\[
-\omega^T \bm X + b = 0.
-\]
-Note that
+\subsection{Why Linear Regression Fails for Classification}
+
+If we try to use linear regression for binary classification ($y \in \{0,1\}$), the model predicts
+\begin{equation}
+\label{linear classification attempt}
+\hat{y} = \bm{\beta}^\top \bm{X},
+\end{equation}
+which can output \emph{any} real number. There is no guarantee the output falls in $[0,\,1]$, so it cannot be interpreted as a probability. For example, the model might predict $\hat{y} = -3.7$ or $\hat{y} = 45$ for a given input, neither of which is a valid probability.
+
+\subsection{From Linear Regression to Logistic Regression}
+
+Logistic regression solves this by keeping the linear structure but wrapping it in the sigmoid function:
+\begin{equation}
+\label{logistic from linear}
+\underbrace{\bm{\beta}^\top \bm{X}}_{\text{any real number}}
+\;\xrightarrow{\;\sigma\;}\;
+\underbrace{\sigma(\bm{\beta}^\top \bm{X})}_{\in\;(0,\,1)}.
+\end{equation}
+The key insight is that this is not an arbitrary choice. Logistic regression assumes that the \textbf{log-odds} of class~1 versus class~0 is linear in the features:
+\begin{equation}
+\label{log-odds appendix}
+\log \frac{P(y = 1 \mid \bm{X})}{P(y = 0 \mid \bm{X})} = \bm{\beta}^\top \bm{X}.
+\end{equation}
+Solving \cref{log-odds appendix} for $P(y=1 \mid \bm{X})$, using the fact that $P(y=0 \mid \bm{X}) = 1 - P(y=1 \mid \bm{X})$, yields the sigmoid as the \emph{only} function that satisfies this constraint:
+\begin{equation}
+\label{sigmoid derivation appendix}
+P(y = 1 \mid \bm{X}) = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}} = \sigma(\bm{\beta}^\top \bm{X}).
+\end{equation}
+So the sigmoid is not chosen because ``it looks nice.'' It is the mathematical consequence of assuming linear log-odds.
+
+\subsection{Beyond Binary: Multinomial Logistic Regression}
+
+The logistic regression model in \S2.2.4 handles binary classification ($y \in \{0, 1\}$), but the idea extends naturally to $K > 2$ classes. Instead of a single parameter vector $\bm{\beta}$, each class $k$ gets its own parameter vector $\bm{\beta}_k$. The sigmoid is replaced by the \textbf{softmax} function, which produces a probability for every class simultaneously:
+\begin{equation}
+\label{softmax}
+P(y = k \mid \bm{X}) = \frac{e^{\bm{\beta}_k^\top \bm{X}}}{\displaystyle\sum_{j=1}^K e^{\bm{\beta}_j^\top \bm{X}}}.
+\end{equation}
+The denominator ensures that the probabilities over all $K$ classes sum to~1. This is called \textbf{multinomial logistic regression} (or \textbf{softmax regression}).
+
+\begin{note}[Sigmoid Is a Special Case of Softmax]
+  When $K = 2$, the softmax reduces to the sigmoid. Setting $\bm{\beta}_1 = \bm{\beta}$ and $\bm{\beta}_0 = \bm{0}$ in \cref{softmax} gives
+  \begin{equation}
+  \label{softmax to sigmoid}
+  P(y = 1 \mid \bm{X}) = \frac{e^{\bm{\beta}^\top \bm{X}}}{e^{\bm{0}^\top \bm{X}} + e^{\bm{\beta}^\top \bm{X}}} = \frac{e^{\bm{\beta}^\top \bm{X}}}{1 + e^{\bm{\beta}^\top \bm{X}}} = \frac{1}{1 + e^{-\bm{\beta}^\top \bm{X}}} = \sigma(\bm{\beta}^\top \bm{X}).
+  \end{equation}
+  So the binary model is not a separate method; it is the two-class simplification of the general framework.
+\end{note}
+
+If you have seen neural networks, this should look familiar: the softmax is exactly what sits at the output layer of a classification network. Just as a single neuron computes $\sigma(\bm{\beta}^\top \bm{X})$ (binary logistic regression), the final softmax layer performs multinomial logistic regression over $K$ classes.
+
+\subsection{Connection to LDA}
+
+Interestingly, if the LDA assumptions hold (features are Gaussian with shared covariance), then $P(y = 1 \mid \bm{X})$ turns out to be \emph{exactly} a sigmoid of a linear function. In other words, LDA implies the logistic regression model. Logistic regression simply adopts the same functional form without requiring the Gaussian assumption, which makes it more flexible but requires numerical optimization (gradient descent) instead of a closed-form solution.
+
+\begin{note}[Summary: Linear Regression vs.\ Logistic Regression]
+  The differences are
+  \begin{itemize}[nosep, label=\tiny$\bullet$]
+    \item \textbf{Linear regression:} predicts a continuous value $y \in \mathbb{R}$. Minimizes squared error. Has a closed-form solution (normal equation). Cannot be used directly for classification because outputs are unbounded.
+    \item \textbf{Logistic regression:} predicts a probability $P(y = 1 \mid \bm{X}) \in (0,\,1)$. Maximizes the likelihood. Requires gradient descent (no closed-form solution). The sigmoid maps the linear output to a valid probability.
+    \item Both use a linear combination $\bm{\beta}^\top \bm{X}$ at their core. Logistic regression wraps it in a sigmoid; linear regression uses it directly.
+  \end{itemize}
+\end{note}
+
+\subsection{Historical Context}
+
+Logistic regression was developed in the 1940s\textendash 1950s in biostatistics, where the core problem was: given measurements about a patient, what is the \emph{probability} they have a disease? Doctors wanted a calibrated probability to make informed decisions.
+
+The model remains widely used today for two reasons beyond classification:
 \begin{itemize}[nosep, label=\tiny$\bullet$]
-    \item \(\bm \omega\) is the normal vector to this decision boundary.
-    \item 
+  \item \textbf{Interpretability:} each weight $\beta_j$ has a direct meaning. For instance, $\beta_{\text{smoking}} = 1.2$ means smoking multiplies the odds of the outcome by $e^{1.2} \approx 3.3$.
+  \item \textbf{Building block for neural networks:} a single neuron in a neural network computes exactly $\sigma(\bm{\beta}^\top \bm{X})$. A neural network is, in essence, many logistic regressions composed together with nonlinearities between layers.
 \end{itemize}
 
 \end{document}
